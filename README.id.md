@@ -1,6 +1,10 @@
 # 🚀 GoNAS — Lightweight, High-Performance, Cross-Platform Cloud NAS
 
 <p align="center">
+  <img src="web/gonas-banner.svg" alt="GoNAS Cloud Banner" width="100%">
+</p>
+
+<p align="center">
   <a href="README.md">English</a> • <b>Bahasa Indonesia</b>
 </p>
 
