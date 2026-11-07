@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  gonas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gonas-cloud
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      - NAS_PORT=8082
+      - NAS_APP_TITLE=GoNAS - Cloud Preservasi BPMN
+      - NAS_ROOT_PATH=/storage
+    volumes:
+      - ./storage:/storage
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8082/api/sys/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

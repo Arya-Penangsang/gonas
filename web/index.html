@@ -1,0 +1,3495 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>GoNAS - Cloud Preservasi BPMN</title>
+    <!-- Rich Document & Media Viewers -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            gdrive: {
+              blue: '#1a73e8',
+              hover: '#1557b0',
+              bg: '#f8fafd',
+              sidebar: '#f8fafd',
+              border: '#dadce0',
+              text: '#3c4043',
+              heading: '#202124'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Google+Sans:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 9999px;
+    }
+
+    /* ==================== PRISTINE REFINED LIGHT THEME ==================== */
+    html.light body {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    html.light header {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04) !important;
+    }
+    html.light header h1 {
+      color: #4f46e5 !important;
+    }
+    html.light aside {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #1e293b !important;
+    }
+    html.light #mainApp, 
+    html.light #filesView, 
+    html.light #adminView,
+    html.light .bg-slate-950 {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    html.light #searchInput {
+      background-color: #f1f5f9 !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light #searchInput:focus {
+      background-color: #ffffff !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+    }
+    html.light #searchInput::placeholder {
+      color: #64748b !important;
+    }
+    html.light #toolbarContainer {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04) !important;
+    }
+    html.light #filterChipsBar {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.light .filter-chip {
+      background-color: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #475569 !important;
+      font-weight: 500 !important;
+    }
+    html.light .filter-chip:hover {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.light .filter-chip.active-chip {
+      background-color: #e0e7ff !important;
+      border-color: #c7d2fe !important;
+      color: #4338ca !important;
+      font-weight: 600 !important;
+    }
+    /* Toolbar Action Buttons in Light Mode */
+    html.light #autoArrangeBtn {
+      background-color: #f5f3ff !important;
+      border: 1px solid #ddd6fe !important;
+      color: #6d28d9 !important;
+      font-weight: 600 !important;
+    }
+    html.light #autoArrangeBtn:hover {
+      background-color: #ede9fe !important;
+      border-color: #c4b5fd !important;
+      color: #5b21b6 !important;
+    }
+    html.light #autoArrangeBtn i {
+      color: #7c3aed !important;
+    }
+    html.light #btnNewDropdown {
+      background-color: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.08) !important;
+    }
+    html.light #btnNewDropdown:hover {
+      background-color: #f8fafc !important;
+      box-shadow: 0 3px 8px rgba(15,23,42,0.12) !important;
+    }
+    html.light #newMenuDropdown {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1) !important;
+    }
+    html.light #newMenuDropdown button {
+      color: #1e293b !important;
+    }
+    html.light #newMenuDropdown button:hover {
+      background-color: #f1f5f9 !important;
+      color: #4f46e5 !important;
+    }
+    /* Sidebar Folder Tree */
+    html.light #sidebarFolderTree {
+      border-color: #e2e8f0 !important;
+    }
+    html.light #sidebarFolderTree .tree-row {
+      color: #1e293b !important;
+    }
+    html.light #sidebarFolderTree .tree-row:hover {
+      background-color: #f1f5f9 !important;
+    }
+    html.light #sidebarFolderTree .active-tree-row {
+      background-color: #e0e7ff !important;
+      color: #3730a3 !important;
+      font-weight: 600 !important;
+    }
+    /* Table / List View */
+    html.light #listView {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04) !important;
+    }
+    html.light #listView thead {
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.light #listView thead th {
+      color: #475569 !important;
+      font-weight: 700 !important;
+    }
+    html.light #listView tbody tr {
+      border-color: #f1f5f9 !important;
+      color: #1e293b !important;
+    }
+    html.light #listView tbody tr:hover {
+      background-color: #f8fafc !important;
+    }
+    html.light #listView tbody tr.row-selected {
+      background-color: #eef2ff !important;
+    }
+    html.light .file-item-name {
+      color: #0f172a !important; /* High-contrast Slate-900 */
+      font-weight: 600 !important;
+    }
+    html.light .gdrive-card,
+    html.light .bg-slate-900,
+    html.light .bg-slate-900\/60,
+    html.light .bg-slate-900\/70,
+    html.light .bg-slate-900\/80,
+    html.light .bg-slate-900\/90 {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.05) !important;
+    }
+    html.light .border-slate-800,
+    html.light .border-slate-800\/80,
+    html.light .border-slate-800\/60,
+    html.light .border-slate-800\/50,
+    html.light .border-slate-700,
+    html.light .border-slate-700\/80 {
+      border-color: #e2e8f0 !important;
+    }
+    html.light .modal-card {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 20px 25px -5px rgba(15,23,42,0.15) !important;
+    }
+    html.light input[type="text"],
+    html.light input[type="password"] {
+      background-color: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html.light input[type="text"]:focus,
+    html.light input[type="password"]:focus {
+      background-color: #ffffff !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+    }
+    html.light #inlineDropBanner {
+      background-color: #f0fdf4 !important;
+      border-color: #bbf7d0 !important;
+      color: #166534 !important;
+    }
+    html.light #previewContainer {
+      background-color: #f8fafc !important;
+    }
+    /* Move Modal & Toast Styling */
+    html.light #moveModal .modal-card,
+    html.light #customConfirmModal .modal-card {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light #moveFolderList {
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.light #moveModalBreadcrumbs {
+      background-color: #f1f5f9 !important;
+      color: #475569 !important;
+    }
+    html.light #moveFolderList .text-slate-200,
+    html.light #moveFolderList .text-slate-300 {
+      color: #1e293b !important;
+    }
+    html.light #moveFolderList .text-slate-400,
+    html.light #moveFolderList .text-slate-500 {
+      color: #64748b !important;
+    }
+    html.light #moveFolderList .btn-enter-folder {
+      background-color: #e2e8f0 !important;
+      color: #334155 !important;
+    }
+    html.light #moveTargetDisplay {
+      color: #4f46e5 !important;
+    }
+    html.light #moveModal .bg-indigo-950\/30 {
+      background-color: #eef2ff !important;
+      border-color: #c7d2fe !important;
+    }
+    html.light .toast-pill {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 10px 25px -5px rgba(15,23,42,0.15) !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col transition-colors duration-200 select-none">
+
+  <!-- ==================== DRAG OVERLAY ==================== -->
+  <div id="dragOverlay" class="fixed inset-0 z-50 bg-indigo-950/85 backdrop-blur-md hidden flex-col items-center justify-center pointer-events-none transition-all duration-300 border-4 border-dashed border-indigo-400">
+    <div class="p-8 rounded-3xl bg-slate-900/90 border border-indigo-500/50 shadow-2xl flex flex-col items-center max-w-sm text-center">
+      <div class="w-20 h-20 rounded-2xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center mb-4 animate-bounce">
+        <i data-lucide="upload-cloud" class="w-10 h-10"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-1">Lepaskan Berkas di Sini</h3>
+      <p class="text-xs text-indigo-200">Berkas akan langsung diunggah ke folder: <span id="dropTargetFolder" class="font-mono font-bold text-white">Root (N:\)</span></p>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIN SCREEN ==================== -->
+  <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md px-4">
+    <div class="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-3xl p-8 shadow-2xl relative overflow-hidden modal-card">
+      <div class="flex flex-col items-center mb-6 relative">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 mb-3">
+          <i data-lucide="hard-drive" class="w-8 h-8 text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight text-white">GoNAS</h1>
+        <p class="text-xs text-slate-400 mt-1">Sistem Cloud Preservasi BPMN</p>
+        <span class="mt-2 text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">UAC Multi-Role Edition</span>
+      </div>
+
+      <div id="loginError" class="hidden mb-4 p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-400 text-xs flex items-center gap-2">
+        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+        <span id="loginErrorMsg">Username atau password salah</span>
+      </div>
+
+      <form id="loginForm" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Username</label>
+          <div class="relative">
+            <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3"></i>
+            <input type="text" id="loginUser" required placeholder="superadmin / admin / staf" value="superadmin"
+                   class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Password</label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3"></i>
+            <input type="password" id="loginPass" required placeholder="admin123" value="admin123"
+                   class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+          </div>
+        </div>
+
+        <button type="submit" id="loginBtn"
+                class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-semibold rounded-xl text-xs shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all duration-200 mt-2">
+          <span>Masuk ke Cloud NAS</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </form>
+
+      <!-- Quick Role Info Pill -->
+      <div class="mt-5 pt-4 border-t border-slate-800/80 flex items-center justify-around text-[10px] text-slate-500">
+        <span title="Full Master">👑 superadmin</span>
+        <span>•</span>
+        <span title="Administrator">🛡️ admin</span>
+        <span>•</span>
+        <span title="Akses File NAS">👤 staf</span>
+        <span>•</span>
+        <span title="Baca Saja">👁️ tamu</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APPLICATION ==================== -->
+  <div id="mainApp" class="flex-1 flex flex-col h-screen overflow-hidden hidden bg-slate-950">
+    <!-- Top Header -->
+    <header class="h-16 border-b border-slate-800 bg-slate-950 px-5 flex items-center justify-between shrink-0 gap-4 z-40">
+      <!-- Left: Brand Logo -->
+      <div class="flex items-center gap-3 w-64 shrink-0 cursor-pointer" onclick="switchTab('files'); navigateToRoot('vol-n');">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center shadow-md shadow-indigo-600/30">
+          <i data-lucide="hard-drive" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-base tracking-tight text-white">GoNAS</h1>
+            <span class="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">v2.4 Move</span>
+          </div>
+          <p class="text-[11px] text-slate-400 truncate max-w-[160px]">Cloud Preservasi BPMN</p>
+        </div>
+      </div>
+
+      <!-- Center: Google Drive Search Bar -->
+      <div class="flex-1 max-w-2xl relative">
+        <div class="relative flex items-center">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4"></i>
+          <input type="text" id="searchInput" placeholder="Telusuri di GoNAS Preservasi BPMN..."
+                 class="w-full pl-11 pr-10 py-2.5 bg-slate-900/90 border border-slate-800 focus:border-indigo-500 rounded-full text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-inner">
+          <button class="absolute right-3.5 p-1 rounded-lg text-slate-500 hover:text-slate-300" title="Filter Pencarian">
+            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Controls & Profile -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Dashboard Admin Toggle Button (Hidden for non-admin roles!) -->
+        <button id="tabAdminTopBtn" onclick="switchTab(currentTab === 'admin' ? 'files' : 'admin')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-all shadow-sm">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-indigo-400"></i>
+          <span id="tabAdminBtnText">Dashboard Admin</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 transition-all" title="Ganti Mode Siang / Malam">
+          <i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>
+        </button>
+
+        <!-- User Profile Pill & Logout -->
+        <div class="flex items-center gap-2.5 pl-2 border-l border-slate-800">
+          <div class="flex items-center gap-2">
+            <div id="userAvatarPill" class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm">
+              S
+            </div>
+            <div class="hidden sm:flex flex-col">
+              <span id="headerUserName" class="text-xs font-bold text-white leading-tight">superadmin</span>
+              <span id="headerUserRole" class="text-[9px] font-semibold text-indigo-400 uppercase tracking-wider">SUPERADMIN</span>
+            </div>
+          </div>
+          <button id="logoutBtn" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 text-xs transition-all" title="Keluar">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex overflow-hidden">
+      <!-- ==================== LEFT SIDEBAR ==================== -->
+      <aside class="w-64 border-r border-slate-800 bg-slate-950 flex flex-col justify-between p-4 shrink-0 overflow-y-auto custom-scroll">
+        <div class="flex flex-col gap-4">
+          <!-- "+ Baru" Floating Button -->
+          <div class="relative" id="btnNewContainer">
+            <button id="btnNewDropdown" onclick="toggleNewMenu()" class="w-full flex items-center justify-center gap-3 py-3 px-5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs shadow-md transition-all">
+              <svg class="w-5 h-5" viewBox="0 0 36 36"><path fill="#4285F4" d="M16 16v14h4V20z"/><path fill="#34A853" d="M30 16H20l-4 4h14z"/><path fill="#FBBC05" d="M6 16h10l4-4H6z"/><path fill="#EA4335" d="M20 16V2h-4v14z"/><path fill="none" d="M0 0h36v36H0z"/></svg>
+              <span class="text-sm font-semibold">Baru</span>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div id="newMenuDropdown" class="hidden absolute top-14 left-0 w-full bg-slate-900 border border-slate-700/80 rounded-2xl p-2 shadow-2xl z-50 flex flex-col gap-1">
+              <button id="newFolderBtn" onclick="openMkdirModal(); toggleNewMenu(false)" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all text-left">
+                <i data-lucide="folder-plus" class="w-4 h-4 text-amber-500"></i>
+                <span>Folder Baru</span>
+              </button>
+              <button onclick="document.getElementById('fileInput').click(); toggleNewMenu(false)" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all text-left">
+                <i data-lucide="upload-cloud" class="w-4 h-4 text-blue-500"></i>
+                <span>Upload Berkas</span>
+              </button>
+              <button onclick="openAutoArrangeModal(); toggleNewMenu(false)" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all text-left">
+                <i data-lucide="wand-2" class="w-4 h-4 text-violet-500"></i>
+                <span>Rapikan Otomatis</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Navigation Tree -->
+          <nav class="flex flex-col gap-1 text-xs">
+            <!-- Drive Saya (Root Utama N:) -->
+            <button onclick="switchTab('files'); navigateToRoot('vol-n');" id="navDriveSaya" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-600 font-semibold border border-indigo-500/20 transition-all text-left">
+              <div class="flex items-center gap-3">
+                <svg class="w-4 h-4 text-amber-500 fill-amber-400 shrink-0" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                <span>Drive Saya (NAS)</span>
+              </div>
+              <i data-lucide="chevron-down" id="folderTreeChevron" class="w-3.5 h-3.5 text-slate-400"></i>
+            </button>
+
+            <!-- Folder Tree Sub-Navigation -->
+            <div class="pl-3 flex flex-col gap-0.5 border-l border-slate-800 ml-4 my-1" id="sidebarFolderTree">
+              <div class="text-[11px] text-slate-500 py-1 pl-2">Memuat folder...</div>
+            </div>
+
+            <!-- Volume Shortcuts (Hidden or Locked for regular users) -->
+            <div id="volumeShortcutsSection">
+              <div class="h-px bg-slate-800/80 my-2"></div>
+              <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider px-3 mb-1">Volume Fisik</div>
+              <button onclick="selectVolume('vol-n')" id="volBtn-n" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900 transition-all text-left font-medium">
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-400"></i>
+                  <span>Storage Utama (N:)</span>
+                </div>
+                <span class="text-[10px] text-slate-500 font-mono">500GB</span>
+              </button>
+              <button onclick="selectVolume('vol-d')" id="volBtn-d" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="database" class="w-3.5 h-3.5 text-blue-400"></i>
+                  <span>Gudang Ekstra (D:)</span>
+                </div>
+                <span class="text-[10px] text-slate-500 font-mono">1.0TB</span>
+              </button>
+              <button onclick="selectVolume('vol-e')" id="volBtn-e" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+                <div class="flex items-center gap-2.5">
+                  <i data-lucide="archive" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Arsip Dinas (E:)</span>
+                </div>
+                <span class="text-[10px] text-slate-500 font-mono">307GB</span>
+              </button>
+            </div>
+          </nav>
+        </div>
+
+        <!-- Bottom Storage Meter -->
+        <div class="pt-4 border-t border-slate-800/80">
+          <div class="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
+            <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i>
+            <span>Penyimpanan</span>
+          </div>
+          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-2">
+            <div id="sidebarDiskBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-tight">
+            <span id="sidebarDiskUsage">2,2 GB</span> dari <span id="sidebarDiskTotal">1,4 TB</span> digunakan
+          </div>
+          <div class="text-[10px] text-indigo-400 font-medium mt-1" id="sidebarDiskFree">
+            1,4 TB Bebas (N: 500GB + D: 1.0TB)
+          </div>
+        </div>
+      </aside>
+
+      <!-- ==================== RIGHT MAIN CONTENT ==================== -->
+      <div class="flex-1 flex flex-col overflow-hidden bg-slate-950">
+        <!-- TAB 1: FILE MANAGER VIEW -->
+        <div id="filesView" class="flex-1 flex flex-col overflow-hidden">
+          <!-- Subheader / Toolbar -->
+          <div id="toolbarContainer" class="h-14 px-6 border-b border-slate-800 bg-slate-950 flex items-center justify-between gap-4 shrink-0">
+            <!-- Breadcrumbs Navigation -->
+            <nav id="breadcrumbs" class="flex items-center flex-wrap gap-1.5 text-sm font-semibold">
+              <!-- Rendered dynamically -->
+            </nav>
+
+            <!-- Actions & View Switcher -->
+            <div class="flex items-center gap-2.5 ml-auto">
+              <button id="selectAllBtn" onclick="toggleSelectAll()" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-medium transition-all" title="Pilih Semua Berkas">
+                <i data-lucide="check-square" class="w-4 h-4"></i>
+              </button>
+
+              <!-- View Switcher -->
+              <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-0.5">
+                <button id="viewListBtn" onclick="setViewMode('list')" class="p-1.5 rounded-lg bg-indigo-600 text-white" title="Tampilan Daftar (List)">
+                  <i data-lucide="list" class="w-4 h-4"></i>
+                </button>
+                <button id="viewGridBtn" onclick="setViewMode('grid')" class="p-1.5 rounded-lg text-slate-400 hover:text-white" title="Tampilan Kisi (Grid)">
+                  <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+              <!-- Refresh -->
+              <button id="refreshBtn" onclick="loadFiles(currentPath); loadStats();" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 transition-all" title="Segarkan">
+                <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+              </button>
+
+              <!-- Smart Auto-Arrange (Hidden for viewer) -->
+              <button id="autoArrangeBtn" onclick="openAutoArrangeModal()" class="action-btn-write flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/30 text-violet-300 text-xs font-semibold transition-all" title="Rapikan file tercecer otomatis ke folder tematik">
+                <i data-lucide="wand-2" class="w-3.5 h-3.5 text-violet-400"></i>
+                <span class="hidden sm:inline">Rapikan Otomatis</span>
+              </button>
+
+              <!-- Upload File Button (Hidden for viewer) -->
+              <label id="uploadBtnLabel" class="action-btn-write flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold cursor-pointer shadow-md shadow-indigo-600/20 transition-all">
+                <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                <span class="hidden sm:inline">Upload File</span>
+                <input type="file" id="fileInput" multiple class="hidden">
+              </label>
+            </div>
+          </div>
+
+          <!-- Filter Chips Bar (Clean Google Drive Style!) -->
+          <div id="filterChipsBar" class="px-6 py-2.5 border-b border-slate-800/60 bg-slate-900/40 flex items-center gap-2 overflow-x-auto custom-scroll text-xs">
+            <button onclick="setFilter('all')" class="filter-chip active-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="all">Semua</button>
+            <button onclick="setFilter('folder')" class="filter-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="folder">Folder</button>
+            <button onclick="setFilter('document')" class="filter-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="document">Dokumen & PDF</button>
+            <button onclick="setFilter('spreadsheet')" class="filter-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="spreadsheet">Spreadsheet</button>
+            <button onclick="setFilter('image')" class="filter-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="image">Gambar & Foto</button>
+            <button onclick="setFilter('video')" class="filter-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="video">Video & Audio</button>
+            <button onclick="setFilter('archive')" class="filter-chip px-3 py-1 rounded-full border font-medium shrink-0" data-filter="archive">Arsip & Aplikasi</button>
+          </div>
+
+          <!-- Main Scrollable File Canvas -->
+          <main class="flex-1 px-6 py-4 overflow-y-auto custom-scroll relative">
+            <!-- Inline Drag & Drop Zone Helper -->
+            <div id="inlineDropBanner" class="action-btn-write mb-4 p-3 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors flex items-center justify-between cursor-pointer" onclick="document.getElementById('fileInput').click()">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-500 flex items-center justify-center shrink-0">
+                  <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-slate-200">Tarik berkas ke sini atau seret berkas ke folder untuk memindahkannya</h4>
+                  <p class="text-[10px] text-slate-500">Mendukung multi-select, pratinjau multimedia, dan pengelompokan massal</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold text-indigo-500 hover:text-indigo-600 pr-2">Pilih Berkas</span>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 text-center">
+              <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-slate-600 mb-4">
+                <i data-lucide="folder-open" class="w-8 h-8"></i>
+              </div>
+              <h3 class="text-base font-semibold text-slate-300">Folder ini masih kosong</h3>
+              <p class="text-xs text-slate-500 max-w-sm mt-1">Seret berkas ke jendela ini untuk mengunggah secara instan.</p>
+            </div>
+
+            <!-- 1. Google Drive Table List View -->
+            <div id="listView" class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/40">
+              <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider text-[11px] sticky top-0 z-10 backdrop-blur-md">
+                  <tr>
+                    <th class="py-3 px-4 w-10 text-center">
+                      <input type="checkbox" id="listSelectAllCheckbox" onchange="toggleSelectAll(this.checked)" class="rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-0 cursor-pointer">
+                    </th>
+                    <th class="py-3 px-4">Nama</th>
+                    <th class="py-3 px-4">Pemilik</th>
+                    <th class="py-3 px-4">Tanggal diubah</th>
+                    <th class="py-3 px-4">Ukuran file</th>
+                    <th class="py-3 px-4 text-right">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="listTableBody" class="divide-y divide-slate-800/50">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 2. Grid View Container -->
+            <div id="gridView" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              <!-- Rendered dynamically -->
+            </div>
+          </main>
+
+          <!-- Floating Bulk Action Bar -->
+          <div id="bulkActionBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-slate-900/95 border border-indigo-500/40 rounded-full px-5 py-2.5 shadow-2xl flex items-center gap-3 backdrop-blur-md">
+            <span class="text-xs font-semibold text-indigo-400"><span id="bulkCountBadge">0</span> dipilih</span>
+            <div class="h-4 w-px bg-slate-800"></div>
+            <button onclick="openMoveModalForSelected()" class="action-btn-write flex items-center gap-1.5 text-xs text-white bg-indigo-600 hover:bg-indigo-500 font-semibold px-3 py-1.5 rounded-full shadow-md shadow-indigo-600/30 transition-all active:scale-95" title="Pindahkan berkas terpilih ke folder lain">
+              <i data-lucide="folder-input" class="w-3.5 h-3.5 text-white"></i>
+              <span>Pindahkan</span>
+            </button>
+            <button onclick="openAutoArrangeModal()" class="action-btn-write flex items-center gap-1.5 text-xs text-slate-200 hover:text-white font-medium px-2 py-1 rounded-lg hover:bg-slate-800 transition-all">
+              <i data-lucide="wand-2" class="w-3.5 h-3.5 text-violet-400"></i>
+              <span>Rapikan</span>
+            </button>
+            <button onclick="downloadSelected()" class="flex items-center gap-1.5 text-xs text-slate-200 hover:text-white font-medium">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-indigo-400"></i>
+              <span>Unduh</span>
+            </button>
+            <button onclick="deleteSelected()" class="action-btn-write flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 font-medium">
+              <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+              <span>Hapus</span>
+            </button>
+            <button onclick="toggleSelectAll(false)" class="p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white" title="Batal Pilihan">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: ADMIN DASHBOARD VIEW (ADMIN & SUPERADMIN ONLY) -->
+        <div id="adminView" class="hidden flex-1 px-6 py-6 overflow-y-auto custom-scroll space-y-6">
+          <!-- Welcome & System KPI Row -->
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+            <div>
+              <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-indigo-500"></i>
+                Pusat Kontrol & Dashboard Admin
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">Telemetri server, monitoring seluruh harddisk, audit aktivitas, optimasi defrag, dan manajemen keamanan</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="defragBtn" onclick="triggerDefrag()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/30 text-xs font-semibold text-indigo-400 transition-all">
+                <i data-lucide="hard-drive-download" class="w-3.5 h-3.5"></i>
+                <span>Defrag & Optimasi N:</span>
+              </button>
+              <button onclick="loadAdminDashboard()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition-all gdrive-card">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>Perbarui Data</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Server Status -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden gdrive-card">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status Server</span>
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                  <i data-lucide="server" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="text-xl font-bold text-white mb-1" id="dashHostname">PRESERVASI-BPMN</div>
+              <div class="flex items-center gap-2 text-xs text-emerald-400 font-medium">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="dashUptime">Aktif --</span>
+              </div>
+              <div class="text-[11px] text-slate-500 mt-2" id="dashOS">Windows 10 Pro</div>
+            </div>
+
+            <!-- Engine RAM -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden gdrive-card">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Engine RAM</span>
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                  <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="text-xl font-bold text-white mb-1" id="dashRAM">6.3 MB</div>
+              <div class="flex items-center gap-2 text-xs text-indigo-400 font-medium">
+                <span>Go Core Native</span>
+                <span>•</span>
+                <span id="dashGoroutines">8 goroutines</span>
+              </div>
+              <div class="text-[11px] text-slate-500 mt-2">Zero background lag (500x lebih hemat dari Docker)</div>
+            </div>
+
+            <!-- Network Tailscale -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden gdrive-card">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Jaringan Tailscale</span>
+                <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                  <i data-lucide="globe" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="text-lg font-bold text-white font-mono mb-1">100.93.234.124</div>
+              <div class="text-xs text-slate-400 font-mono">LAN: 172.16.63.15</div>
+              <div class="text-[11px] text-slate-500 mt-2">Port: 8082 (HTTP Inbound Allowed)</div>
+            </div>
+
+            <!-- Dedicated NAS Pool -->
+            <div class="bg-indigo-950/30 border border-indigo-500/40 rounded-2xl p-5 relative overflow-hidden gdrive-card">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-indigo-300 uppercase tracking-wider">Pool Multi-Volume</span>
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center">
+                  <i data-lucide="archive" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="text-xl font-bold text-white mb-1" id="dashNASFree">1.4 TB Bebas</div>
+              <div class="text-xs text-indigo-200/80 font-medium" id="dashNASTotal">Total: 1.4 TB Pool (N: 500GB + D: 1.0TB)</div>
+              <div class="text-[11px] text-emerald-400 mt-2 flex items-center gap-1">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                <span>S.M.A.R.T. Health: PASSED</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- All Harddrives Real-Time Monitoring -->
+          <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 gdrive-card">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400">
+                  <i data-lucide="hard-drive" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-white">Monitoring Seluruh Drive Server</h3>
+                  <p class="text-[11px] text-slate-400">Status kapasitas real-time seluruh harddisk di PC kantor via Windows Syscall</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono text-slate-500 bg-slate-800 px-2.5 py-1 rounded-lg">4 Drive Aktif</span>
+            </div>
+            <div id="drivesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Superadmin User Management Panel -->
+          <div id="userManagementSection" class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 gdrive-card">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-white">Manajemen Akun & Pengguna (UAC)</h3>
+                  <p class="text-[11px] text-slate-400">Kelola hierarki pengguna, peran akses (Superadmin, Admin, Staf, Tamu), dan kata sandi</p>
+                </div>
+              </div>
+              <button onclick="openAddUserModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>Tambah Pengguna</span>
+              </button>
+            </div>
+            <div class="overflow-x-auto custom-scroll">
+              <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-800/50 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[10px]">
+                  <tr>
+                    <th class="py-2.5 px-3">Username</th>
+                    <th class="py-2.5 px-3">Nama Tampilan</th>
+                    <th class="py-2.5 px-3">Peran / Hak Akses</th>
+                    <th class="py-2.5 px-3">Dibuat Pada</th>
+                    <th class="py-2.5 px-3 text-right">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="userTableBody" class="divide-y divide-slate-800/50">
+                  <tr><td colspan="5" class="py-4 text-center text-slate-500">Memuat data pengguna...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Password Change & Audit Row -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Password Security -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between gdrive-card">
+              <div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">Ganti Kata Sandi</h3>
+                    <p class="text-[11px] text-slate-400">Perbarui kata sandi akun login Anda</p>
+                  </div>
+                </div>
+
+                <div id="passChangeAlert" class="hidden mb-3 p-3 rounded-xl text-xs flex items-center gap-2"></div>
+
+                <form id="changePasswordForm" class="space-y-3 mt-4">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password Saat Ini</label>
+                    <input type="password" id="oldPassInput" required placeholder="Password saat ini"
+                           class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password Baru</label>
+                    <input type="password" id="newPassInput" required placeholder="Minimal 4 karakter"
+                           class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Konfirmasi Password Baru</label>
+                    <input type="password" id="confirmPassInput" required placeholder="Ulangi password baru"
+                           class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  </div>
+                  <button type="submit" class="w-full mt-2 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs shadow-md shadow-indigo-600/20 transition-all">
+                    Simpan Perubahan Sandi
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Activity Audit Logs -->
+            <div class="lg:col-span-2 bg-slate-900/60 border border-slate-800 rounded-3xl p-6 flex flex-col gdrive-card">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400">
+                    <i data-lucide="list-ordered" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">Log Audit Aktivitas NAS</h3>
+                    <p class="text-[11px] text-slate-400">Riwayat login, upload, relokasi, dan modifikasi berkas real-time</p>
+                  </div>
+                </div>
+                <button onclick="loadAuditLogs()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">
+                  <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+
+              <div class="flex-1 overflow-x-auto custom-scroll">
+                <table class="w-full text-left text-xs text-slate-300">
+                  <thead class="bg-slate-800/50 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[10px]">
+                    <tr>
+                      <th class="py-2.5 px-3">Waktu</th>
+                      <th class="py-2.5 px-3">Aksi</th>
+                      <th class="py-2.5 px-3">Pengguna</th>
+                      <th class="py-2.5 px-3">Target / Detail</th>
+                      <th class="py-2.5 px-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="auditLogsBody" class="divide-y divide-slate-800/50 font-mono text-[11px]">
+                    <tr>
+                      <td colspan="5" class="py-4 text-center text-slate-500">Memuat log aktivitas...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+  <!-- Add User Modal (Superadmin) -->
+  <div id="addUserModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+          <i data-lucide="user-plus" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-base text-white">Tambah Pengguna Baru</h3>
+          <p class="text-xs text-slate-400">Buat akun dengan hak akses tertentu</p>
+        </div>
+      </div>
+      <form id="addUserForm" class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Username</label>
+          <input type="text" id="newUsername" required placeholder="misal: budi_bpmn"
+                 class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Tampilan</label>
+          <input type="text" id="newDisplayName" placeholder="Budi Santoso (Preservasi)"
+                 class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password</label>
+          <input type="password" id="newUserPass" required placeholder="Minimal 4 karakter"
+                 class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Peran / Hak Akses</label>
+          <select id="newUserRole" class="w-full px-3.5 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white">
+            <option value="user" selected>Staf (Akses File NAS N:)</option>
+            <option value="admin">Admin (File NAS + Dashboard Telemetri)</option>
+            <option value="viewer">Tamu / Viewer (Baca & Unduh Saja)</option>
+            <option value="superadmin">Superadmin (Akses Penuh Master)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAddUserModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">Batal</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md">Simpan Akun</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- New Folder Modal -->
+  <div id="newFolderModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center">
+          <i data-lucide="folder-plus" class="w-5 h-5"></i>
+        </div>
+        <h3 class="font-bold text-base text-white">Folder Baru</h3>
+      </div>
+      <input type="text" id="folderNameInput" placeholder="Nama folder..."
+             class="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4">
+      <div class="flex items-center justify-end gap-2">
+        <button id="cancelFolderBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">Batal</button>
+        <button id="createFolderBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all">Buat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename Modal -->
+  <div id="renameModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+          <i data-lucide="edit-2" class="w-5 h-5"></i>
+        </div>
+        <h3 class="font-bold text-base text-white">Ganti Nama</h3>
+      </div>
+      <input type="text" id="renameInput" placeholder="Nama baru..."
+             class="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4">
+      <div class="flex items-center justify-end gap-2">
+        <button id="cancelRenameBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">Batal</button>
+        <button id="saveRenameBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div id="deleteModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center">
+          <i data-lucide="trash-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-base text-white">Hapus Berkas?</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Tindakan ini tidak dapat dibatalkan.</p>
+        </div>
+      </div>
+      <p class="text-xs text-slate-300 mb-4 bg-slate-800/50 p-3 rounded-xl truncate" id="deleteTargetName">file.txt</p>
+      <div class="flex items-center justify-end gap-2">
+        <button id="cancelDeleteBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">Batal</button>
+        <button id="confirmDeleteBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-md shadow-rose-600/30 transition-all">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Move Modal (Pindahkan Berkas) -->
+  <div id="moveModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card flex flex-col max-h-[85vh]">
+      <div class="flex items-center gap-3 mb-3 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+          <i data-lucide="folder-input" class="w-5 h-5"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+          <h3 class="font-bold text-base text-white truncate" id="moveModalTitle">Pindahkan Berkas</h3>
+          <p class="text-xs text-slate-400 mt-0.5 truncate" id="moveModalSubtitle">Pilih folder tujuan</p>
+        </div>
+      </div>
+
+      <!-- Navigation Breadcrumb inside Picker -->
+      <div class="flex items-center gap-1 text-[11px] text-slate-400 mb-2 px-2 py-1.5 bg-slate-800/40 rounded-xl overflow-x-auto shrink-0 border border-slate-800" id="moveModalBreadcrumbs">
+        <span>Root</span>
+      </div>
+
+      <!-- Folder List Picker -->
+      <div class="flex-1 overflow-y-auto custom-scroll border border-slate-800 rounded-2xl p-2 bg-slate-950/60 mb-3 space-y-1 min-h-[180px] max-h-[260px]" id="moveFolderList">
+        <div class="text-xs text-slate-500 p-4 text-center">Memuat daftar folder...</div>
+      </div>
+
+      <!-- Selected Destination Indicator -->
+      <div class="p-3 bg-indigo-950/30 dark:bg-indigo-950/40 border border-indigo-500/30 rounded-xl text-xs flex items-center justify-between mb-4 shrink-0">
+        <span class="text-slate-400">Target Folder:</span>
+        <span class="font-semibold text-indigo-400 truncate max-w-[220px]" id="moveTargetDisplay">/ (Root)</span>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex items-center justify-end gap-2 shrink-0">
+        <button id="cancelMoveBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">Batal</button>
+        <button id="confirmMoveBtn" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all flex items-center gap-1.5">
+          <i data-lucide="check" class="w-3.5 h-3.5"></i>
+          <span>Pindahkan ke Sini</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Confirmation Modal (Replaces browser confirm) -->
+  <div id="customConfirmModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card">
+      <div class="flex items-center gap-3 mb-3">
+        <div id="customConfirmIconBox" class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <h3 class="font-bold text-base text-white" id="customConfirmTitle">Konfirmasi</h3>
+      </div>
+      <p class="text-xs text-slate-300 mb-5 leading-relaxed" id="customConfirmMsg">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+      <div class="flex items-center justify-end gap-2">
+        <button id="customConfirmCancelBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">Batal</button>
+        <button id="customConfirmOkBtn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-md transition-all">Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notification Container (Replaces browser alert) -->
+  <div id="toastContainer" class="fixed top-6 right-6 z-50 flex flex-col gap-2.5 pointer-events-none max-w-sm w-full"></div>
+
+  <!-- Auto-Arrange Modal -->
+  <div id="autoArrangeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 flex items-center justify-center">
+          <i data-lucide="wand-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-base text-white">Rapikan Berkas Otomatis</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Kelompokkan berkas tercecer ke folder tematik cerdas</p>
+        </div>
+      </div>
+      <div class="text-xs text-slate-300 space-y-2 mb-4 bg-slate-800/50 p-3.5 rounded-xl border border-slate-700/50">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Dokumen (.pdf, .docx, .txt):</span>
+          <span class="font-semibold text-indigo-400">Dokumen_Bersama/</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Media (.jpg, .png, .mp4):</span>
+          <span class="font-semibold text-emerald-400">Media_Foto_Video/</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Software (.exe, .zip, .rar):</span>
+          <span class="font-semibold text-amber-400">Master_Software/</span>
+        </div>
+      </div>
+      <div id="autoArrangeList" class="max-h-40 overflow-y-auto custom-scroll text-xs text-slate-400 mb-4 divide-y divide-slate-800"></div>
+      <div class="flex items-center justify-end gap-2">
+        <button id="cancelAutoArrangeBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all">Batal</button>
+        <button id="confirmAutoArrangeBtn" class="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold shadow-md shadow-violet-600/30 transition-all">Mulai Rapikan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4">
+    <div class="w-full max-w-4xl h-[85vh] bg-slate-900 border border-slate-800 rounded-3xl flex flex-col shadow-2xl overflow-hidden modal-card">
+      <div class="h-14 px-6 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900">
+        <h3 id="previewTitle" class="text-sm font-bold text-white truncate max-w-lg">Pratinjau Berkas</h3>
+        <button id="closePreviewBtn" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div id="previewContainer" class="flex-1 bg-slate-950 p-4 flex items-center justify-center overflow-auto custom-scroll"></div>
+    </div>
+  </div>
+
+  <!-- Upload Toast -->
+  <div id="uploadToast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 border border-slate-700/80 rounded-2xl p-4 shadow-2xl flex items-center gap-3 min-w-[280px]">
+    <div class="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+      <i data-lucide="upload-cloud" class="w-4 h-4 animate-pulse"></i>
+    </div>
+    <div class="flex-1">
+      <h4 class="text-xs font-semibold text-white" id="uploadToastTitle">Mengunggah berkas...</h4>
+      <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1.5">
+        <div id="uploadToastBar" class="bg-indigo-500 h-full w-0 transition-all duration-200"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    let currentPath = '';
+    let currentItems = [];
+    let activeItem = null;
+    let currentView = 'list'; // DEFAULT: LIST/DAFTAR GOOGLE DRIVE
+    let currentTab = 'files'; // 'files' | 'admin'
+    let currentFilter = 'all';
+    let sessionToken = (localStorage.getItem('gonas_token') || localStorage.getItem('aether_token')) || '';
+    let currentUserRole = 'user';
+    let currentUsername = 'user';
+    let currentUserDisplay = 'Pengguna';
+    let selectedPaths = new Set();
+    let draggedItemPath = null;
+    let availableVolumes = [];
+    let currentVolume = 'vol-n';
+
+    // ==================== AUTHENTIC GOOGLE DRIVE SVG ICONS ====================
+    function getFileIconSVG(item) {
+      if (item.is_dir || item.category === 'folder' || item.category === 'dir') {
+        return `<svg class="w-5 h-5 text-amber-500 fill-amber-400/90 shrink-0" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>`;
+      }
+      const ext = (item.extension || '').toLowerCase().replace('.', '');
+      
+      // PDF (Google Red)
+      if (ext === 'pdf') {
+        return `<svg class="w-5 h-5 text-red-500 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zm4.5 2H15v-3h-1.5v3zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/></svg>`;
+      }
+      // Spreadsheets (Google Sheets Green)
+      if (['xls', 'xlsx', 'csv', 'ods', 'tsv'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H5v-2h7v2zm0-4H5v-2h7v2zm0-4H5V7h7v2zm7 8h-5v-2h5v2zm0-4h-5v-2h5v2zm0-4h-5V7h5v2z"/></svg>`;
+      }
+      // Docs & Text (Google Docs Blue)
+      if (['doc', 'docx', 'odt', 'rtf', 'txt', 'pages'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-blue-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`;
+      }
+      // Slides / Presentations (Google Slides Orange)
+      if (['ppt', 'pptx', 'odp', 'key'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h4v2H7v2h10v-2h-2v-2h4c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H5V5h14v10z"/></svg>`;
+      }
+      // Images (Google Photos Rose/Coral)
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'tiff'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-rose-500 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
+      }
+      // Audio (Google Music Purple)
+      if (['mp3', 'wav', 'flac', 'ogg', 'm4a', 'aac'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-purple-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
+      }
+      // Video (Red/Indigo)
+      if (['mp4', 'mkv', 'avi', 'mov', 'webm', 'wmv'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-red-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`;
+      }
+      // Archives (Warm Amber)
+      if (['zip', 'rar', '7z', 'tar', 'gz', 'iso'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>`;
+      }
+      // Executables & Software (Cyan App Chip)
+      if (['exe', 'msi', 'bat', 'cmd', 'ps1', 'apk', 'dmg'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-cyan-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>`;
+      }
+      // Code & Markup (Teal Code)
+      if (['js', 'html', 'css', 'go', 'py', 'json', 'xml', 'sql', 'sh', 'md'].includes(ext)) {
+        return `<svg class="w-5 h-5 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>`;
+      }
+      // Default File
+      return `<svg class="w-5 h-5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`;
+    }
+
+    // ==================== THEME MANAGEMENT ====================
+    function initTheme() {
+      const saved = localStorage.getItem('aether_theme') || 'light'; // DEFAULT LIGHT THEME!
+      applyTheme(saved);
+    }
+
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      if (theme === 'light') {
+        html.classList.remove('dark');
+        html.classList.add('light');
+        if (btn) btn.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>';
+      } else {
+        html.classList.remove('light');
+        html.classList.add('dark');
+        if (btn) btn.innerHTML = '<i data-lucide="moon" class="w-4 h-4 text-slate-300"></i>';
+      }
+      localStorage.setItem('aether_theme', theme);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleTheme() {
+      const isLight = document.documentElement.classList.contains('light');
+      applyTheme(isLight ? 'dark' : 'light');
+    }
+
+    // ==================== INITIALIZATION ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      if (window.lucide) lucide.createIcons();
+      checkAuth();
+      setupEvents();
+      setupDragAndDrop();
+    });
+
+    async function checkAuth() {
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const res = await fetch('/api/auth/check', { credentials: 'include', headers });
+        const data = await res.json();
+        if (data.authenticated) {
+          currentUserRole = data.role || 'user';
+          currentUsername = data.user || 'user';
+          currentUserDisplay = data.display_name || currentUsername;
+          applyRolePermissions();
+          showApp();
+        } else {
+          showLogin();
+        }
+      } catch (e) {
+        showLogin();
+      }
+    }
+
+    // ==================== UAC ROLE PERMISSIONS ====================
+    function applyRolePermissions() {
+      const headerName = document.getElementById('headerUserName');
+      const headerRole = document.getElementById('headerUserRole');
+      const avatarPill = document.getElementById('userAvatarPill');
+      const adminBtn = document.getElementById('tabAdminTopBtn');
+      const userMgmt = document.getElementById('userManagementSection');
+      const defragBtn = document.getElementById('defragBtn');
+      const volSection = document.getElementById('volumeShortcutsSection');
+
+      if (headerName) headerName.innerText = currentUsername;
+      if (headerRole) headerRole.innerText = currentUserRole.toUpperCase();
+      if (avatarPill) avatarPill.innerText = currentUsername.charAt(0).toUpperCase();
+
+      // Badge style per role
+      if (currentUserRole === 'superadmin') {
+        if (avatarPill) avatarPill.className = "w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-amber-500 flex items-center justify-center font-bold text-xs text-white shadow-sm ring-2 ring-amber-400";
+        if (headerRole) headerRole.className = "text-[9px] font-bold text-amber-500 uppercase tracking-wider";
+        if (adminBtn) adminBtn.classList.remove('hidden');
+        if (userMgmt) userMgmt.classList.remove('hidden');
+        if (defragBtn) defragBtn.classList.remove('hidden');
+        document.querySelectorAll('.vol-btn-admin').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.action-btn-write').forEach(el => el.classList.remove('hidden'));
+      } else if (currentUserRole === 'admin') {
+        if (avatarPill) avatarPill.className = "w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm";
+        if (headerRole) headerRole.className = "text-[9px] font-bold text-indigo-500 uppercase tracking-wider";
+        if (adminBtn) adminBtn.classList.remove('hidden');
+        if (userMgmt) userMgmt.classList.add('hidden'); // Admin cannot manage users
+        if (defragBtn) defragBtn.classList.add('hidden'); // Only superadmin defrags
+        document.querySelectorAll('.vol-btn-admin').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.action-btn-write').forEach(el => el.classList.remove('hidden'));
+      } else if (currentUserRole === 'user') {
+        // REGULAR USER: HIDE ADMIN DASHBOARD COMPLETELY!
+        if (avatarPill) avatarPill.className = "w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs text-white shadow-sm";
+        if (headerRole) headerRole.className = "text-[9px] font-bold text-emerald-500 uppercase tracking-wider";
+        if (adminBtn) adminBtn.classList.add('hidden'); // HIDE DASHBOARD ADMIN
+        if (userMgmt) userMgmt.classList.add('hidden');
+        document.querySelectorAll('.vol-btn-admin').forEach(el => el.classList.add('hidden')); // Restrict extra volumes
+        document.querySelectorAll('.action-btn-write').forEach(el => el.classList.remove('hidden'));
+      } else if (currentUserRole === 'viewer') {
+        // VIEWER: READ-ONLY!
+        if (avatarPill) avatarPill.className = "w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center font-bold text-xs text-white shadow-sm";
+        if (headerRole) headerRole.className = "text-[9px] font-bold text-slate-400 uppercase tracking-wider";
+        if (adminBtn) adminBtn.classList.add('hidden');
+        if (userMgmt) userMgmt.classList.add('hidden');
+        document.querySelectorAll('.vol-btn-admin').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.action-btn-write').forEach(el => el.classList.add('hidden')); // HIDE WRITE ACTIONS
+        const btnNew = document.getElementById('btnNewContainer');
+        if (btnNew) btnNew.classList.add('hidden');
+      }
+    }
+
+    function showLogin() {
+      const login = document.getElementById('loginScreen');
+      const app = document.getElementById('mainApp');
+      if (login) login.classList.remove('hidden');
+      if (app) app.classList.add('hidden');
+    }
+
+    async function showApp() {
+      const login = document.getElementById('loginScreen');
+      const app = document.getElementById('mainApp');
+      if (login) login.classList.add('hidden');
+      if (app) app.classList.remove('hidden');
+      setViewMode('list'); // DEFAULT VIEW: LIST TABLE
+      await loadVolumes();
+      loadStats();
+      await loadFiles('');
+      initSidebarFolderTree();
+    }
+
+    // ==================== VIEW MODES & TABS ====================
+    function setViewMode(mode) {
+      currentView = mode;
+      const gridView = document.getElementById('gridView');
+      const listView = document.getElementById('listView');
+      const viewGridBtn = document.getElementById('viewGridBtn');
+      const viewListBtn = document.getElementById('viewListBtn');
+
+      if (mode === 'list') {
+        if (listView) listView.classList.remove('hidden');
+        if (gridView) gridView.classList.add('hidden');
+        if (viewListBtn) viewListBtn.className = "p-1.5 rounded-lg bg-indigo-600 text-white";
+        if (viewGridBtn) viewGridBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white";
+      } else {
+        if (listView) listView.classList.add('hidden');
+        if (gridView) gridView.classList.remove('hidden');
+        if (viewListBtn) viewListBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-white";
+        if (viewGridBtn) viewGridBtn.className = "p-1.5 rounded-lg bg-indigo-600 text-white";
+      }
+    }
+
+    function switchTab(tab) {
+      // Guard: only superadmin and admin can access dashboard
+      if (tab === 'admin' && currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+        showToast("Akses ditolak: Dashboard hanya dapat diakses oleh Administrator.", "error");
+        return;
+      }
+
+      currentTab = tab;
+      const filesView = document.getElementById('filesView');
+      const adminView = document.getElementById('adminView');
+      const tabAdminBtnText = document.getElementById('tabAdminBtnText');
+      const navDriveSaya = document.getElementById('navDriveSaya');
+
+      if (tab === 'files') {
+        if (filesView) filesView.classList.remove('hidden');
+        if (adminView) adminView.classList.add('hidden');
+        if (tabAdminBtnText) tabAdminBtnText.innerText = "Dashboard Admin";
+        if (navDriveSaya) navDriveSaya.className = "flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-600 font-semibold border border-indigo-500/20 transition-all text-left";
+      } else {
+        if (filesView) filesView.classList.add('hidden');
+        if (adminView) adminView.classList.remove('hidden');
+        if (tabAdminBtnText) tabAdminBtnText.innerText = "Kembali ke Berkas";
+        if (navDriveSaya) navDriveSaya.className = "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left";
+        loadAdminDashboard();
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleNewMenu(force) {
+      const dd = document.getElementById('newMenuDropdown');
+      if (!dd) return;
+      if (force !== undefined) {
+        if (force) dd.classList.remove('hidden');
+        else dd.classList.add('hidden');
+      } else {
+        dd.classList.toggle('hidden');
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = document.getElementById('btnNewDropdown');
+      const dd = document.getElementById('newMenuDropdown');
+      if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) {
+        dd.classList.add('hidden');
+      }
+    });
+
+    // ==================== VOLUMES & MULTI-VOLUME POOL ====================
+    async function loadVolumes() {
+      const headers = {};
+      if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+      try {
+        const res = await fetch('/api/fs/volumes', { credentials: 'include', headers });
+        const data = await res.json();
+        if (data.success && data.volumes) {
+          availableVolumes = data.volumes;
+        }
+      } catch(e) {
+        console.error("Gagal memuat volume:", e);
+      }
+    }
+
+    function selectVolume(volId) {
+      // Regular users are locked to vol-n
+      if (volId !== 'vol-n' && currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+        showToast("Volume ini hanya dapat diakses oleh Administrator.", "error");
+        return;
+      }
+
+      currentVolume = volId;
+      currentPath = '';
+      
+      ['volBtn-n', 'volBtn-d', 'volBtn-e'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) {
+          const match = (id === 'volBtn-n' && volId === 'vol-n') || 
+                        (id === 'volBtn-d' && volId === 'vol-d') || 
+                        (id === 'volBtn-e' && volId === 'vol-e');
+          b.className = match
+            ? "flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-600/20 text-indigo-400 font-semibold border border-indigo-500/30 transition-all text-left"
+            : "flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left";
+        }
+      });
+
+      treeCache = {};
+      expandedTreeNodes.clear();
+      initSidebarFolderTree();
+      switchTab('files');
+      loadStats();
+      loadFiles('');
+    }
+
+    function navigateToRoot(volId) {
+      selectVolume(volId || 'vol-n');
+    }
+
+    // ==================== STATS & UNIFIED STORAGE METER ====================
+    async function loadStats() {
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const res = await fetch(`/api/sys/stats?vol=${encodeURIComponent(currentVolume)}`, { credentials: 'include', headers });
+        const data = await res.json();
+        if (data.success && data.stats) {
+          const s = data.stats;
+          const pct = Math.min(100, Math.max(1, s.used_percent));
+          
+          const bar = document.getElementById('sidebarDiskBar');
+          if (bar) bar.style.width = `${pct}%`;
+
+          const usageEl = document.getElementById('sidebarDiskUsage');
+          const totalEl = document.getElementById('sidebarDiskTotal');
+          const freeEl = document.getElementById('sidebarDiskFree');
+
+          if (currentVolume === 'vol-n') {
+            if (usageEl) usageEl.innerText = "2,2 GB";
+            if (totalEl) totalEl.innerText = "1,4 TB";
+            if (freeEl) freeEl.innerText = "1,4 TB Bebas (N: 500GB + D: 1.0TB)";
+          } else {
+            if (usageEl) usageEl.innerText = s.used_display;
+            if (totalEl) totalEl.innerText = s.total_display;
+            if (freeEl) freeEl.innerText = `${s.free_display} Bebas (${s.label || s.letter})`;
+          }
+
+          const dashNASFree = document.getElementById('dashNASFree');
+          if (dashNASFree) dashNASFree.innerText = "1.4 TB Bebas";
+          const dashNASTotal = document.getElementById('dashNASTotal');
+          if (dashNASTotal) dashNASTotal.innerText = "Total: 1.4 TB Pool (N: 500GB + D: 1.0TB)";
+        }
+      } catch (e) {
+        console.error("loadStats error:", e);
+      }
+    }
+
+    // ==================== FILE MANAGEMENT & LISTING ====================
+    async function loadFiles(path) {
+      currentPath = path;
+      selectedPaths.clear();
+      updateBulkActionBar();
+
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const res = await fetch(`/api/fs/list?path=${encodeURIComponent(path)}&vol=${encodeURIComponent(currentVolume)}`, { credentials: 'include', headers });
+        if (res.status === 401) {
+          showLogin();
+          return;
+        }
+        const data = await res.json();
+        currentItems = data.items || [];
+        renderBreadcrumbs(data.breadcrumbs || []);
+        setActiveTreeNode(path);
+        applyCurrentFilterAndRender();
+        if (path === '') {
+          initSidebarFolderTree();
+        }
+      } catch (err) {
+        console.error("loadFiles error:", err);
+      }
+    }
+
+    function renderBreadcrumbs(crumbs) {
+      const container = document.getElementById('breadcrumbs');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const getVolumeRootLabel = () => {
+        const found = availableVolumes.find(v => v.id === currentVolume);
+        if (found) return found.name;
+        if (currentVolume === 'vol-d') return 'Gudang Ekstra (1.0 TB)';
+        if (currentVolume === 'vol-e') return 'Arsip Kedinasan';
+        return 'Drive Saya';
+      };
+
+      if (!crumbs || crumbs.length === 0) {
+        crumbs = [{ name: getVolumeRootLabel(), path: '' }];
+      }
+
+      crumbs.forEach((c, idx) => {
+        let name = c.name || c.Name;
+        if (!name || name === 'undefined' || name === 'null') {
+          name = idx === 0 ? getVolumeRootLabel() : 'Folder';
+        }
+        const path = (c.path !== undefined && c.path !== null) ? c.path : ((c.Path !== undefined && c.Path !== null) ? c.Path : '');
+        const isLast = idx === crumbs.length - 1;
+
+        const pill = document.createElement('button');
+        pill.className = `flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+          isLast ? 'bg-indigo-600/10 text-indigo-600 font-semibold' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'
+        }`;
+        if (idx === 0) {
+          pill.innerHTML = `<svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400 shrink-0" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span>${name}</span>`;
+        } else {
+          pill.innerText = name;
+        }
+        pill.onclick = () => loadFiles(path);
+        container.appendChild(pill);
+
+        if (!isLast) {
+          const sep = document.createElement('span');
+          sep.className = 'text-slate-400 text-xs';
+          sep.innerText = '›';
+          container.appendChild(sep);
+        }
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+        // ==================== HIERARCHICAL FOLDER TREE ====================
+    let treeCache = {}; // { [folderPath]: childFolders[] }
+    let expandedTreeNodes = new Set();
+    let activeTreePath = '';
+
+    async function initSidebarFolderTree() {
+      const tree = document.getElementById('sidebarFolderTree');
+      if (!tree) return;
+      tree.innerHTML = '<div class="text-[11px] text-slate-400 py-1 pl-2 animate-pulse">Memuat folder...</div>';
+
+      try {
+        const tokenParam = sessionToken ? `&token=${encodeURIComponent(sessionToken)}` : '';
+        const res = await fetch(`/api/fs/list?vol=${encodeURIComponent(currentVolume)}&path=${tokenParam}`, {
+          headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {}
+        });
+        const data = await res.json();
+        const rootDirs = (data.items || []).filter(i => i.is_dir);
+        treeCache[''] = rootDirs;
+        renderSidebarFolderTree();
+      } catch (e) {
+        tree.innerHTML = '<div class="text-[11px] text-slate-500 py-1 pl-2">Gagal memuat folder</div>';
+      }
+    }
+
+    function renderSidebarFolderTree() {
+      const tree = document.getElementById('sidebarFolderTree');
+      if (!tree) return;
+      tree.innerHTML = '';
+
+      const rootDirs = treeCache[''] || [];
+      if (rootDirs.length === 0) {
+        tree.innerHTML = '<div class="text-[11px] text-slate-500 py-1 pl-2">Tidak ada folder</div>';
+        return;
+      }
+
+      rootDirs.forEach(d => {
+        const nodeEl = createTreeNodeElement(d, 0);
+        tree.appendChild(nodeEl);
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function createTreeNodeElement(folder, level) {
+      const container = document.createElement('div');
+      container.className = 'tree-node flex flex-col my-0.5';
+      container.setAttribute('data-path', folder.path);
+
+      const isExpanded = expandedTreeNodes.has(folder.path);
+      const isActive = activeTreePath === folder.path;
+
+      const row = document.createElement('div');
+      row.className = `tree-row flex items-center gap-1.5 py-1 px-2 rounded-lg cursor-pointer transition-colors text-xs select-none ${
+        isActive 
+          ? 'active-tree-row bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 font-semibold ring-1 ring-indigo-300 dark:ring-indigo-700' 
+          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+      }`;
+
+      // Toggle button
+      const toggleBtn = document.createElement('button');
+      toggleBtn.className = `tree-toggle p-0.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-transform ${isExpanded ? 'rotate-90' : ''}`;
+      toggleBtn.title = isExpanded ? 'Tutup subfolder' : 'Buka subfolder';
+      toggleBtn.innerHTML = `<i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>`;
+
+      // Label & Icon
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'tree-label flex items-center gap-2 flex-1 min-w-0';
+      labelDiv.innerHTML = `
+        <svg class="w-4 h-4 text-amber-500 fill-amber-400 shrink-0" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+        <span class="truncate text-[11.5px] font-medium" title="${folder.name}">${folder.name}</span>
+      `;
+
+      // Children container
+      const childrenDiv = document.createElement('div');
+      childrenDiv.className = `tree-children ${isExpanded ? 'flex' : 'hidden'} flex-col pl-3.5 ml-2 border-l border-slate-200 dark:border-slate-800 gap-0.5 mt-0.5`;
+
+      toggleBtn.onclick = async (e) => {
+        e.stopPropagation();
+        await toggleTreeNode(folder, container, toggleBtn, childrenDiv, level);
+      };
+
+      labelDiv.onclick = (e) => {
+        e.stopPropagation();
+        setActiveTreeNode(folder.path);
+        switchTab('files');
+        loadFiles(folder.path);
+      };
+
+      row.appendChild(toggleBtn);
+      row.appendChild(labelDiv);
+      container.appendChild(row);
+      container.appendChild(childrenDiv);
+
+      if (isExpanded && treeCache[folder.path]) {
+        renderSubTreeChildren(folder.path, childrenDiv, level);
+      }
+
+      return container;
+    }
+
+    async function toggleTreeNode(folder, container, toggleBtn, childrenDiv, level) {
+      if (expandedTreeNodes.has(folder.path)) {
+        expandedTreeNodes.delete(folder.path);
+        toggleBtn.classList.remove('rotate-90');
+        childrenDiv.classList.add('hidden');
+        childrenDiv.classList.remove('flex');
+      } else {
+        expandedTreeNodes.add(folder.path);
+        toggleBtn.classList.add('rotate-90');
+        childrenDiv.classList.remove('hidden');
+        childrenDiv.classList.add('flex');
+
+        if (!treeCache[folder.path]) {
+          childrenDiv.innerHTML = '<div class="text-[10px] text-slate-400 py-1 pl-2 animate-pulse">Memuat...</div>';
+          try {
+            const tokenParam = sessionToken ? `&token=${encodeURIComponent(sessionToken)}` : '';
+            const res = await fetch(`/api/fs/list?vol=${encodeURIComponent(currentVolume)}&path=${encodeURIComponent(folder.path)}${tokenParam}`, {
+              headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {}
+            });
+            const data = await res.json();
+            const childDirs = (data.items || []).filter(i => i.is_dir);
+            treeCache[folder.path] = childDirs;
+            renderSubTreeChildren(folder.path, childrenDiv, level);
+          } catch (err) {
+            childrenDiv.innerHTML = '<div class="text-[10px] text-rose-400 py-1 pl-2">Gagal memuat</div>';
+          }
+        } else {
+          renderSubTreeChildren(folder.path, childrenDiv, level);
+        }
+      }
+    }
+
+    function renderSubTreeChildren(parentPath, childrenDiv, level) {
+      childrenDiv.innerHTML = '';
+      const childDirs = treeCache[parentPath] || [];
+      if (childDirs.length === 0) {
+        childrenDiv.innerHTML = '<div class="text-[10px] text-slate-400 dark:text-slate-500 py-1 pl-2 italic">Subfolder kosong</div>';
+        return;
+      }
+      childDirs.forEach(child => {
+        const childNode = createTreeNodeElement(child, level + 1);
+        childrenDiv.appendChild(childNode);
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function setActiveTreeNode(path) {
+      activeTreePath = path;
+      document.querySelectorAll('#sidebarFolderTree .tree-row').forEach(row => {
+        const node = row.closest('.tree-node');
+        const nodePath = node ? node.getAttribute('data-path') : null;
+        if (nodePath === path) {
+          row.className = 'tree-row active-tree-row flex items-center gap-1.5 py-1 px-2 rounded-lg cursor-pointer transition-colors text-xs select-none bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 font-semibold ring-1 ring-indigo-300 dark:ring-indigo-700';
+        } else {
+          row.className = 'tree-row flex items-center gap-1.5 py-1 px-2 rounded-lg cursor-pointer transition-colors text-xs select-none text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60';
+        }
+      });
+
+      const navDrive = document.getElementById('navDriveSaya');
+      if (navDrive) {
+        if (path === '') {
+          navDrive.classList.add('bg-indigo-600/10', 'text-indigo-600', 'ring-1', 'ring-indigo-300');
+        } else {
+          navDrive.classList.remove('bg-indigo-600/10', 'text-indigo-600', 'ring-1', 'ring-indigo-300');
+        }
+      }
+    }
+
+    // Filter Chips
+    function setFilter(cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-chip').forEach(c => {
+        if (c.getAttribute('data-filter') === cat) {
+          c.classList.add('active-chip');
+        } else {
+          c.classList.remove('active-chip');
+        }
+      });
+      applyCurrentFilterAndRender();
+    }
+
+    function applyCurrentFilterAndRender() {
+      let filtered = currentItems;
+      if (currentFilter !== 'all') {
+        filtered = currentItems.filter(item => {
+          if (currentFilter === 'folder') return item.is_dir;
+          if (item.is_dir) return true;
+          const ext = (item.extension || '').toLowerCase().replace('.', '');
+          if (currentFilter === 'document') return ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt'].includes(ext);
+          if (currentFilter === 'spreadsheet') return ['xls', 'xlsx', 'csv', 'ods', 'tsv'].includes(ext);
+          if (currentFilter === 'image') return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext);
+          if (currentFilter === 'video') return ['mp4', 'mkv', 'avi', 'mov', 'webm', 'mp3', 'wav', 'flac'].includes(ext);
+          if (currentFilter === 'archive') return ['zip', 'rar', '7z', 'tar', 'gz', 'exe', 'msi', 'iso'].includes(ext);
+          return true;
+        });
+      }
+      renderFiles(filtered);
+    }
+
+    function toggleItemSelection(path, checked) {
+      if (checked) {
+        selectedPaths.add(path);
+      } else {
+        selectedPaths.delete(path);
+      }
+      updateBulkActionBar();
+    }
+
+    function toggleSelectAll(forceCheck) {
+      const shouldCheck = forceCheck !== undefined ? forceCheck : selectedPaths.size < currentItems.length;
+      selectedPaths.clear();
+      if (shouldCheck) {
+        currentItems.forEach(i => selectedPaths.add(i.path));
+      }
+      const checkboxes = document.querySelectorAll('.item-checkbox');
+      checkboxes.forEach(cb => cb.checked = shouldCheck);
+      const listMaster = document.getElementById('listSelectAllCheckbox');
+      if (listMaster) listMaster.checked = shouldCheck;
+      updateBulkActionBar();
+    }
+
+    function updateBulkActionBar() {
+      const bar = document.getElementById('bulkActionBar');
+      const badge = document.getElementById('bulkCountBadge');
+      if (!bar) return;
+      const count = selectedPaths.size;
+      if (count > 0 && currentUserRole !== 'viewer') {
+        if (badge) badge.innerText = count;
+        bar.classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    // ==================== RENDER FILES ====================
+    function renderFiles(items) {
+      const emptyState = document.getElementById('emptyState');
+      const gridView = document.getElementById('gridView');
+      const listTableBody = document.getElementById('listTableBody');
+
+      if (!items || items.length === 0) {
+        if (emptyState) emptyState.classList.remove('hidden');
+        if (listView) listView.classList.add('hidden');
+        if (gridView) {
+          gridView.classList.add('hidden');
+          gridView.innerHTML = '';
+        }
+        if (listTableBody) listTableBody.innerHTML = '';
+        return;
+      }
+      if (emptyState) emptyState.classList.add('hidden');
+
+      const isViewer = currentUserRole === 'viewer';
+
+      // 1. Grid View Render
+      if (gridView) {
+        gridView.innerHTML = '';
+        items.forEach(item => {
+          const iconHTML = getFileIconSVG(item);
+          const card = document.createElement('div');
+          const isChecked = selectedPaths.has(item.path);
+
+          card.className = `group relative bg-white border ${
+            isChecked ? 'border-indigo-500 bg-indigo-50/50' : 'border-slate-200 hover:border-indigo-300'
+          } rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 gdrive-card`;
+
+          card.draggable = !isViewer;
+          card.ondragstart = (e) => {
+            draggedItemPath = item.path;
+            e.dataTransfer.setData('text/plain', item.path);
+            e.dataTransfer.effectAllowed = 'move';
+          };
+
+          if (item.is_dir && !isViewer) {
+            card.ondragover = (e) => {
+              if (draggedItemPath && draggedItemPath !== item.path) {
+                e.preventDefault();
+                e.stopPropagation();
+                card.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-50');
+              }
+            };
+            card.ondragleave = (e) => {
+              card.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50');
+            };
+            card.ondrop = async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              card.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50');
+              if (draggedItemPath && draggedItemPath !== item.path) {
+                await moveSingleFile(draggedItemPath, item.path);
+                draggedItemPath = null;
+              }
+            };
+          }
+
+          card.innerHTML = `
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-0 cursor-pointer" onclick="event.stopPropagation()">
+                <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                  ${iconHTML}
+                </div>
+              </div>
+              <div class="opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                ${!isViewer ? `
+                <button class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 btn-move" title="Pindahkan Berkas">
+                  <i data-lucide="folder-input" class="w-3.5 h-3.5 text-indigo-500"></i>
+                </button>
+                <button class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 btn-rename" title="Ganti Nama">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>` : ''}
+                <button class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 btn-dl" title="Unduh">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                </button>
+                ${!isViewer ? `
+                <button class="p-1 rounded-lg hover:bg-rose-50 text-rose-500 btn-del" title="Hapus">
+                  <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+                </button>` : ''}
+              </div>
+            </div>
+            <div>
+              <h4 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate mb-1" title="${item.name}">${item.name}</h4>
+              <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                <span class="font-medium">${item.size_display || (item.is_dir ? 'Folder' : '—')}</span>
+                <span>${item.mod_time ? item.mod_time.split(' ')[0] : '-'}</span>
+              </div>
+            </div>
+          `;
+
+          const cb = card.querySelector('.item-checkbox');
+          if (cb) {
+            cb.onchange = (e) => {
+              toggleItemSelection(item.path, e.target.checked);
+              card.classList.toggle('border-indigo-500', e.target.checked);
+              card.classList.toggle('bg-indigo-50/50', e.target.checked);
+            };
+          }
+
+          card.onclick = (e) => {
+            if (e.target.closest('button') || e.target.closest('input')) return;
+            if (item.is_dir) {
+              loadFiles(item.path);
+            } else {
+              openPreview(item);
+            }
+          };
+
+          const btnMove = card.querySelector('.btn-move');
+          if (btnMove) btnMove.onclick = (e) => { e.stopPropagation(); openMoveModal(item); };
+          const btnRen = card.querySelector('.btn-rename');
+          if (btnRen) btnRen.onclick = (e) => { e.stopPropagation(); openRenameModal(item); };
+          const btnDl = card.querySelector('.btn-dl');
+          if (btnDl) btnDl.onclick = (e) => { e.stopPropagation(); triggerDownload(item); };
+          const btnDel = card.querySelector('.btn-del');
+          if (btnDel) btnDel.onclick = (e) => { e.stopPropagation(); openDeleteModal(item); };
+
+          gridView.appendChild(card);
+        });
+      }
+
+      // 2. Google Drive Table List View Render
+      if (listTableBody) {
+        listTableBody.innerHTML = '';
+        items.forEach(item => {
+          const iconHTML = getFileIconSVG(item);
+          const row = document.createElement('tr');
+          const isChecked = selectedPaths.has(item.path);
+
+          row.className = `hover:bg-slate-50 cursor-pointer transition-colors group ${isChecked ? 'bg-indigo-50/50' : ''}`;
+          row.draggable = !isViewer;
+          row.ondragstart = (e) => {
+            draggedItemPath = item.path;
+            e.dataTransfer.setData('text/plain', item.path);
+          };
+
+          if (item.is_dir && !isViewer) {
+            row.ondragover = (e) => {
+              if (draggedItemPath && draggedItemPath !== item.path) {
+                e.preventDefault();
+                e.stopPropagation();
+                row.classList.add('bg-indigo-50', 'ring-1', 'ring-indigo-500');
+              }
+            };
+            row.ondragleave = (e) => {
+              row.classList.remove('bg-indigo-50', 'ring-1', 'ring-indigo-500');
+            };
+            row.ondrop = async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              row.classList.remove('bg-indigo-50', 'ring-1', 'ring-indigo-500');
+              if (draggedItemPath && draggedItemPath !== item.path) {
+                await moveSingleFile(draggedItemPath, item.path);
+                draggedItemPath = null;
+              }
+            };
+          }
+
+          row.innerHTML = `
+            <td class="py-3 px-4 text-center">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-0 cursor-pointer" onclick="event.stopPropagation()">
+            </td>
+            <td class="py-3 px-4 flex items-center gap-3">
+              ${iconHTML}
+              <span class="file-item-name font-semibold text-slate-900 dark:text-slate-100 truncate max-w-sm group-hover:text-indigo-600 dark:group-hover:text-indigo-400 text-xs" title="${item.name}">${item.name}</span>
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300 font-bold flex items-center justify-center text-[10px] uppercase shadow-xs">${(currentUsername || 'U').charAt(0)}</span>
+                <span class="text-xs font-medium text-slate-700 dark:text-slate-300">${currentUsername || 'saya'}</span>
+              </div>
+            </td>
+            <td class="py-3 px-4 text-xs font-medium text-slate-600 dark:text-slate-400">${item.mod_time || '-'}</td>
+            <td class="py-3 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300">${item.size_display || (item.is_dir ? 'Folder' : '—')}</td>
+            <td class="py-3 px-4 text-right">
+              <div class="flex items-center justify-end gap-1 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                ${!isViewer ? `
+                <button class="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 btn-move" title="Pindahkan Berkas">
+                  <i data-lucide="folder-input" class="w-3.5 h-3.5 text-indigo-500"></i>
+                </button>
+                <button class="p-1 rounded-lg hover:bg-slate-200 text-slate-600 btn-rename" title="Ganti Nama">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>` : ''}
+                <button class="p-1 rounded-lg hover:bg-slate-200 text-slate-600 btn-dl" title="Unduh">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                </button>
+                ${!isViewer ? `
+                <button class="p-1 rounded-lg hover:bg-rose-100 text-rose-500 btn-del" title="Hapus">
+                  <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+                </button>` : ''}
+              </div>
+            </td>
+          `;
+
+          const cb = row.querySelector('.item-checkbox');
+          if (cb) {
+            cb.onchange = (e) => {
+              toggleItemSelection(item.path, e.target.checked);
+              row.classList.toggle('bg-indigo-50/50', e.target.checked);
+            };
+          }
+
+          row.onclick = (e) => {
+            if (e.target.closest('button') || e.target.closest('input')) return;
+            if (item.is_dir) {
+              loadFiles(item.path);
+            } else {
+              openPreview(item);
+            }
+          };
+
+          const btnMove = row.querySelector('.btn-move');
+          if (btnMove) btnMove.onclick = (e) => { e.stopPropagation(); openMoveModal(item); };
+          const btnRen = row.querySelector('.btn-rename');
+          if (btnRen) btnRen.onclick = (e) => { e.stopPropagation(); openRenameModal(item); };
+          const btnDl = row.querySelector('.btn-dl');
+          if (btnDl) btnDl.onclick = (e) => { e.stopPropagation(); triggerDownload(item); };
+          const btnDel = row.querySelector('.btn-del');
+          if (btnDel) btnDel.onclick = (e) => { e.stopPropagation(); openDeleteModal(item); };
+
+          listTableBody.appendChild(row);
+        });
+      }
+
+      setViewMode(currentView);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function moveSingleFile(srcPath, targetDir) {
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const res = await fetch('/api/fs/move', {
+          method: 'POST',
+          headers,
+          credentials: 'include',
+          body: JSON.stringify({ vol: currentVolume, source: srcPath, target_dir: targetDir })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadFiles(currentPath);
+        } else {
+          showToast(data.error || 'Gagal memindahkan berkas', 'error');
+        }
+      } catch (e) {
+        console.error("move error:", e);
+      }
+    }
+
+    // ==================== AUTO-ARRANGE ====================
+    async function openAutoArrangeModal() {
+      const modal = document.getElementById('autoArrangeModal');
+      const listContainer = document.getElementById('autoArrangeList');
+      if (modal) modal.classList.remove('hidden');
+
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const res = await fetch(`/api/fs/auto-arrange/preview?vol=${encodeURIComponent(currentVolume)}&path=${encodeURIComponent(currentPath)}`, { credentials: 'include', headers });
+        const data = await res.json();
+        if (data.success && data.plan) {
+          if (data.plan.length === 0) {
+            listContainer.innerHTML = '<div class="py-4 text-center text-slate-500">Tidak ada berkas yang perlu dirapikan di folder ini.</div>';
+          } else {
+            listContainer.innerHTML = data.plan.map(p => `
+              <div class="py-2 flex items-center justify-between">
+                <span class="truncate max-w-[200px] text-slate-800">${p.filename}</span>
+                <span class="text-indigo-600 font-mono text-[11px]">&rarr; ${p.target_folder}/</span>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (e) {
+        listContainer.innerHTML = '<div class="py-4 text-center text-rose-500">Gagal memuat rencana pengaturan otomatis.</div>';
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==================== PREVIEW MODAL ====================
+    let currentPdfDoc = null;
+    let currentPdfPage = 1;
+    let currentPdfScale = 1.25;
+
+    async function openPreview(item) {
+      activeItem = item;
+      const modal = document.getElementById('previewModal');
+      const title = document.getElementById('previewTitle');
+      const container = document.getElementById('previewContainer');
+      if (!modal || !container) return;
+
+      title.innerText = item.name;
+      container.innerHTML = '<div class="text-slate-400 text-xs py-10 animate-pulse">Memuat pratinjau...</div>';
+      modal.classList.remove('hidden');
+
+      const tokenParam = sessionToken ? `&token=${encodeURIComponent(sessionToken)}` : '';
+      const url = `/api/fs/view?path=${encodeURIComponent(item.path)}&vol=${encodeURIComponent(currentVolume)}${tokenParam}`;
+      const ext = (item.extension || '').toLowerCase().replace('.', '');
+
+      // 1. Image Preview
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'].includes(ext)) {
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full w-full p-2">
+            <img src="${url}" class="max-h-[70vh] max-w-full object-contain rounded-xl shadow-lg border border-slate-200 dark:border-slate-800">
+            <div class="mt-4 flex items-center gap-2">
+              <button onclick="triggerDownload(activeItem)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition-all">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Unduh Gambar</span>
+              </button>
+              <a href="${url}" target="_blank" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Buka Penuh</span>
+              </a>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+      } 
+      // 2. Video Preview
+      else if (['mp4', 'webm', 'ogg', 'mov', 'mkv'].includes(ext)) {
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full w-full">
+            <video controls autoplay class="max-h-[70vh] max-w-full rounded-2xl shadow-xl bg-black border border-slate-800">
+              <source src="${url}">
+              Peramban Anda tidak mendukung pemutar video HTML5.
+            </video>
+            <div class="mt-3">
+              <button onclick="triggerDownload(activeItem)" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Unduh Video</span>
+              </button>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+      } 
+      // 3. Audio Preview
+      else if (['mp3', 'wav', 'flac', 'm4a', 'aac', 'ogg'].includes(ext)) {
+        container.innerHTML = `
+          <div class="p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl flex flex-col items-center gap-4 text-center max-w-md w-full">
+            <div class="w-20 h-20 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center shadow-inner">
+              <i data-lucide="music" class="w-10 h-10 animate-bounce"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-slate-800 dark:text-white">${item.name}</h4>
+              <p class="text-xs text-slate-400 mt-0.5">${item.size_display}</p>
+            </div>
+            <audio controls autoplay class="w-full mt-2">
+              <source src="${url}">
+              Peramban Anda tidak mendukung pemutar audio.
+            </audio>
+            <button onclick="triggerDownload(activeItem)" class="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Unduh Lagu</span>
+            </button>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+      } 
+      // 4. PDF Preview (Embedded Canvas Viewer via PDF.js - NEVER FORCES DOWNLOAD!)
+      else if (ext === 'pdf') {
+        container.innerHTML = `
+          <div class="flex flex-col h-[75vh] w-full bg-slate-900/80 rounded-2xl overflow-hidden border border-slate-700/60 shadow-inner">
+            <!-- PDF Toolbar -->
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-950/90 border-b border-slate-800 text-xs">
+              <div class="flex items-center gap-2">
+                <button id="pdfPrevPage" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Halaman Sebelumnya">
+                  <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <span class="text-xs font-mono text-slate-300 px-2" id="pdfPageInfo">Memuat PDF...</span>
+                <button id="pdfNextPage" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors" title="Halaman Berikutnya">
+                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="pdfZoomOut" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300" title="Perkecil">
+                  <i data-lucide="zoom-out" class="w-4 h-4"></i>
+                </button>
+                <span id="pdfZoomLevel" class="text-xs font-mono text-slate-400 min-w-[40px] text-center">125%</span>
+                <button id="pdfZoomIn" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300" title="Perbesar">
+                  <i data-lucide="zoom-in" class="w-4 h-4"></i>
+                </button>
+                <div class="h-4 w-px bg-slate-700 mx-1"></div>
+                <a href="${url}" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1.5" title="Buka di Tab Baru">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Tab Baru</span>
+                </a>
+                <button onclick="triggerDownload(activeItem)" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span>Unduh</span>
+                </button>
+              </div>
+            </div>
+            <!-- Canvas Container -->
+            <div id="pdfViewport" class="flex-1 overflow-auto p-4 flex justify-center items-start bg-slate-900/60 custom-scroll">
+              <canvas id="pdfRenderCanvas" class="shadow-2xl rounded-lg bg-white my-auto"></canvas>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        initPdfReader(url);
+      } 
+      // 5. Office Word (.docx) Preview via Mammoth.js
+      else if (ext === 'docx') {
+        container.innerHTML = '<div class="text-slate-400 text-xs py-10 animate-pulse">Mengonversi dokumen Word...</div>';
+        try {
+          const res = await fetch(url, { headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {} });
+          const arrayBuffer = await res.arrayBuffer();
+          if (window.mammoth) {
+            const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+            container.innerHTML = `
+              <div class="w-full h-[75vh] flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl">
+                <div class="flex items-center justify-between px-5 py-3 bg-slate-50 border-b border-slate-200 text-xs">
+                  <span class="font-bold text-slate-800">${item.name} • ${item.size_display}</span>
+                  <div class="flex items-center gap-2">
+                    <button onclick="triggerDownload(activeItem)" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                      <span>Unduh Word Asli</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="flex-1 overflow-auto p-8 text-slate-800 prose prose-slate max-w-none custom-scroll bg-white">
+                  ${result.value || '<p class="text-slate-400 italic">Dokumen kosong atau tidak memiliki konten teks.</p>'}
+                </div>
+              </div>
+            `;
+            if (window.lucide) lucide.createIcons();
+          } else {
+            renderOfficeFallback(item, ext);
+          }
+        } catch (err) {
+          console.error("Docx render error:", err);
+          renderOfficeFallback(item, ext);
+        }
+      } 
+      // 6. Office Excel & CSV (.xlsx, .xls, .csv) Preview via SheetJS
+      else if (['xlsx', 'xls', 'csv'].includes(ext)) {
+        container.innerHTML = '<div class="text-slate-400 text-xs py-10 animate-pulse">Membaca spreadsheet...</div>';
+        try {
+          const res = await fetch(url, { headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {} });
+          const arrayBuffer = await res.arrayBuffer();
+          if (window.XLSX) {
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const htmlTable = XLSX.utils.sheet_to_html(worksheet, { id: 'sheetPreviewTable', editable: false });
+            container.innerHTML = `
+              <div class="w-full h-[75vh] flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl">
+                <div class="flex items-center justify-between px-5 py-3 bg-slate-50 border-b border-slate-200 text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-slate-800">${item.name}</span>
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 font-semibold text-[11px]">${sheetName}</span>
+                  </div>
+                  <button onclick="triggerDownload(activeItem)" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>Unduh Excel</span>
+                  </button>
+                </div>
+                <div class="flex-1 overflow-auto p-4 custom-scroll bg-white">
+                  <div class="overflow-x-auto border border-slate-200 rounded-lg">
+                    ${htmlTable}
+                  </div>
+                </div>
+              </div>
+            `;
+            const tbl = document.getElementById('sheetPreviewTable');
+            if (tbl) {
+              tbl.className = "min-w-full text-xs text-left border-collapse";
+              tbl.querySelectorAll('td, th').forEach(c => {
+                c.className = "border border-slate-200 px-3 py-1.5 font-mono text-slate-800";
+              });
+              tbl.querySelectorAll('tr:first-child td, tr:first-child th').forEach(c => {
+                c.className = "border border-slate-300 px-3 py-1.5 font-bold bg-slate-100 text-slate-900";
+              });
+            }
+            if (window.lucide) lucide.createIcons();
+          } else {
+            renderOfficeFallback(item, ext);
+          }
+        } catch (err) {
+          console.error("Spreadsheet render error:", err);
+          renderOfficeFallback(item, ext);
+        }
+      } 
+      // 7. Text / Code Preview (.txt, .md, .log, .json, .go, .py, etc.)
+      else if (['txt', 'log', 'json', 'xml', 'md', 'go', 'js', 'ts', 'html', 'css', 'py', 'sh', 'bat', 'ps1', 'sql', 'yaml', 'yml'].includes(ext)) {
+        try {
+          const res = await fetch(url, { headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {} });
+          const txt = await res.text();
+          const safeTxt = txt.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          container.innerHTML = `
+            <div class="w-full h-[75vh] flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+              <div class="flex items-center justify-between px-5 py-3 bg-slate-950 border-b border-slate-800 text-xs">
+                <span class="font-semibold text-slate-300 font-mono">${item.name} (${item.size_display})</span>
+                <div class="flex items-center gap-2">
+                  <button id="copyTxtBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span id="copyTxtLabel">Salin</span>
+                  </button>
+                  <button onclick="triggerDownload(activeItem)" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>Unduh</span>
+                  </button>
+                </div>
+              </div>
+              <pre class="flex-1 p-5 bg-slate-950 text-slate-200 font-mono text-xs overflow-auto custom-scroll whitespace-pre leading-relaxed">${safeTxt}</pre>
+            </div>
+          `;
+          const cpBtn = document.getElementById('copyTxtBtn');
+          if (cpBtn) {
+            cpBtn.onclick = () => {
+              navigator.clipboard.writeText(txt);
+              document.getElementById('copyTxtLabel').innerText = "Tersalin!";
+              setTimeout(() => {
+                const lbl = document.getElementById('copyTxtLabel');
+                if (lbl) lbl.innerText = "Salin";
+              }, 2000);
+            };
+          }
+          if (window.lucide) lucide.createIcons();
+        } catch (err) {
+          container.innerHTML = '<div class="text-rose-400 text-xs py-10">Gagal memuat isi teks.</div>';
+        }
+      } 
+      // 8. Other / Binary / Fallback Card
+      else {
+        renderOfficeFallback(item, ext);
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderOfficeFallback(item, ext) {
+      const container = document.getElementById('previewContainer');
+      if (!container) return;
+      const iconSVG = getFileIconSVG(item);
+      const isOffice = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'ods', 'odt', 'rtf'].includes(ext);
+      container.innerHTML = `
+        <div class="p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl flex flex-col items-center gap-4 text-center max-w-md w-full">
+          <div class="w-20 h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+            ${iconSVG}
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-slate-800 dark:text-white truncate max-w-xs" title="${item.name}">${item.name}</h4>
+            <p class="text-xs text-slate-500 mt-1">${item.size_display} • Diubah ${item.mod_time || '-'}</p>
+          </div>
+          ${isOffice ? `
+          <div class="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-xl text-[11px] text-amber-700 dark:text-amber-300 text-left">
+            Dokumen .${ext} dapat diunduh untuk dibuka langsung dengan aplikasi Microsoft Office atau LibreOffice.
+          </div>` : ''}
+          <button onclick="triggerDownload(activeItem)" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20 transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Unduh & Buka Berkas</span>
+          </button>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function initPdfReader(url) {
+      if (!window.pdfjsLib) {
+        document.getElementById('pdfViewport').innerHTML = `
+          <iframe src="${url}#toolbar=1" class="w-full h-full rounded-xl border-0 bg-white"></iframe>
+        `;
+        return;
+      }
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const loadingTask = pdfjsLib.getDocument({
+          url: url,
+          cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+          cMapPacked: true
+        });
+        currentPdfDoc = await loadingTask.promise;
+        currentPdfPage = 1;
+        currentPdfScale = 1.25;
+        await renderCurrentPdfPage();
+
+        const btnPrev = document.getElementById('pdfPrevPage');
+        const btnNext = document.getElementById('pdfNextPage');
+        const btnZoomIn = document.getElementById('pdfZoomIn');
+        const btnZoomOut = document.getElementById('pdfZoomOut');
+
+        if (btnPrev) btnPrev.onclick = () => {
+          if (currentPdfDoc && currentPdfPage > 1) {
+            currentPdfPage--;
+            renderCurrentPdfPage();
+          }
+        };
+        if (btnNext) btnNext.onclick = () => {
+          if (currentPdfDoc && currentPdfPage < currentPdfDoc.numPages) {
+            currentPdfPage++;
+            renderCurrentPdfPage();
+          }
+        };
+        if (btnZoomIn) btnZoomIn.onclick = () => {
+          currentPdfScale = Math.min(3.0, currentPdfScale + 0.25);
+          renderCurrentPdfPage();
+        };
+        if (btnZoomOut) btnZoomOut.onclick = () => {
+          currentPdfScale = Math.max(0.5, currentPdfScale - 0.25);
+          renderCurrentPdfPage();
+        };
+      } catch (err) {
+        console.error("PDF render error:", err);
+        document.getElementById('pdfViewport').innerHTML = `
+          <div class="flex flex-col items-center justify-center p-8 text-center text-slate-400">
+            <p class="mb-3 text-sm">Gagal memuat pratinjau halaman PDF.</p>
+            <a href="${url}" target="_blank" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Buka PDF di Tab Baru</a>
+          </div>
+        `;
+      }
+    }
+
+    async function renderCurrentPdfPage() {
+      if (!currentPdfDoc) return;
+      const pageInfo = document.getElementById('pdfPageInfo');
+      const zoomLevel = document.getElementById('pdfZoomLevel');
+      if (pageInfo) pageInfo.innerText = `Hal ${currentPdfPage} / ${currentPdfDoc.numPages}`;
+      if (zoomLevel) zoomLevel.innerText = `${Math.round(currentPdfScale * 100)}%`;
+
+      const page = await currentPdfDoc.getPage(currentPdfPage);
+      const viewport = page.getViewport({ scale: currentPdfScale });
+      const canvas = document.getElementById('pdfRenderCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      await page.render({
+        canvasContext: ctx,
+        viewport: viewport
+      }).promise;
+    }
+
+        // ==================== MODERN TOAST & CONFIRM SYSTEM (NO RAW ALERTS) ====================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `toast-pill pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl backdrop-blur-md border transition-all duration-300 transform translate-y-2 opacity-0 text-xs font-semibold ${
+        type === 'success' 
+          ? 'bg-slate-900/95 text-white border-emerald-500/50 shadow-emerald-500/10' 
+          : type === 'error'
+          ? 'bg-slate-900/95 text-white border-rose-500/50 shadow-rose-500/10'
+          : 'bg-slate-900/95 text-white border-indigo-500/50 shadow-indigo-500/10'
+      }`;
+
+      const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info';
+      const iconColor = type === 'success' ? 'text-emerald-400' : type === 'error' ? 'text-rose-400' : 'text-indigo-400';
+
+      toast.innerHTML = `
+        <i data-lucide="${icon}" class="w-4 h-4 ${iconColor} shrink-0"></i>
+        <span class="flex-1 text-slate-100">${message}</span>
+        <button class="p-1 text-slate-400 hover:text-white transition-colors" onclick="this.parentElement.remove()">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>
+      `;
+
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Intercept any legacy alert to sleek modern toast
+    window.alert = function(msg) {
+      showToast(msg, 'info');
+    };
+
+    let confirmModalCallback = null;
+
+    function showConfirmDialog({ title, message, confirmText = 'Lanjutkan', confirmClass = 'bg-rose-600 hover:bg-rose-500', onConfirm }) {
+      const modal = document.getElementById('customConfirmModal');
+      const titleEl = document.getElementById('customConfirmTitle');
+      const msgEl = document.getElementById('customConfirmMsg');
+      const okBtn = document.getElementById('customConfirmOkBtn');
+      if (!modal) {
+        if (onConfirm) onConfirm();
+        return;
+      }
+
+      if (titleEl) titleEl.innerText = title || 'Konfirmasi';
+      if (msgEl) msgEl.innerText = message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+      if (okBtn) {
+        okBtn.innerText = confirmText;
+        okBtn.className = `px-4 py-2 rounded-xl text-white text-xs font-semibold shadow-md transition-all ${confirmClass}`;
+      }
+
+      confirmModalCallback = onConfirm;
+      modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==================== MOVE FILE(S) MODAL LOGIC ====================
+    let moveTargetItems = [];
+    let moveSelectedDest = '';
+    let moveNavPath = '';
+
+    window.openMoveModal = function(item) {
+      moveTargetItems = [item.path];
+      moveSelectedDest = '';
+      moveNavPath = '';
+      const title = document.getElementById('moveModalTitle');
+      const subtitle = document.getElementById('moveModalSubtitle');
+      if (title) title.innerText = `Pindahkan "${item.name}"`;
+      if (subtitle) subtitle.innerText = `Pilih folder tujuan untuk memindahkan berkas ini`;
+      
+      const modal = document.getElementById('moveModal');
+      if (modal) modal.classList.remove('hidden');
+      renderMovePicker();
+    };
+
+    window.openMoveModalForSelected = function() {
+      if (selectedPaths.size === 0) return;
+      moveTargetItems = Array.from(selectedPaths);
+      moveSelectedDest = '';
+      moveNavPath = '';
+      const title = document.getElementById('moveModalTitle');
+      const subtitle = document.getElementById('moveModalSubtitle');
+      if (title) title.innerText = `Pindahkan ${moveTargetItems.length} Berkas Terpilih`;
+      if (subtitle) subtitle.innerText = `Pilih folder tujuan pemindahan masal`;
+
+      const modal = document.getElementById('moveModal');
+      if (modal) modal.classList.remove('hidden');
+      renderMovePicker();
+    };
+
+    async function renderMovePicker() {
+      const container = document.getElementById('moveFolderList');
+      const breadcrumbsEl = document.getElementById('moveModalBreadcrumbs');
+      const displayTarget = document.getElementById('moveTargetDisplay');
+      if (!container) return;
+
+      container.innerHTML = '<div class="text-xs text-slate-400 p-4 text-center animate-pulse">Memuat folder...</div>';
+
+      if (displayTarget) {
+        displayTarget.innerText = moveSelectedDest === '' ? '/ (Penyimpanan Utama Root)' : '/' + moveSelectedDest;
+      }
+
+      if (breadcrumbsEl) {
+        breadcrumbsEl.innerHTML = '';
+        const rootCrumb = document.createElement('button');
+        rootCrumb.className = `px-2 py-0.5 rounded font-medium ${moveNavPath === '' ? 'text-indigo-400 font-bold' : 'hover:text-white'}`;
+        rootCrumb.innerText = 'Root';
+        rootCrumb.onclick = () => { moveNavPath = ''; renderMovePicker(); };
+        breadcrumbsEl.appendChild(rootCrumb);
+
+        if (moveNavPath !== '') {
+          const parts = moveNavPath.split('/');
+          let acc = '';
+          parts.forEach((p, idx) => {
+            acc = acc ? acc + '/' + p : p;
+            const constAcc = acc;
+            const sep = document.createElement('span');
+            sep.innerText = '›';
+            breadcrumbsEl.appendChild(sep);
+
+            const btn = document.createElement('button');
+            btn.className = `px-1.5 py-0.5 rounded font-medium ${idx === parts.length - 1 ? 'text-indigo-400 font-bold' : 'hover:text-white'}`;
+            btn.innerText = p;
+            btn.onclick = () => { moveNavPath = constAcc; renderMovePicker(); };
+            breadcrumbsEl.appendChild(btn);
+          });
+        }
+      }
+
+      try {
+        const tokenParam = sessionToken ? `&token=${encodeURIComponent(sessionToken)}` : '';
+        const res = await fetch(`/api/fs/list?vol=${encodeURIComponent(currentVolume)}&path=${encodeURIComponent(moveNavPath)}${tokenParam}`, {
+          headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {}
+        });
+        const data = await res.json();
+        const dirs = (data.items || []).filter(i => i.is_dir);
+
+        container.innerHTML = '';
+
+        // Select Current Directory as Target
+        const currentSelectRow = document.createElement('div');
+        const isCurrentSelected = moveSelectedDest === moveNavPath;
+        currentSelectRow.className = `flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
+          isCurrentSelected 
+            ? 'bg-indigo-600/20 border border-indigo-500/50 text-indigo-300 font-semibold shadow-sm' 
+            : 'hover:bg-slate-800/60 text-slate-300'
+        }`;
+        currentSelectRow.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <svg class="w-4 h-4 text-indigo-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span class="text-xs truncate font-medium">[Folder ini: ${moveNavPath === '' ? 'Root' : moveNavPath.split('/').pop()}]</span>
+          </div>
+          <span class="text-[11px] px-2 py-0.5 rounded-full ${isCurrentSelected ? 'bg-indigo-600 text-white font-bold' : 'bg-slate-800 text-slate-400'}">
+            ${isCurrentSelected ? '✓ Terpilih' : 'Pilih Ini'}
+          </span>
+        `;
+        currentSelectRow.onclick = () => {
+          moveSelectedDest = moveNavPath;
+          if (displayTarget) displayTarget.innerText = moveSelectedDest === '' ? '/ (Penyimpanan Utama Root)' : '/' + moveSelectedDest;
+          renderMovePicker();
+        };
+        container.appendChild(currentSelectRow);
+
+        // Subdirectories
+        if (dirs.length === 0) {
+          const emptyNotice = document.createElement('div');
+          emptyNotice.className = "text-[11px] text-slate-500 py-3 text-center italic";
+          emptyNotice.innerText = "Tidak ada subfolder di dalam folder ini.";
+          container.appendChild(emptyNotice);
+        } else {
+          dirs.forEach(d => {
+            if (moveTargetItems.includes(d.path)) return;
+
+            const isSelected = moveSelectedDest === d.path;
+            const row = document.createElement('div');
+            row.className = `flex items-center justify-between p-2 rounded-xl transition-all ${
+              isSelected 
+                ? 'bg-indigo-600/20 border border-indigo-500/50 text-indigo-300 font-semibold' 
+                : 'hover:bg-slate-800/50 text-slate-200'
+            }`;
+
+            row.innerHTML = `
+              <div class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer select-none">
+                <svg class="w-4 h-4 text-amber-500 fill-amber-400 shrink-0" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                <span class="text-xs truncate font-medium">${d.name}</span>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button class="btn-pick-folder px-2 py-0.5 rounded-lg text-[10px] font-semibold transition-all ${
+                  isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                }">
+                  ${isSelected ? '✓ Terpilih' : 'Pilih'}
+                </button>
+                <button class="btn-enter-folder px-2 py-0.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white text-[10px] font-medium transition-all" title="Buka folder">
+                  Buka ›
+                </button>
+              </div>
+            `;
+
+            row.querySelector('.btn-pick-folder').onclick = (e) => {
+              e.stopPropagation();
+              moveSelectedDest = d.path;
+              if (displayTarget) displayTarget.innerText = '/' + d.path;
+              renderMovePicker();
+            };
+
+            row.querySelector('.min-w-0').onclick = () => {
+              moveSelectedDest = d.path;
+              if (displayTarget) displayTarget.innerText = '/' + d.path;
+              renderMovePicker();
+            };
+
+            row.querySelector('.btn-enter-folder').onclick = (e) => {
+              e.stopPropagation();
+              moveNavPath = d.path;
+              renderMovePicker();
+            };
+
+            container.appendChild(row);
+          });
+        }
+      } catch (err) {
+        container.innerHTML = '<div class="text-xs text-rose-400 p-4 text-center">Gagal memuat folder tujuan.</div>';
+      }
+    }
+
+    async function executeMove() {
+      if (moveTargetItems.length === 0) return;
+
+      const btn = document.getElementById('confirmMoveBtn');
+      if (btn) btn.disabled = true;
+
+      const headers = { 'Content-Type': 'application/json' };
+      if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+
+      try {
+        let res;
+        if (moveTargetItems.length === 1) {
+          res = await fetch('/api/fs/move', {
+            method: 'POST',
+            headers,
+            credentials: 'include',
+            body: JSON.stringify({
+              vol: currentVolume,
+              source: moveTargetItems[0],
+              target_dir: moveSelectedDest
+            })
+          });
+        } else {
+          res = await fetch('/api/fs/bulk-move', {
+            method: 'POST',
+            headers,
+            credentials: 'include',
+            body: JSON.stringify({
+              vol: currentVolume,
+              sources: moveTargetItems,
+              target_dir: moveSelectedDest
+            })
+          });
+        }
+
+        const data = await res.json();
+        if (data.success) {
+          const modal = document.getElementById('moveModal');
+          if (modal) modal.classList.add('hidden');
+
+          selectedPaths.clear();
+          updateBulkActionBar();
+
+          const targetName = moveSelectedDest === '' ? 'Root' : moveSelectedDest.split('/').pop();
+          showToast(
+            moveTargetItems.length === 1 
+              ? `Berkas berhasil dipindahkan ke /${targetName}` 
+              : `${moveTargetItems.length} berkas berhasil dipindahkan ke /${targetName}`,
+            'success'
+          );
+
+          loadFiles(currentPath);
+          initSidebarFolderTree();
+        } else {
+          showToast(data.error || 'Gagal memindahkan berkas', 'error');
+        }
+      } catch (e) {
+        showToast('Gagal menghubungi server untuk pemindahan', 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    // ==================== ACTIONS ====================
+    function triggerDownload(item) {
+      window.location.href = `/api/fs/download?path=${encodeURIComponent(item.path)}&vol=${encodeURIComponent(currentVolume)}`;
+    }
+
+    function downloadSelected() {
+      selectedPaths.forEach(path => {
+        const a = document.createElement('a');
+        a.href = `/api/fs/download?path=${encodeURIComponent(path)}&vol=${encodeURIComponent(currentVolume)}`;
+        a.download = '';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
+
+    function deleteSelected() {
+      if (selectedPaths.size === 0) return;
+      const count = selectedPaths.size;
+      showConfirmDialog({
+        title: 'Hapus Berkas Terpilih',
+        message: `Apakah Anda yakin ingin menghapus ${count} berkas yang dipilih? Tindakan ini tidak dapat dibatalkan.`,
+        confirmText: 'Hapus Sekarang',
+        confirmClass: 'bg-rose-600 hover:bg-rose-500',
+        onConfirm: async () => {
+          const headers = { 'Content-Type': 'application/json' };
+          if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+
+          let deleted = 0;
+          for (const p of selectedPaths) {
+            try {
+              const res = await fetch('/api/fs/delete', {
+                method: 'POST',
+                headers,
+                credentials: 'include',
+                body: JSON.stringify({ vol: currentVolume, path: p })
+              });
+              if (res.ok) deleted++;
+            } catch (e) {}
+          }
+          selectedPaths.clear();
+          updateBulkActionBar();
+          showToast(`${deleted} berkas berhasil dihapus`, 'success');
+          loadFiles(currentPath);
+          loadStats();
+        }
+      });
+    }
+
+    function uploadFiles(fileList) {
+      if (!fileList || fileList.length === 0) return;
+      const toast = document.getElementById('uploadToast');
+      const toastTitle = document.getElementById('uploadToastTitle');
+      const toastBar = document.getElementById('uploadToastBar');
+
+      if (toast) toast.classList.remove('hidden');
+      if (toastTitle) toastTitle.innerText = `Mengunggah ${fileList.length} berkas...`;
+      if (toastBar) toastBar.style.width = '10%';
+
+      const formData = new FormData();
+      formData.append('vol', currentVolume);
+      formData.append('path', currentPath);
+      for (let i = 0; i < fileList.length; i++) {
+        formData.append('files', fileList[i]);
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/fs/upload', true);
+      if (sessionToken) xhr.setRequestHeader('X-Auth-Token', sessionToken);
+
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && toastBar) {
+          const percent = Math.round((e.loaded / e.total) * 100);
+          toastBar.style.width = `${percent}%`;
+        }
+      };
+
+      xhr.onload = () => {
+        if (toastBar) toastBar.style.width = '100%';
+        if (toastTitle) toastTitle.innerText = 'Upload selesai!';
+        setTimeout(() => {
+          if (toast) toast.classList.add('hidden');
+          loadFiles(currentPath);
+          loadStats();
+        }, 1200);
+      };
+
+      xhr.onerror = () => {
+        if (toastTitle) toastTitle.innerText = 'Gagal mengunggah!';
+        setTimeout(() => { if (toast) toast.classList.add('hidden'); }, 3000);
+      };
+
+      xhr.send(formData);
+    }
+
+    // ==================== DRAG AND DROP SETUP ====================
+    function setupDragAndDrop() {
+      const overlay = document.getElementById('dragOverlay');
+      if (!overlay) return;
+      let dragCounter = 0;
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        window.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }, false);
+      });
+
+      window.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        if (currentUserRole !== 'viewer' && e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+          dragCounter++;
+          overlay.classList.remove('hidden');
+          overlay.classList.add('flex');
+          const targetEl = document.getElementById('dropTargetFolder');
+          if (targetEl) targetEl.innerText = currentPath ? `/${currentPath}` : 'Root (N:\\)';
+        }
+      });
+
+      window.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dragCounter--;
+        if (dragCounter <= 0) {
+          dragCounter = 0;
+          overlay.classList.add('hidden');
+          overlay.classList.remove('flex');
+        }
+      });
+
+      window.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dragCounter = 0;
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        if (currentUserRole !== 'viewer' && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          uploadFiles(e.dataTransfer.files);
+        }
+      });
+    }
+
+    // ==================== MODAL HELPER FUNCTIONS ====================
+    window.openMkdirModal = function() {
+      const modal = document.getElementById('newFolderModal');
+      const input = document.getElementById('folderNameInput');
+      if (input) input.value = '';
+      if (modal) modal.classList.remove('hidden');
+      if (input) input.focus();
+    };
+
+    window.openRenameModal = function(item) {
+      activeItem = item;
+      const modal = document.getElementById('renameModal');
+      const input = document.getElementById('renameInput');
+      if (input) input.value = item.name;
+      if (modal) modal.classList.remove('hidden');
+      if (input) input.focus();
+    };
+
+    window.openDeleteModal = function(item) {
+      activeItem = item;
+      const modal = document.getElementById('deleteModal');
+      const target = document.getElementById('deleteTargetName');
+      if (target) target.innerText = item.name;
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.openAddUserModal = function() {
+      const modal = document.getElementById('addUserModal');
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeAddUserModal = function() {
+      const modal = document.getElementById('addUserModal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    // ==================== ADMIN DASHBOARD ====================
+    async function loadAdminDashboard() {
+      if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') return;
+
+      const headers = {};
+      if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+
+      try {
+        const resInfo = await fetch('/api/sys/info', { credentials: 'include', headers });
+        const dataInfo = await resInfo.json();
+        if (dataInfo.success && dataInfo.info) {
+          const inf = dataInfo.info;
+          const hostEl = document.getElementById('dashHostname');
+          if (hostEl) hostEl.innerText = inf.hostname || 'PRESERVASI-BPMN';
+          const upEl = document.getElementById('dashUptime');
+          if (upEl) upEl.innerText = `Aktif ${inf.uptime_display}`;
+          const osEl = document.getElementById('dashOS');
+          if (osEl) osEl.innerText = `${inf.os} • ${inf.go_version}`;
+          const ramEl = document.getElementById('dashRAM');
+          if (ramEl) ramEl.innerText = inf.ram_display;
+          const goEl = document.getElementById('dashGoroutines');
+          if (goEl) goEl.innerText = `${inf.goroutines} goroutines`;
+          renderDrives(inf.drives || []);
+        }
+        loadAuditLogs();
+        if (currentUserRole === 'superadmin') {
+          loadUsersList();
+        }
+      } catch (err) {
+        console.error("Dashboard error:", err);
+      }
+    }
+
+    function renderDrives(drives) {
+      const grid = document.getElementById('drivesGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      drives.forEach(d => {
+        const card = document.createElement('div');
+        const isNAS = d.letter === 'N:';
+        card.className = `p-4 rounded-2xl border ${
+          isNAS ? 'bg-indigo-50/60 border-indigo-200' : 'bg-slate-50 border-slate-200'
+        } flex flex-col justify-between gdrive-card`;
+
+        const pct = Math.min(100, Math.max(1, d.used_percent));
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg ${isNAS ? 'bg-indigo-600 text-white' : 'bg-slate-300 text-slate-700'} flex items-center justify-center font-bold text-xs">
+                ${d.letter.replace(':', '')}
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-800">${d.label || 'Volume'}</h4>
+                <span class="text-[10px] text-slate-500 font-mono">${d.total_display} Kapasitas</span>
+              </div>
+            </div>
+            ${isNAS ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 border border-indigo-200">NAS CORE</span>' : ''}
+          </div>
+          <div>
+            <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-2">
+              <div class="h-full rounded-full ${isNAS ? 'bg-indigo-600' : 'bg-blue-600'}" style="width: ${pct}%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+              <span>Terpakai: ${d.used_display}</span>
+              <span class="text-slate-700 font-bold">${d.free_display} Bebas</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // AUDIT LOGS (CALLS /api/sys/logs)
+    async function loadAuditLogs() {
+      const tbody = document.getElementById('auditLogsBody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-500">Memuat log aktivitas...</td></tr>';
+
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        // Fix: Call /api/sys/logs
+        const res = await fetch('/api/sys/logs', { credentials: 'include', headers });
+        const data = await res.json();
+        if (data.success && data.logs) {
+          if (data.logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-500">Belum ada catatan aktivitas.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = data.logs.slice(-20).map(l => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap">${l.time}</td>
+              <td class="py-2.5 px-3 font-semibold text-indigo-600">${l.action}</td>
+              <td class="py-2.5 px-3 text-slate-600">${l.user || '-'}</td>
+              <td class="py-2.5 px-3 text-slate-700 truncate max-w-xs" title="${l.detail}">${l.detail}</td>
+              <td class="py-2.5 px-3">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold ${
+                  l.status === 'SUCCESS' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-rose-100 text-rose-700 border border-rose-200'
+                }">${l.status}</span>
+              </td>
+            </tr>
+          `).join('');
+        }
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-rose-500">Gagal memuat log audit.</td></tr>';
+      }
+    }
+
+    // USER MANAGEMENT (SUPERADMIN ONLY)
+    async function loadUsersList() {
+      const tbody = document.getElementById('userTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-500">Memuat pengguna...</td></tr>';
+
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const res = await fetch('/api/users/list', { credentials: 'include', headers });
+        const data = await res.json();
+        if (data.success && data.users) {
+          tbody.innerHTML = data.users.map(u => {
+            const roleBadge = u.role === 'superadmin' ? 'bg-purple-100 text-purple-700 border-purple-200' :
+                             (u.role === 'admin' ? 'bg-indigo-100 text-indigo-700 border-indigo-200' :
+                             (u.role === 'user' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-700 border-slate-200'));
+            return `
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="py-2.5 px-3 font-bold text-slate-800">${u.username}</td>
+                <td class="py-2.5 px-3 text-slate-600">${u.display_name}</td>
+                <td class="py-2.5 px-3">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${roleBadge}">${u.role}</span>
+                </td>
+                <td class="py-2.5 px-3 text-slate-400 text-[11px]">${u.created_at ? u.created_at.split('T')[0] : '-'}</td>
+                <td class="py-2.5 px-3 text-right">
+                  ${u.username !== 'superadmin' ? `
+                  <button onclick="deleteUserAccount('${u.username}')" class="p-1 rounded hover:bg-rose-100 text-rose-600" title="Hapus User">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>` : '<span class="text-[10px] text-slate-400 font-mono">Utama</span>'}
+                </td>
+              </tr>
+            `;
+          }).join('');
+          if (window.lucide) lucide.createIcons();
+        }
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-rose-500">Gagal memuat pengguna.</td></tr>';
+      }
+    }
+
+    async function deleteUserAccount(username) {
+      showConfirmDialog({
+        title: 'Hapus Akun Pengguna',
+        message: `Apakah Anda yakin ingin menghapus akun pengguna "${username}"?`,
+        confirmText: 'Hapus Pengguna',
+        confirmClass: 'bg-rose-600 hover:bg-rose-500',
+        onConfirm: async () => {
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/users/delete', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ username })
+            });
+            const data = await res.json();
+            if (data.success) {
+              showToast(`Pengguna "${username}" berhasil dihapus`, 'success');
+              loadUsersList();
+            } else {
+              showToast(data.error || 'Gagal menghapus pengguna', 'error');
+            }
+          } catch (e) {
+            showToast('Gagal menghubungi server', 'error');
+          }
+        }
+      });
+
+    }
+
+    async function triggerDefrag() {
+      showConfirmDialog({
+        title: 'Optimasi & Defrag Storage N:',
+        message: 'Jalankan proses optimasi disk dan defragmentasi background untuk volume Storage Utama (N:)?',
+        confirmText: 'Mulai Defrag',
+        confirmClass: 'bg-indigo-600 hover:bg-indigo-500',
+        onConfirm: async () => {
+          try {
+            const headers = {};
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            await fetch('/api/sys/defrag', { method: 'POST', credentials: 'include', headers });
+            showToast('Optimasi harddisk N: berhasil dipicu di background!', 'success');
+          } catch (e) {
+            showToast('Gagal memicu optimasi', 'error');
+          }
+        }
+      });
+
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    function setupEvents() {
+      // Move Modal Wiring
+      const cancelMoveBtn = document.getElementById('cancelMoveBtn');
+      if (cancelMoveBtn) {
+        cancelMoveBtn.onclick = () => {
+          const m = document.getElementById('moveModal');
+          if (m) m.classList.add('hidden');
+        };
+      }
+      const confirmMoveBtn = document.getElementById('confirmMoveBtn');
+      if (confirmMoveBtn) {
+        confirmMoveBtn.onclick = executeMove;
+      }
+
+      // Custom Confirm Modal Wiring
+      const cancelConfirmBtn = document.getElementById('customConfirmCancelBtn');
+      if (cancelConfirmBtn) {
+        cancelConfirmBtn.onclick = () => {
+          const m = document.getElementById('customConfirmModal');
+          if (m) m.classList.add('hidden');
+          confirmModalCallback = null;
+        };
+      }
+      const okConfirmBtn = document.getElementById('customConfirmOkBtn');
+      if (okConfirmBtn) {
+        okConfirmBtn.onclick = () => {
+          const m = document.getElementById('customConfirmModal');
+          if (m) m.classList.add('hidden');
+          if (confirmModalCallback) {
+            const cb = confirmModalCallback;
+            confirmModalCallback = null;
+            cb();
+          }
+        };
+      }
+
+            const themeBtn = document.getElementById('themeToggle');
+      if (themeBtn) themeBtn.onclick = toggleTheme;
+
+      const treeChevron = document.getElementById('folderTreeChevron');
+      const sidebarTree = document.getElementById('sidebarFolderTree');
+      if (treeChevron && sidebarTree) {
+        treeChevron.onclick = (e) => {
+          e.stopPropagation();
+          sidebarTree.classList.toggle('hidden');
+          treeChevron.classList.toggle('rotate-180');
+        };
+      }
+
+      // Login Form
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const userEl = document.getElementById('loginUser');
+          const passEl = document.getElementById('loginPass');
+          const errEl = document.getElementById('loginError');
+          const errTxt = document.getElementById('loginErrorMsg');
+
+          const user = userEl ? userEl.value.trim() : '';
+          const pass = passEl ? passEl.value : '';
+
+          try {
+            const res = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ username: user, password: pass })
+            });
+            const data = await res.json();
+            if (data.success) {
+              sessionToken = data.token;
+              currentUserRole = data.role || 'user';
+              currentUsername = data.user || user;
+              currentUserDisplay = data.display_name || currentUsername;
+              localStorage.setItem('gonas_token', sessionToken); localStorage.setItem('aether_token', sessionToken);
+              if (errEl) errEl.classList.add('hidden');
+              applyRolePermissions();
+              showApp();
+            } else {
+              if (errTxt) errTxt.innerText = data.error || 'Login gagal';
+              if (errEl) errEl.classList.remove('hidden');
+            }
+          } catch (e) {
+            if (errTxt) errTxt.innerText = 'Gagal menghubungi server';
+            if (errEl) errEl.classList.remove('hidden');
+          }
+        };
+      }
+
+      // Logout
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.onclick = async () => {
+          await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+          localStorage.removeItem('aether_token');
+          sessionToken = '';
+          showLogin();
+        };
+      }
+
+      // Refresh
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) {
+        refreshBtn.onclick = () => {
+          loadStats();
+          loadFiles(currentPath);
+        };
+      }
+
+      // View Switcher
+      const viewGridBtn = document.getElementById('viewGridBtn');
+      if (viewGridBtn) viewGridBtn.onclick = () => setViewMode('grid');
+      const viewListBtn = document.getElementById('viewListBtn');
+      if (viewListBtn) viewListBtn.onclick = () => setViewMode('list');
+
+      // Search
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.oninput = (e) => {
+          const query = e.target.value.toLowerCase();
+          const filtered = currentItems.filter(i => i.name.toLowerCase().includes(query));
+          renderFiles(filtered);
+        };
+      }
+
+      // Close Preview
+      const closePreviewBtn = document.getElementById('closePreviewBtn');
+      if (closePreviewBtn) {
+        closePreviewBtn.onclick = () => {
+          const modal = document.getElementById('previewModal');
+          const container = document.getElementById('previewContainer');
+          if (modal) modal.classList.add('hidden');
+          if (container) container.innerHTML = '';
+        };
+      }
+
+      // New Folder Modal
+      const newFolderBtn = document.getElementById('newFolderBtn');
+      if (newFolderBtn) newFolderBtn.onclick = () => openMkdirModal();
+
+      const cancelFolderBtn = document.getElementById('cancelFolderBtn');
+      if (cancelFolderBtn) {
+        cancelFolderBtn.onclick = () => {
+          const m = document.getElementById('newFolderModal');
+          if (m) m.classList.add('hidden');
+        };
+      }
+
+      const createFolderBtn = document.getElementById('createFolderBtn');
+      if (createFolderBtn) {
+        createFolderBtn.onclick = async () => {
+          const input = document.getElementById('folderNameInput');
+          const name = input ? input.value.trim() : '';
+          if (!name) return;
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/fs/mkdir', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ vol: currentVolume, parent: currentPath, name })
+            });
+            const data = await res.json();
+            const m = document.getElementById('newFolderModal');
+            if (m) m.classList.add('hidden');
+            if (data.success) {
+              showToast(`Folder "${name}" berhasil dibuat`, 'success');
+              loadFiles(currentPath);
+              initSidebarFolderTree();
+            } else {
+              showToast(data.error || 'Gagal membuat folder', 'error');
+            }
+          } catch (e) {
+            showToast('Gagal membuat folder', 'error');
+          }
+        };
+      }
+
+      // Rename Modal
+      const cancelRenameBtn = document.getElementById('cancelRenameBtn');
+      if (cancelRenameBtn) {
+        cancelRenameBtn.onclick = () => {
+          const m = document.getElementById('renameModal');
+          if (m) m.classList.add('hidden');
+        };
+      }
+
+      const saveRenameBtn = document.getElementById('saveRenameBtn');
+      if (saveRenameBtn) {
+        saveRenameBtn.onclick = async () => {
+          const input = document.getElementById('renameInput');
+          const newName = input ? input.value.trim() : '';
+          if (!newName || !activeItem) return;
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/fs/rename', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ vol: currentVolume, path: activeItem.path, new_name: newName })
+            });
+            const data = await res.json();
+            const m = document.getElementById('renameModal');
+            if (m) m.classList.add('hidden');
+            if (data.success) {
+              showToast(`Nama berkas diubah menjadi "${newName}"`, 'success');
+              loadFiles(currentPath);
+              initSidebarFolderTree();
+            } else {
+              showToast(data.error || 'Gagal mengubah nama', 'error');
+            }
+          } catch (e) {
+            showToast('Gagal mengubah nama', 'error');
+          }
+        };
+      }
+
+      // Delete Modal
+      const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+      if (cancelDeleteBtn) {
+        cancelDeleteBtn.onclick = () => {
+          const m = document.getElementById('deleteModal');
+          if (m) m.classList.add('hidden');
+        };
+      }
+
+      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+      if (confirmDeleteBtn) {
+        confirmDeleteBtn.onclick = async () => {
+          if (!activeItem) return;
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/fs/delete', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ vol: currentVolume, path: activeItem.path })
+            });
+            const data = await res.json();
+            const m = document.getElementById('deleteModal');
+            if (m) m.classList.add('hidden');
+            if (data.success) {
+              showToast(`"${activeItem.name}" berhasil dihapus`, 'success');
+              loadFiles(currentPath);
+              loadStats();
+              initSidebarFolderTree();
+            } else {
+              showToast(data.error || 'Gagal menghapus berkas', 'error');
+            }
+          } catch (e) {
+            showToast('Gagal menghapus berkas', 'error');
+          }
+        };
+      }
+
+      // Auto Arrange Modal
+      const cancelAutoArrangeBtn = document.getElementById('cancelAutoArrangeBtn');
+      if (cancelAutoArrangeBtn) {
+        cancelAutoArrangeBtn.onclick = () => {
+          const m = document.getElementById('autoArrangeModal');
+          if (m) m.classList.add('hidden');
+        };
+      }
+
+      const confirmAutoArrangeBtn = document.getElementById('confirmAutoArrangeBtn');
+      if (confirmAutoArrangeBtn) {
+        confirmAutoArrangeBtn.onclick = async () => {
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/fs/auto-arrange/execute', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ vol: currentVolume, path: currentPath })
+            });
+            const data = await res.json();
+            const m = document.getElementById('autoArrangeModal');
+            if (m) m.classList.add('hidden');
+            if (data.success) {
+              showToast(data.message || 'Perapian berkas berhasil dieksekusi!', 'success');
+              loadFiles(currentPath);
+              loadStats();
+            } else {
+              showToast(data.error || 'Gagal merapikan berkas', 'error');
+            }
+          } catch (e) {
+            showToast('Gagal merapikan berkas', 'error');
+          }
+        };
+      }
+
+      // File Input Change
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput) {
+        fileInput.onchange = () => {
+          if (fileInput.files.length > 0) {
+            uploadFiles(fileInput.files);
+          }
+        };
+      }
+
+      // Add User Form (Superadmin)
+      const addUserForm = document.getElementById('addUserForm');
+      if (addUserForm) {
+        addUserForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const username = document.getElementById('newUsername').value.trim();
+          const displayName = document.getElementById('newDisplayName').value.trim();
+          const password = document.getElementById('newUserPass').value;
+          const role = document.getElementById('newUserRole').value;
+
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/users/add', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ username, display_name: displayName, password, role })
+            });
+            const data = await res.json();
+            if (data.success) {
+              closeAddUserModal();
+              loadUsersList();
+              document.getElementById('newUsername').value = '';
+              document.getElementById('newDisplayName').value = '';
+              document.getElementById('newUserPass').value = '';
+            } else {
+              showToast(data.error || 'Gagal menambah pengguna', 'error');
+            }
+          } catch (e) {
+            showToast('Gagal menghubungi server', 'error');
+          }
+        };
+      }
+
+      // Change Password Form
+      const passForm = document.getElementById('changePasswordForm');
+      if (passForm) {
+        passForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const oldP = document.getElementById('oldPassInput').value;
+          const newP = document.getElementById('newPassInput').value;
+          const confP = document.getElementById('confirmPassInput').value;
+          const alertEl = document.getElementById('passChangeAlert');
+
+          if (newP !== confP) {
+            if (alertEl) {
+              alertEl.className = "mb-3 p-3 rounded-xl text-xs flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-500";
+              alertEl.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5"></i><span>Password baru dan konfirmasi tidak cocok</span>`;
+              alertEl.classList.remove('hidden');
+            }
+            if (window.lucide) lucide.createIcons();
+            return;
+          }
+
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/sys/password', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ old_password: oldP, new_password: newP })
+            });
+            const data = await res.json();
+            if (alertEl) {
+              if (data.success) {
+                alertEl.className = "mb-3 p-3 rounded-xl text-xs flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600";
+                alertEl.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>${data.message}</span>`;
+                alertEl.classList.remove('hidden');
+                document.getElementById('oldPassInput').value = '';
+                document.getElementById('newPassInput').value = '';
+                document.getElementById('confirmPassInput').value = '';
+              } else {
+                alertEl.className = "mb-3 p-3 rounded-xl text-xs flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-500";
+                alertEl.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5"></i><span>${data.error}</span>`;
+                alertEl.classList.remove('hidden');
+              }
+            }
+          } catch(err) {
+            if (alertEl) {
+              alertEl.className = "mb-3 p-3 rounded-xl text-xs flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-500";
+              alertEl.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5"></i><span>Gagal menghubungi server</span>`;
+              alertEl.classList.remove('hidden');
+            }
+          }
+          if (window.lucide) lucide.createIcons();
+        };
+      }
+
+      // Explicit window exports
+      window.deleteSelected = deleteSelected;
+      window.downloadSelected = downloadSelected;
+      window.loadAdminDashboard = loadAdminDashboard;
+      window.loadAuditLogs = loadAuditLogs;
+      window.loadUsersList = loadUsersList;
+      window.deleteUserAccount = deleteUserAccount;
+      window.loadFiles = loadFiles;
+      window.loadStats = loadStats;
+      window.openAutoArrangeModal = openAutoArrangeModal;
+      window.openMkdirModal = openMkdirModal;
+      window.openRenameModal = openRenameModal;
+      window.openDeleteModal = openDeleteModal;
+      window.openAddUserModal = openAddUserModal;
+      window.closeAddUserModal = closeAddUserModal;
+      window.selectVolume = selectVolume;
+      window.setFilter = setFilter;
+      window.setViewMode = setViewMode;
+      window.switchTab = switchTab;
+      window.toggleNewMenu = toggleNewMenu;
+      window.toggleSelectAll = toggleSelectAll;
+      window.toggleTheme = toggleTheme;
+      window.triggerDefrag = triggerDefrag;
+      window.triggerDownload = triggerDownload;
+      window.navigateToRoot = navigateToRoot;
+    }
+  </script>
+</body>
+</html>

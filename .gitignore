@@ -1,0 +1,36 @@
+# Binaries & Executables
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+gonas.exe
+aether-nas.exe
+
+# Build artifacts & Test outputs
+*.test
+*.out
+scratch/
+storage/
+data/
+tmp/
+*.zip
+
+# Runtime databases & sensitive credentials
+users.json
+config.json
+*.env
+*.log
+
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Operating System files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+*.bak
