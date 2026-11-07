@@ -8,9 +8,11 @@
   <a href="../README.md">English</a> • <b>Bahasa Indonesia</b>
 </p>
 
+[![CI](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml/badge.svg)](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/Docker%20Image-ghcr.io-2496ED?logo=docker)](https://github.com/Arya-Penangsang/gonas/pkgs/container/gonas)
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
-[![Memory Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
+[![RAM Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
 [![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
@@ -283,9 +285,15 @@ Laporan asesmen teknis dan catatan patch selengkapnya dapat dibaca di **[SECURIT
 
 ```text
 GoNAS/
+├── .github/                # Workflow GitHub Actions CI/CD & template laporan
+│   ├── ISSUE_TEMPLATE/     # Form terstruktur bug report & feature request
+│   ├── workflows/          # Pengujian otomatis, rilis biner, & publikasi Docker
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── SECURITY.md         # Kebijakan pelaporan kerentanan keamanan GitHub
 ├── docs/                   # Dokumentasi Teknis & Arsitektur Lengkap
 │   ├── API.md              # Dokumentasi lengkap REST API v2.4
 │   ├── ARCHITECTURE.md     # Rincian desain teknis, I/O streaming, & keamanan
+│   ├── CONTRIBUTING.md     # Panduan alur kerja kontributor & developer
 │   ├── README.id.md        # Dokumentasi bahasa Indonesia
 │   ├── SECURITY.md         # Laporan Asesmen Keamanan Purple Team & Catatan Patch
 │   └── SOCIAL_MEDIA_POSTS.md # Draf teks publikasi media sosial Threads & X
@@ -303,6 +311,7 @@ GoNAS/
 ├── disk_posix.go           # Telemetri disk kernel POSIX via statfs (Linux, macOS, Docker)
 ├── disk_windows.go         # Telemetri disk kernel Win32 via GetDiskFreeSpaceExW (Windows)
 ├── main.go                 # Engine backend Go utama
+├── main_test.go            # Suite uji unit untuk validasi keamanan path & UAC
 └── tailwind.config.js      # Konfigurasi kompilasi Tailwind CSS
 ```
 

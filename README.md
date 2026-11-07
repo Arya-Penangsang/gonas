@@ -8,9 +8,11 @@
   <b>English</b> • <a href="docs/README.id.md">Bahasa Indonesia</a>
 </p>
 
+[![CI](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml/badge.svg)](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/Docker%20Image-ghcr.io-2496ED?logo=docker)](https://github.com/Arya-Penangsang/gonas/pkgs/container/gonas)
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
-[![Memory Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
+[![RAM Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
 [![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](docs/SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -283,9 +285,15 @@ Read the full technical security audit and patch notes in **[SECURITY.md](docs/S
 
 ```text
 GoNAS/
+├── .github/                # GitHub Actions CI/CD workflows & issue templates
+│   ├── ISSUE_TEMPLATE/     # Structured bug reports & feature request forms
+│   ├── workflows/          # Automated testing, releases & Docker builds
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── SECURITY.md         # GitHub security policy & vulnerability reporting
 ├── docs/                   # Full Technical & Architectural Documentation
 │   ├── API.md              # Comprehensive REST API v2.4 documentation
 │   ├── ARCHITECTURE.md     # Technical architecture, 256KB streaming I/O, security specs
+│   ├── CONTRIBUTING.md     # Contributor & developer workflow guide
 │   ├── README.id.md        # Dokumentasi Bahasa Indonesia
 │   ├── SECURITY.md         # Purple Team Security Assessment Report & Patch Notes
 │   └── SOCIAL_MEDIA_POSTS.md # Social media publication draft copy
@@ -303,6 +311,7 @@ GoNAS/
 ├── disk_posix.go           # POSIX kernel disk telemetry via statfs (Linux, macOS, Docker)
 ├── disk_windows.go         # Win32 Syscall disk telemetry via GetDiskFreeSpaceExW (Windows)
 ├── main.go                 # Core Go backend engine
+├── main_test.go            # Unit test suite for security, auth & path validation
 └── tailwind.config.js      # Tailwind CSS build configuration
 ```
 

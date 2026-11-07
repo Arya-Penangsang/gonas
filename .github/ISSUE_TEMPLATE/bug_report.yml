@@ -1,0 +1,64 @@
+name: 🐛 Bug Report
+description: Laporkan masalah atau kegagalan fungsi di GoNAS
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih telah melaporkan kendala pada GoNAS! Harap sertakan detail selengkap mungkin agar mempermudah investigasi.
+  - type: textarea
+    id: description
+    attributes:
+      label: Deskripsi Masalah
+      description: Jelaskan apa yang terjadi secara rinci.
+      placeholder: Terjadi kendala saat...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Langkah Reproduksi Masalah
+      description: Tuliskan tahapan langkah untuk memicu bug tersebut.
+      placeholder: |
+        1. Buka browser ke '...'
+        2. Masuk dengan user '...'
+        3. Klik menu '...'
+        4. Muncul error '...'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang Diharapkan
+      description: Apa yang seharusnya terjadi?
+      placeholder: Seharusnya file terunduh dengan normal...
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistem Operasi Server
+      options:
+        - Windows (Server / 10 / 11)
+        - Linux (Ubuntu / Debian / CentOS / Alpine)
+        - Docker / Docker Compose
+        - Raspberry Pi (ARM)
+        - macOS
+        - Lainnya
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versi GoNAS
+      description: Versi biner atau commit git yang digunakan (contoh v2.4.1).
+      placeholder: v2.4.1
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log Console / Server (Opsional)
+      description: Cuplikan output terminal server atau console browser jika ada.
+      render: shell

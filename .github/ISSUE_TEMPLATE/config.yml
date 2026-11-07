@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Diskusi & Tanya Jawab Komunitas
+    url: https://github.com/Arya-Penangsang/gonas/discussions
+    about: Ajukan pertanyaan umum, saran setup, atau diskusikan ide sebelum membuat issue.

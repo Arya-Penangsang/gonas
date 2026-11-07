@@ -1,0 +1,31 @@
+name: 💡 Usulan Fitur Baru (Feature Request)
+description: Usulkan ide atau fitur baru untuk meningkatkan GoNAS
+title: "[FEAT]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Punya ide menarik untuk GoNAS? Bagikan usulan Anda di sini!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah yang Ingin Diselesaikan
+      description: Apakah usulan ini terkait dengan kendala alur kerja saat ini?
+      placeholder: Saat ini terasa merepotkan ketika...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solusi yang Diusulkan
+      description: Jelaskan bagaimana fitur ini seharusnya bekerja dan tampil.
+      placeholder: Sebaiknya ditambahkan tombol...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif Lain yang Sudah Dipertimbangkan
+      description: Apakah ada solusi alternatif atau workaround yang pernah dicoba?
+      placeholder: Cara sementara saat ini adalah...
