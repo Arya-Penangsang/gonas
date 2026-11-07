@@ -21,6 +21,10 @@ users.json
 config.json
 *.env
 *.log
+*CREDENTIALS*.md
+*DAFTAR_PENGGUNA*.md
+DAFTAR_PENGGUNA.md
+USER_CREDENTIALS.md
 
 # IDE & Editors
 .idea/

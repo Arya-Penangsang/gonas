@@ -376,6 +376,33 @@ func (us *UserStore) UpdatePassword(username, newPass string) error {
 	return nil
 }
 
+func (us *UserStore) Update(username, displayName string, role UserRole, newPass string) error {
+	us.Lock()
+	defer us.Unlock()
+
+	u, exists := us.users[username]
+	if !exists {
+		return fmt.Errorf("User tidak ditemukan")
+	}
+
+	if username == "superadmin" && role != "" && role != RoleSuperAdmin {
+		return fmt.Errorf("Peran akun superadmin utama tidak dapat diturunkan")
+	}
+
+	if displayName != "" {
+		u.DisplayName = displayName
+	}
+	if role != "" {
+		u.Role = role
+	}
+	if strings.TrimSpace(newPass) != "" {
+		u.Password = hashPassword(newPass)
+	}
+
+	saveUserStoreLocked()
+	return nil
+}
+
 // Session Store with User & Role metadata
 type SessionInfo struct {
 	Username    string    `json:"username"`
@@ -935,10 +962,12 @@ func main() {
 	mux.HandleFunc("/api/sys/password", authMiddleware(handlePasswordChange))
 	mux.HandleFunc("/api/sys/defrag", superadminMiddleware(handleDefrag))
 	mux.HandleFunc("/api/sys/health", authMiddleware(handleHealth))
+	mux.HandleFunc("/api/sys/file-stats", adminMiddleware(handleFileStats))
 
 	// 3. User Management Endpoints (SUPERADMIN ONLY)
 	mux.HandleFunc("/api/users/list", superadminMiddleware(handleListUsers))
 	mux.HandleFunc("/api/users/add", superadminMiddleware(handleAddUser))
+	mux.HandleFunc("/api/users/edit", superadminMiddleware(handleEditUser))
 	mux.HandleFunc("/api/users/delete", superadminMiddleware(handleDeleteUser))
 	mux.HandleFunc("/api/users/reset-pass", superadminMiddleware(handleResetUserPass))
 
@@ -1237,6 +1266,183 @@ func handleResetUserPass(w http.ResponseWriter, r *http.Request) {
 	}
 	logAudit("USER_PASS_RESET", req.Username, clientIP(r), fmt.Sprintf("Reset password user: %s", req.Username), true)
 	json.NewEncoder(w).Encode(map[string]interface{}{"success": true, "message": "Password user berhasil direset"})
+}
+
+func handleEditUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	var req struct {
+		Username    string `json:"username"`
+		DisplayName string `json:"display_name"`
+		Role        string `json:"role"`
+		Password    string `json:"password"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+	if req.Username == "" {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "error": "Username wajib diisi"})
+		return
+	}
+
+	role := UserRole(req.Role)
+	if role != RoleSuperAdmin && role != RoleAdmin && role != RoleUser && role != RoleViewer {
+		role = RoleUser
+	}
+
+	err := userStore.Update(req.Username, req.DisplayName, role, req.Password)
+	w.Header().Set("Content-Type", "application/json")
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "error": err.Error()})
+		return
+	}
+
+	passChanged := strings.TrimSpace(req.Password) != ""
+	logAudit("USER_EDIT", req.Username, clientIP(r), fmt.Sprintf("Perbarui akun %s (Role: %s, Display: %s, Ganti Password: %v)", req.Username, role, req.DisplayName, passChanged), true)
+	json.NewEncoder(w).Encode(map[string]interface{}{"success": true, "message": "Data pengguna berhasil diperbarui"})
+}
+
+type CategoryStat struct {
+	Count       int     `json:"count"`
+	Bytes       int64   `json:"bytes"`
+	SizeDisplay string  `json:"size_display"`
+	Percent     float64 `json:"percent"`
+}
+
+type FileDistributionStats struct {
+	TotalFiles   int                      `json:"total_files"`
+	TotalFolders int                      `json:"total_folders"`
+	TotalBytes   int64                    `json:"total_bytes"`
+	TotalDisplay string                   `json:"total_display"`
+	Categories   map[string]*CategoryStat `json:"categories"`
+	CachedAt     time.Time                `json:"cached_at"`
+}
+
+var (
+	fileStatsCache     *FileDistributionStats
+	fileStatsCacheTime time.Time
+	fileStatsMu        sync.RWMutex
+)
+
+func computeFileStats(root string) *FileDistributionStats {
+	cats := map[string]*CategoryStat{
+		"documents": {Count: 0, Bytes: 0},
+		"images":    {Count: 0, Bytes: 0},
+		"media":     {Count: 0, Bytes: 0},
+		"archives":  {Count: 0, Bytes: 0},
+		"others":    {Count: 0, Bytes: 0},
+	}
+	var totalFiles, totalFolders int
+	var totalBytes int64
+
+	docExts := map[string]bool{".pdf": true, ".doc": true, ".docx": true, ".xls": true, ".xlsx": true, ".ppt": true, ".pptx": true, ".txt": true, ".csv": true, ".rtf": true, ".odt": true, ".ods": true, ".odp": true, ".md": true}
+	imgExts := map[string]bool{".jpg": true, ".jpeg": true, ".png": true, ".gif": true, ".webp": true, ".svg": true, ".bmp": true, ".ico": true, ".tiff": true, ".tif": true}
+	mediaExts := map[string]bool{".mp4": true, ".mkv": true, ".avi": true, ".mov": true, ".mp3": true, ".wav": true, ".flac": true, ".aac": true, ".m4a": true, ".wma": true, ".wmv": true, ".webm": true, ".ogg": true}
+	archExts := map[string]bool{".zip": true, ".rar": true, ".7z": true, ".tar": true, ".gz": true, ".exe": true, ".msi": true, ".iso": true, ".apk": true, ".dmg": true, ".bin": true}
+
+	_ = filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if path == root {
+			return nil
+		}
+		name := d.Name()
+		if strings.HasPrefix(name, ".") || strings.EqualFold(name, "$RECYCLE.BIN") || strings.EqualFold(name, "System Volume Information") {
+			if d.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if d.IsDir() {
+			totalFolders++
+			return nil
+		}
+		info, err := d.Info()
+		if err != nil {
+			return nil
+		}
+		size := info.Size()
+		totalFiles++
+		totalBytes += size
+
+		ext := strings.ToLower(filepath.Ext(name))
+		switch {
+		case docExts[ext]:
+			cats["documents"].Count++
+			cats["documents"].Bytes += size
+		case imgExts[ext]:
+			cats["images"].Count++
+			cats["images"].Bytes += size
+		case mediaExts[ext]:
+			cats["media"].Count++
+			cats["media"].Bytes += size
+		case archExts[ext]:
+			cats["archives"].Count++
+			cats["archives"].Bytes += size
+		default:
+			cats["others"].Count++
+			cats["others"].Bytes += size
+		}
+		return nil
+	})
+
+	for _, c := range cats {
+		c.SizeDisplay = formatBytes(uint64(c.Bytes))
+		if totalBytes > 0 {
+			c.Percent = float64(int((float64(c.Bytes)/float64(totalBytes))*1000)) / 10.0
+		} else {
+			c.Percent = 0
+		}
+	}
+
+	return &FileDistributionStats{
+		TotalFiles:   totalFiles,
+		TotalFolders: totalFolders,
+		TotalBytes:   totalBytes,
+		TotalDisplay: formatBytes(uint64(totalBytes)),
+		Categories:   cats,
+		CachedAt:     time.Now(),
+	}
+}
+
+func handleFileStats(w http.ResponseWriter, r *http.Request) {
+	force := r.URL.Query().Get("refresh") == "true"
+	fileStatsMu.RLock()
+	if !force && fileStatsCache != nil && time.Since(fileStatsCacheTime) < 60*time.Second {
+		cached := fileStatsCache
+		fileStatsMu.RUnlock()
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"success": true,
+			"stats":   cached,
+			"cached":  true,
+		})
+		return
+	}
+	fileStatsMu.RUnlock()
+
+	configMu.RLock()
+	rootPath := cfg.RootPath
+	configMu.RUnlock()
+
+	stats := computeFileStats(rootPath)
+
+	fileStatsMu.Lock()
+	fileStatsCache = stats
+	fileStatsCacheTime = time.Now()
+	fileStatsMu.Unlock()
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"stats":   stats,
+		"cached":  false,
+	})
 }
 
 func handleVolumes(w http.ResponseWriter, r *http.Request) {

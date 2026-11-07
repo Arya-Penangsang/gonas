@@ -203,7 +203,65 @@
       color: #0f172a !important; /* High-contrast Slate-900 */
       font-weight: 600 !important;
     }
-    html.light .gdrive-card,
+        /* Grid Card in Light Mode */
+    html.light .gdrive-card {
+      background-color: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.06) !important;
+    }
+    html.light .gdrive-card:hover {
+      border-color: #c7d2fe !important;
+      background-color: #f8fafc !important;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.08) !important;
+    }
+    html.light .gdrive-card h4 {
+      color: #0f172a !important;
+    }
+    html.light .gdrive-card .card-meta {
+      color: #64748b !important;
+    }
+    html.light .gdrive-card .icon-box {
+      background-color: #f1f5f9 !important;
+    }
+    html.light .gdrive-card .card-action-btn {
+      color: #64748b !important;
+    }
+    html.light .gdrive-card .card-action-btn:hover {
+      background-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    /* Grid Card in Dark Mode */
+    html.dark .gdrive-card {
+      background-color: rgba(15, 23, 42, 0.75) !important;
+      border: 1px solid rgba(51, 65, 85, 0.6) !important;
+      color: #f8fafc !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+    }
+    html.dark .gdrive-card:hover {
+      background-color: rgba(30, 41, 59, 0.9) !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+    }
+    html.dark .gdrive-card h4 {
+      color: #f8fafc !important;
+    }
+    html.dark .gdrive-card .card-meta {
+      color: #94a3b8 !important;
+    }
+    html.dark .gdrive-card .icon-box {
+      background-color: rgba(30, 41, 59, 0.8) !important;
+    }
+    html.dark .gdrive-card .card-action-btn {
+      color: #94a3b8 !important;
+    }
+    html.dark .gdrive-card .card-action-btn:hover {
+      background-color: #334155 !important;
+      color: #ffffff !important;
+    }
+
+html.light .gdrive-card,
     html.light .bg-slate-900,
     html.light .bg-slate-900\/60,
     html.light .bg-slate-900\/70,
@@ -240,10 +298,40 @@
       border-color: #6366f1 !important;
       box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
     }
+    /* Refined High-Contrast Inline Drop Banner in Light Mode */
     html.light #inlineDropBanner {
-      background-color: #f0fdf4 !important;
-      border-color: #bbf7d0 !important;
-      color: #166534 !important;
+      background-color: #f8faff !important;
+      border-color: #a5b4fc !important;
+    }
+    html.light #inlineDropBanner:hover {
+      background-color: #eef2ff !important;
+      border-color: #6366f1 !important;
+    }
+    html.light #inlineDropBanner h4 {
+      color: #0f172a !important; /* Deep Slate-900: High-Contrast & Legible */
+      font-weight: 700 !important;
+    }
+    html.light #inlineDropBanner p {
+      color: #475569 !important; /* Slate-600 */
+      font-weight: 500 !important;
+    }
+    html.light #inlineDropBanner .drop-icon-box {
+      background-color: #e0e7ff !important;
+      color: #4f46e5 !important;
+    }
+    html.light #inlineDropBanner .drop-cta {
+      color: #4338ca !important;
+      font-weight: 700 !important;
+    }
+    html.light #emptyState h3 {
+      color: #0f172a !important;
+    }
+    html.light #emptyState p {
+      color: #475569 !important;
+    }
+    html.light #emptyState .bg-slate-900 {
+      background-color: #f1f5f9 !important;
+      color: #64748b !important;
     }
     html.light #previewContainer {
       background-color: #f8fafc !important;
@@ -288,6 +376,149 @@
       color: #0f172a !important;
       box-shadow: 0 10px 25px -5px rgba(15,23,42,0.15) !important;
     }
+  
+    /* Always show action buttons on touch/tablet devices where hover doesn't exist */
+    @media (hover: none), (pointer: coarse) {
+      .row-action-group, .card-action-group {
+        opacity: 1 !important;
+      }
+    }
+
+      /* High-contrast Sidebar Volumes & Storage in Light Mode */
+    html.light #volumeShortcutsSection .text-slate-500,
+    html.light #volumeShortcutsSection .text-slate-600 {
+      color: #475569 !important;
+      font-weight: 700 !important;
+    }
+    html.light #volBtn-n,
+    html.light #volBtn-d,
+    html.light #volBtn-e {
+      color: #1e293b !important;
+    }
+    html.light #volBtn-n span,
+    html.light #volBtn-d span,
+    html.light #volBtn-e span {
+      color: #1e293b !important;
+      font-weight: 600 !important;
+    }
+    html.light #volBtn-n span.font-mono,
+    html.light #volBtn-d span.font-mono,
+    html.light #volBtn-e span.font-mono {
+      color: #64748b !important;
+      font-weight: 600 !important;
+    }
+    html.light #sidebarDiskUsage,
+    html.light #sidebarDiskTotal {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+    html.light #sidebarDiskFree {
+      color: #4338ca !important;
+      font-weight: 700 !important;
+    }
+
+  
+    /* ==================== GLOBAL LIGHT MODE HIGH-CONTRAST REFINEMENTS ==================== */
+    html.light header {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.light #headerUserName {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+    html.light #tabAdminTopBtn,
+    html.light #themeToggle,
+    html.light #selectAllBtn,
+    html.light #refreshBtn {
+      background-color: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    html.light #tabAdminTopBtn:hover,
+    html.light #themeToggle:hover,
+    html.light #selectAllBtn:hover,
+    html.light #refreshBtn:hover {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+      border-color: #94a3b8 !important;
+    }
+    html.light #tabAdminTopBtn span {
+      color: #334155 !important;
+    }
+    html.light #breadcrumbs,
+    html.light #breadcrumbs * {
+      color: #0f172a !important;
+      font-weight: 600 !important;
+    }
+    html.light #breadcrumbs a:hover {
+      color: #4f46e5 !important;
+    }
+
+    /* Sidebar Volume Shortcuts in Light Mode */
+    html.light #volumeShortcutsSection {
+      border-color: #e2e8f0 !important;
+    }
+    html.light #volumeShortcutsSection .text-\[10px\] {
+      color: #475569 !important;
+      font-weight: 700 !important;
+    }
+    html.light #volBtn-n,
+    html.light #volBtn-d,
+    html.light #volBtn-e {
+      color: #1e293b !important;
+    }
+    html.light #volBtn-n span,
+    html.light #volBtn-d span,
+    html.light #volBtn-e span {
+      color: #1e293b !important;
+      font-weight: 600 !important;
+    }
+    html.light #volBtn-n span.font-mono,
+    html.light #volBtn-d span.font-mono,
+    html.light #volBtn-e span.font-mono {
+      color: #475569 !important;
+      font-weight: 700 !important;
+    }
+    html.light #volBtn-n:hover,
+    html.light #volBtn-d:hover,
+    html.light #volBtn-e:hover {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    /* Sidebar Bottom Storage Meter in Light Mode */
+    html.light aside .pt-4.border-t {
+      border-color: #e2e8f0 !important;
+    }
+    html.light aside .pt-4.border-t .text-xs {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+    html.light aside .pt-4.border-t .text-xs span {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+    html.light #sidebarDiskBar {
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    html.light aside .w-full.bg-slate-800 {
+      background-color: #e2e8f0 !important; /* Clean light gray progress track */
+    }
+    html.light #sidebarDiskUsage,
+    html.light #sidebarDiskTotal {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+    html.light aside .text-\[11px\] {
+      color: #334155 !important;
+      font-weight: 500 !important;
+    }
+    html.light #sidebarDiskFree {
+      color: #4338ca !important; /* Rich Indigo-700 */
+      font-weight: 700 !important;
+    }
+
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col transition-colors duration-200 select-none">
@@ -325,7 +556,7 @@
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Username</label>
           <div class="relative">
             <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3"></i>
-            <input type="text" id="loginUser" required placeholder="superadmin / admin / staf" value="superadmin"
+            <input type="text" id="loginUser" required placeholder="Masukkan username" autocomplete="username"
                    class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
           </div>
         </div>
@@ -334,8 +565,11 @@
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Password</label>
           <div class="relative">
             <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3"></i>
-            <input type="password" id="loginPass" required placeholder="admin123" value="admin123"
-                   class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            <input type="password" id="loginPass" required placeholder="Masukkan kata sandi" autocomplete="current-password"
+                   class="w-full pl-10 pr-10 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            <button type="button" id="toggleLoginPassBtn" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-2.5 p-1 rounded-lg text-slate-400 hover:text-slate-200 transition-colors" title="Tampilkan / Sembunyikan Password">
+              <i data-lucide="eye" id="toggleLoginPassIcon" class="w-4 h-4"></i>
+            </button>
           </div>
         </div>
 
@@ -362,18 +596,25 @@
   <!-- ==================== MAIN APPLICATION ==================== -->
   <div id="mainApp" class="flex-1 flex flex-col h-screen overflow-hidden hidden bg-slate-950">
     <!-- Top Header -->
-    <header class="h-16 border-b border-slate-800 bg-slate-950 px-5 flex items-center justify-between shrink-0 gap-4 z-40">
-      <!-- Left: Brand Logo -->
-      <div class="flex items-center gap-3 w-64 shrink-0 cursor-pointer" onclick="switchTab('files'); navigateToRoot('vol-n');">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center shadow-md shadow-indigo-600/30">
-          <i data-lucide="hard-drive" class="w-5 h-5 text-white"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-bold text-base tracking-tight text-white">GoNAS</h1>
-            <span class="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">v2.4 Move</span>
+    <header class="h-16 border-b border-slate-800 bg-slate-950 px-3 sm:px-5 flex items-center justify-between shrink-0 gap-2 sm:gap-4 z-40">
+      <!-- Left: Mobile Menu Hamburger & Brand Logo -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Hamburger Button on Mobile / Tablet -->
+        <button id="mobileMenuBtn" onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all shrink-0" title="Buka Menu Navigasi">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <div class="flex items-center gap-2 sm:gap-3 cursor-pointer" onclick="switchTab('files'); navigateToRoot('vol-n');">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center shadow-md shadow-indigo-600/30 shrink-0">
+            <i data-lucide="hard-drive" class="w-4 h-4 sm:w-5 sm:h-5 text-white"></i>
           </div>
-          <p class="text-[11px] text-slate-400 truncate max-w-[160px]">Cloud Preservasi BPMN</p>
+          <div class="hidden sm:block">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <h1 class="font-bold text-sm sm:text-base tracking-tight text-white">GoNAS</h1>
+              <span class="text-[9px] uppercase font-bold tracking-widest px-1.5 sm:px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">v2.4</span>
+            </div>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate max-w-[140px] sm:max-w-[160px]">Cloud Preservasi BPMN</p>
+          </div>
         </div>
       </div>
 
@@ -392,9 +633,9 @@
       <!-- Right: Controls & Profile -->
       <div class="flex items-center gap-3 shrink-0">
         <!-- Dashboard Admin Toggle Button (Hidden for non-admin roles!) -->
-        <button id="tabAdminTopBtn" onclick="switchTab(currentTab === 'admin' ? 'files' : 'admin')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-all shadow-sm">
+        <button id="tabAdminTopBtn" onclick="switchTab(currentTab === 'admin' ? 'files' : 'admin')" class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-all shadow-sm">
           <i data-lucide="layout-dashboard" class="w-4 h-4 text-indigo-400"></i>
-          <span id="tabAdminBtnText">Dashboard Admin</span>
+          <span id="tabAdminBtnText" class="hidden md:inline">Dashboard Admin</span>
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         </button>
 
@@ -423,8 +664,21 @@
 
     <!-- Main Workspace -->
     <div class="flex-1 flex overflow-hidden">
-      <!-- ==================== LEFT SIDEBAR ==================== -->
-      <aside class="w-64 border-r border-slate-800 bg-slate-950 flex flex-col justify-between p-4 shrink-0 overflow-y-auto custom-scroll">
+      <!-- Mobile Sidebar Backdrop Overlay -->
+      <div id="sidebarBackdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity"></div>
+
+      <!-- ==================== LEFT SIDEBAR (RESPONSIVE DRAWER) ==================== -->
+      <aside id="mainSidebar" class="fixed inset-y-0 left-0 z-50 w-72 lg:static lg:w-64 border-r border-slate-800 bg-slate-950 flex flex-col justify-between p-4 shrink-0 overflow-y-auto custom-scroll -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl lg:shadow-none">
+        <!-- Mobile Drawer Header -->
+        <div class="flex items-center justify-between lg:hidden pb-3 border-b border-slate-800/80 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm">G</div>
+            <span class="font-bold text-sm text-white">Menu Navigasi</span>
+          </div>
+          <button onclick="toggleMobileSidebar(false)" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
         <div class="flex flex-col gap-4">
           <!-- "+ Baru" Floating Button -->
           <div class="relative" id="btnNewContainer">
@@ -453,61 +707,60 @@
           <!-- Navigation Tree -->
           <nav class="flex flex-col gap-1 text-xs">
             <!-- Drive Saya (Root Utama N:) -->
-            <button onclick="switchTab('files'); navigateToRoot('vol-n');" id="navDriveSaya" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-600 font-semibold border border-indigo-500/20 transition-all text-left">
-              <div class="flex items-center gap-3">
-                <svg class="w-4 h-4 text-amber-500 fill-amber-400 shrink-0" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                <span>Drive Saya (NAS)</span>
+            <button onclick="navigateToRoot('vol-n'); toggleMobileSidebar(false);" id="navDriveSaya" class="w-full flex items-center justify-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-200 dark:border-indigo-500/30 ring-1 ring-indigo-300 dark:ring-indigo-800 transition-all text-left group select-none cursor-pointer" title="Drive Saya (Root Penyimpanan Utama)">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <svg class="w-4 h-4 text-amber-500 fill-amber-400 shrink-0 group-hover:scale-105 transition-transform" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                <span class="truncate font-semibold text-xs text-left">Drive Saya (NAS)</span>
               </div>
-              <i data-lucide="chevron-down" id="folderTreeChevron" class="w-3.5 h-3.5 text-slate-400"></i>
             </button>
 
-            <!-- Folder Tree Sub-Navigation -->
-            <div class="pl-3 flex flex-col gap-0.5 border-l border-slate-800 ml-4 my-1" id="sidebarFolderTree">
+            <!-- Folder Tree Sub-Navigation (Always smoothly visible & collapsible per subfolder) -->
+            <div class="pl-2 flex flex-col gap-0.5 border-l border-slate-800/80 ml-3.5 my-1" id="sidebarFolderTree">
               <div class="text-[11px] text-slate-500 py-1 pl-2">Memuat folder...</div>
             </div>
 
             <!-- Volume Shortcuts (Hidden or Locked for regular users) -->
             <div id="volumeShortcutsSection">
-              <div class="h-px bg-slate-800/80 my-2"></div>
-              <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider px-3 mb-1">Volume Fisik</div>
-              <button onclick="selectVolume('vol-n')" id="volBtn-n" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900 transition-all text-left font-medium">
+              <div class="h-px bg-slate-200 dark:bg-slate-800/80 my-2"></div>
+              <div class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider px-3 mb-1.5">Volume Fisik</div>
+              <button onclick="selectVolume('vol-n')" id="volBtn-n" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left">
                 <div class="flex items-center gap-2.5">
-                  <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-400"></i>
-                  <span>Storage Utama (N:)</span>
+                  <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
+                  <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Storage Utama (N:)</span>
                 </div>
-                <span class="text-[10px] text-slate-500 font-mono">500GB</span>
+                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">500GB</span>
               </button>
-              <button onclick="selectVolume('vol-d')" id="volBtn-d" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+              <button onclick="selectVolume('vol-d')" id="volBtn-d" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
                 <div class="flex items-center gap-2.5">
-                  <i data-lucide="database" class="w-3.5 h-3.5 text-blue-400"></i>
-                  <span>Gudang Ekstra (D:)</span>
+                  <i data-lucide="database" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
+                  <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Gudang Ekstra (D:)</span>
                 </div>
-                <span class="text-[10px] text-slate-500 font-mono">1.0TB</span>
+                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">1.0TB</span>
               </button>
-              <button onclick="selectVolume('vol-e')" id="volBtn-e" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+              <button onclick="selectVolume('vol-e')" id="volBtn-e" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
                 <div class="flex items-center gap-2.5">
-                  <i data-lucide="archive" class="w-3.5 h-3.5 text-emerald-400"></i>
-                  <span>Arsip Dinas (E:)</span>
+                  <i data-lucide="archive" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
+                  <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Arsip Dinas (E:)</span>
                 </div>
-                <span class="text-[10px] text-slate-500 font-mono">307GB</span>
+                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">307GB</span>
               </button>
             </div>
           </nav>
         </div>
 
         <!-- Bottom Storage Meter -->
-        <div class="pt-4 border-t border-slate-800/80">
-          <div class="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
-            <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i>
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800/80">
+          <div class="flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200 mb-2">
+            <i data-lucide="cloud" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
             <span>Penyimpanan</span>
           </div>
-          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-2">
-            <div id="sidebarDiskBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
+          <div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-2 shadow-inner">
+            <div id="sidebarDiskBar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500" style="width: 1%"></div>
           </div>
-          <div class="text-[11px] text-slate-400 leading-tight">
-            <span id="sidebarDiskUsage">2,2 GB</span> dari <span id="sidebarDiskTotal">1,4 TB</span> digunakan
+          <div class="text-[11px] font-medium text-slate-700 dark:text-slate-300 leading-tight">
+            <span id="sidebarDiskUsage" class="font-bold text-slate-900 dark:text-white">2,2 GB</span> dari <span id="sidebarDiskTotal" class="font-bold text-slate-900 dark:text-white">1,4 TB</span> digunakan
           </div>
-          <div class="text-[10px] text-indigo-400 font-medium mt-1" id="sidebarDiskFree">
+          <div class="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold mt-1" id="sidebarDiskFree">
             1,4 TB Bebas (N: 500GB + D: 1.0TB)
           </div>
         </div>
@@ -574,17 +827,17 @@
           <!-- Main Scrollable File Canvas -->
           <main class="flex-1 px-6 py-4 overflow-y-auto custom-scroll relative">
             <!-- Inline Drag & Drop Zone Helper -->
-            <div id="inlineDropBanner" class="action-btn-write mb-4 p-3 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors flex items-center justify-between cursor-pointer" onclick="document.getElementById('fileInput').click()">
+            <div id="inlineDropBanner" class="action-btn-write mb-4 p-3.5 rounded-2xl border-2 border-dashed border-indigo-400/40 dark:border-indigo-500/30 bg-indigo-50/70 dark:bg-indigo-500/5 hover:bg-indigo-100/70 dark:hover:bg-indigo-500/10 transition-colors flex items-center justify-between cursor-pointer" onclick="document.getElementById('fileInput').click()">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-500 flex items-center justify-center shrink-0">
+                <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 drop-icon-box flex items-center justify-center shrink-0 shadow-sm">
                   <i data-lucide="upload-cloud" class="w-4 h-4"></i>
                 </div>
                 <div>
-                  <h4 class="text-xs font-semibold text-slate-200">Tarik berkas ke sini atau seret berkas ke folder untuk memindahkannya</h4>
-                  <p class="text-[10px] text-slate-500">Mendukung multi-select, pratinjau multimedia, dan pengelompokan massal</p>
+                  <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100">Tarik berkas ke sini atau seret berkas ke folder untuk memindahkannya</h4>
+                  <p class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Mendukung multi-select, pratinjau multimedia, dan pengelompokan massal</p>
                 </div>
               </div>
-              <span class="text-xs font-bold text-indigo-500 hover:text-indigo-600 pr-2">Pilih Berkas</span>
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 pr-2 drop-cta">Pilih Berkas</span>
             </div>
 
             <!-- Empty State -->
@@ -733,6 +986,96 @@
               <div class="text-[11px] text-emerald-400 mt-2 flex items-center gap-1">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                 <span>S.M.A.R.T. Health: PASSED</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- File Composition & Storage Distribution (Admin & Superadmin) -->
+          <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 gdrive-card">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+                  <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-white">Distribusi & Komposisi Tipe Berkas</h3>
+                  <p class="text-[11px] text-slate-400">Analisis proporsi berkas, konsumsi kapasitas per jenis data, dan rasio penyimpanan</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="fileStatsSummaryBadge" class="text-xs font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg">Memuat statistik...</span>
+                <button onclick="loadDashboardFileStats(true)" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors" title="Perbarui Statistik">
+                  <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Segmented Storage Ratio Bar -->
+            <div class="mb-5">
+              <div class="h-3.5 w-full bg-slate-800 rounded-full overflow-hidden flex shadow-inner" id="storageRatioBar">
+                <div id="barDocs" class="bg-indigo-500 h-full transition-all duration-500" style="width: 0%" title="Dokumen & PDF"></div>
+                <div id="barImages" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%" title="Gambar & Foto"></div>
+                <div id="barMedia" class="bg-sky-500 h-full transition-all duration-500" style="width: 0%" title="Video & Musik"></div>
+                <div id="barArchives" class="bg-amber-500 h-full transition-all duration-500" style="width: 0%" title="Arsip & Software"></div>
+                <div id="barOthers" class="bg-slate-600 h-full transition-all duration-500" style="width: 0%" title="Lainnya"></div>
+              </div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mt-2.5 text-[11px] text-slate-400" id="storageRatioLegend">
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span><span>Dokumen (<span id="legDocsPct">0%</span>)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span>Gambar (<span id="legImagesPct">0%</span>)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span><span>Media (<span id="legMediaPct">0%</span>)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span><span>Software (<span id="legArchivesPct">0%</span>)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-600"></span><span>Lainnya (<span id="legOthersPct">0%</span>)</span></div>
+              </div>
+            </div>
+
+            <!-- 4 Metric Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Dokumen & PDF -->
+              <div class="p-4 rounded-2xl bg-slate-950/40 border border-slate-800/80 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Dokumen & PDF</span>
+                  <div class="text-base font-bold text-white mt-1" id="statDocsCount">0 berkas</div>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5" id="statDocsSize">0 B</div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="file-text" class="w-5 h-5"></i>
+                </div>
+              </div>
+
+              <!-- Gambar & Foto -->
+              <div class="p-4 rounded-2xl bg-slate-950/40 border border-slate-800/80 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Gambar & Foto</span>
+                  <div class="text-base font-bold text-white mt-1" id="statImagesCount">0 berkas</div>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5" id="statImagesSize">0 B</div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="image" class="w-5 h-5"></i>
+                </div>
+              </div>
+
+              <!-- Video & Audio -->
+              <div class="p-4 rounded-2xl bg-slate-950/40 border border-slate-800/80 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-sky-400">Video & Audio</span>
+                  <div class="text-base font-bold text-white mt-1" id="statMediaCount">0 berkas</div>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5" id="statMediaSize">0 B</div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="film" class="w-5 h-5"></i>
+                </div>
+              </div>
+
+              <!-- Arsip & Software -->
+              <div class="p-4 rounded-2xl bg-slate-950/40 border border-slate-800/80 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Arsip & Master</span>
+                  <div class="text-base font-bold text-white mt-1" id="statArchivesCount">0 berkas</div>
+                  <div class="text-[11px] text-slate-400 font-mono mt-0.5" id="statArchivesSize">0 B</div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="package" class="w-5 h-5"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -914,6 +1257,62 @@
         <div class="flex items-center justify-end gap-2 pt-2">
           <button type="button" onclick="closeAddUserModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">Batal</button>
           <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md">Simpan Akun</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit User Modal (Superadmin) -->
+  <div id="editUserModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl modal-card gdrive-card">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+            <i data-lucide="user-cog" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-white">Edit Pengguna</h3>
+            <p class="text-xs text-slate-400">Perbarui profil, peran, dan kata sandi</p>
+          </div>
+        </div>
+        <button onclick="closeEditUserModal()" class="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <form id="editUserForm" class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Username (ID)</label>
+          <input type="text" id="editUsername" disabled
+                 class="w-full px-3.5 py-2 bg-slate-800/40 border border-slate-700/50 rounded-xl text-xs text-slate-400 font-mono cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Tampilan</label>
+          <input type="text" id="editDisplayName" required placeholder="Nama Lengkap Pengguna"
+                 class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Peran / Hak Akses</label>
+          <select id="editUserRole" class="w-full px-3.5 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white">
+            <option value="superadmin">Superadmin (Akses Penuh Master)</option>
+            <option value="admin">Admin (File NAS + Dashboard Telemetri)</option>
+            <option value="user">Staf (Akses File NAS N:)</option>
+            <option value="viewer">Tamu / Viewer (Baca & Unduh Saja)</option>
+          </select>
+          <p id="editRoleWarning" class="text-[10px] text-amber-400 mt-1 hidden">Peran superadmin utama tidak dapat diturunkan.</p>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password Baru (Opsional)</label>
+          <div class="relative">
+            <input type="password" id="editUserPass" placeholder="Kosongkan jika tidak ingin mengubah"
+                   class="w-full pl-3.5 pr-10 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
+            <button type="button" onclick="toggleEditPassVisibility()" class="absolute right-3 top-2 p-0.5 rounded text-slate-400 hover:text-slate-200" title="Tampilkan Password">
+              <i data-lucide="eye" id="toggleEditPassIcon" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeEditUserModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">Batal</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md">Simpan Perubahan</button>
         </div>
       </form>
     </div>
@@ -1163,31 +1562,87 @@
       return `<svg class="w-5 h-5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`;
     }
 
-    // ==================== THEME MANAGEMENT ====================
+    // ==================== 3-STATE THEME MANAGEMENT (LIGHT / DARK / SYSTEM) ====================
+    let currentThemeSetting = 'system'; // 'light' | 'dark' | 'system'
+
     function initTheme() {
-      const saved = localStorage.getItem('aether_theme') || 'light'; // DEFAULT LIGHT THEME!
-      applyTheme(saved);
+      const saved = localStorage.getItem('gonas_theme') || localStorage.getItem('aether_theme') || 'system';
+      applyTheme(saved, false);
+
+      // Listen to OS theme changes if in 'system' mode
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          if (currentThemeSetting === 'system') {
+            applyTheme('system', false);
+          }
+        });
+      }
     }
 
-    function applyTheme(theme) {
+    function applyTheme(theme, saveToStorage = true) {
+      currentThemeSetting = theme;
+      if (saveToStorage) {
+        localStorage.setItem('gonas_theme', theme);
+        localStorage.setItem('aether_theme', theme);
+      }
+
       const html = document.documentElement;
       const btn = document.getElementById('themeToggle');
-      if (theme === 'light') {
+
+      let effectiveTheme = theme;
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        effectiveTheme = prefersDark ? 'dark' : 'light';
+      }
+
+      if (effectiveTheme === 'light') {
         html.classList.remove('dark');
         html.classList.add('light');
-        if (btn) btn.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>';
       } else {
         html.classList.remove('light');
         html.classList.add('dark');
-        if (btn) btn.innerHTML = '<i data-lucide="moon" class="w-4 h-4 text-slate-300"></i>';
       }
-      localStorage.setItem('aether_theme', theme);
+
+      // Update button icon & tooltip according to 3-state setting
+      if (btn) {
+        if (theme === 'light') {
+          btn.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>';
+          btn.setAttribute('title', 'Tema: Terang (Klik untuk Beralih ke Gelap)');
+        } else if (theme === 'dark') {
+          btn.innerHTML = '<i data-lucide="moon" class="w-4 h-4 text-indigo-400"></i>';
+          btn.setAttribute('title', 'Tema: Gelap (Klik untuk Mengikuti Perangkat)');
+        } else {
+          btn.innerHTML = '<i data-lucide="laptop" class="w-4 h-4 text-emerald-400"></i>';
+          btn.setAttribute('title', 'Tema: Mengikuti Perangkat (Klik untuk Beralih ke Terang)');
+        }
+      }
+
       if (window.lucide) lucide.createIcons();
     }
 
     function toggleTheme() {
-      const isLight = document.documentElement.classList.contains('light');
-      applyTheme(isLight ? 'dark' : 'light');
+      // 3-state cycle: system -> light -> dark -> system
+      if (currentThemeSetting === 'system') {
+        applyTheme('light');
+      } else if (currentThemeSetting === 'light') {
+        applyTheme('dark');
+      } else {
+        applyTheme('system');
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('loginPass');
+      const icon = document.getElementById('toggleLoginPassIcon');
+      if (!passInput) return;
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        passInput.type = 'password';
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
     }
 
     // ==================== INITIALIZATION ====================
@@ -1311,6 +1766,24 @@
       }
     }
 
+    function updateNavDriveState() {
+      const navDrive = document.getElementById('navDriveSaya');
+      if (!navDrive) return;
+      const isFilesTab = (currentTab === 'files');
+      const isRootActive = (isFilesTab && activeTreePath === '');
+
+      // Locked layout: always strictly left-aligned with items-center justify-start gap-2.5, NEVER justify-between!
+      const baseClasses = "w-full flex items-center justify-start gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all text-left group select-none cursor-pointer";
+
+      if (isRootActive) {
+        navDrive.className = `${baseClasses} bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 ring-1 ring-indigo-300 dark:ring-indigo-800 shadow-sm`;
+      } else if (isFilesTab) {
+        navDrive.className = `${baseClasses} text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-300 border border-transparent`;
+      } else {
+        navDrive.className = `${baseClasses} text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent`;
+      }
+    }
+
     function switchTab(tab) {
       // Guard: only superadmin and admin can access dashboard
       if (tab === 'admin' && currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
@@ -1322,20 +1795,18 @@
       const filesView = document.getElementById('filesView');
       const adminView = document.getElementById('adminView');
       const tabAdminBtnText = document.getElementById('tabAdminBtnText');
-      const navDriveSaya = document.getElementById('navDriveSaya');
 
       if (tab === 'files') {
         if (filesView) filesView.classList.remove('hidden');
         if (adminView) adminView.classList.add('hidden');
         if (tabAdminBtnText) tabAdminBtnText.innerText = "Dashboard Admin";
-        if (navDriveSaya) navDriveSaya.className = "flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-600 font-semibold border border-indigo-500/20 transition-all text-left";
       } else {
         if (filesView) filesView.classList.add('hidden');
         if (adminView) adminView.classList.remove('hidden');
         if (tabAdminBtnText) tabAdminBtnText.innerText = "Kembali ke Berkas";
-        if (navDriveSaya) navDriveSaya.className = "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left";
         loadAdminDashboard();
       }
+      updateNavDriveState();
       if (window.lucide) lucide.createIcons();
     }
 
@@ -1390,8 +1861,8 @@
                         (id === 'volBtn-d' && volId === 'vol-d') || 
                         (id === 'volBtn-e' && volId === 'vol-e');
           b.className = match
-            ? "flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-600/20 text-indigo-400 font-semibold border border-indigo-500/30 transition-all text-left"
-            : "flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left";
+            ? "w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left"
+            : "w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium";
         }
       });
 
@@ -1404,7 +1875,31 @@
     }
 
     function navigateToRoot(volId) {
-      selectVolume(volId || 'vol-n');
+      const targetVol = volId || 'vol-n';
+      
+      // If currently on admin dashboard, return to files view
+      if (currentTab !== 'files') {
+        switchTab('files');
+      }
+
+      // If we are already on this volume:
+      if (currentVolume === targetVol) {
+        if (currentPath === '') {
+          // Already at root of Drive Saya - smooth refresh without tearing down folder tree
+          setActiveTreeNode('');
+          loadFiles('');
+          return;
+        } else {
+          // Return from subfolder back to root without wiping the sidebar tree
+          currentPath = '';
+          setActiveTreeNode('');
+          loadFiles('');
+          return;
+        }
+      }
+
+      // If switching physical volumes (e.g. N: -> D: or E:)
+      selectVolume(targetVol);
     }
 
     // ==================== STATS & UNIFIED STORAGE METER ====================
@@ -1677,14 +2172,7 @@
         }
       });
 
-      const navDrive = document.getElementById('navDriveSaya');
-      if (navDrive) {
-        if (path === '') {
-          navDrive.classList.add('bg-indigo-600/10', 'text-indigo-600', 'ring-1', 'ring-indigo-300');
-        } else {
-          navDrive.classList.remove('bg-indigo-600/10', 'text-indigo-600', 'ring-1', 'ring-indigo-300');
-        }
-      }
+      updateNavDriveState();
     }
 
     // Filter Chips
@@ -1782,9 +2270,9 @@
           const card = document.createElement('div');
           const isChecked = selectedPaths.has(item.path);
 
-          card.className = `group relative bg-white border ${
-            isChecked ? 'border-indigo-500 bg-indigo-50/50' : 'border-slate-200 hover:border-indigo-300'
-          } rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 gdrive-card`;
+          card.className = `group relative rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 cursor-pointer gdrive-card ${
+            isChecked ? 'border-indigo-500 ring-2 ring-indigo-500/40 bg-indigo-50/70 dark:bg-indigo-950/40' : ''
+          }`;
 
           card.draggable = !isViewer;
           card.ondragstart = (e) => {
@@ -1818,31 +2306,31 @@
           card.innerHTML = `
             <div class="flex items-start justify-between mb-3">
               <div class="flex items-center gap-2">
-                <input type="checkbox" ${isChecked ? 'checked' : ''} class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-0 cursor-pointer" onclick="event.stopPropagation()">
-                <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} class="item-checkbox rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-indigo-600 focus:ring-0 cursor-pointer" onclick="event.stopPropagation()">
+                <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center transition-colors">
                   ${iconHTML}
                 </div>
               </div>
-              <div class="opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center gap-1">
+              <div class="card-action-group opacity-90 sm:opacity-40 sm:group-hover:opacity-100 transition-opacity flex items-center gap-1">
                 ${!isViewer ? `
-                <button class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 btn-move" title="Pindahkan Berkas">
+                <button class="p-1 rounded-lg card-action-btn transition-colors btn-move" title="Pindahkan Berkas">
                   <i data-lucide="folder-input" class="w-3.5 h-3.5 text-indigo-500"></i>
                 </button>
-                <button class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 btn-rename" title="Ganti Nama">
+                <button class="p-1 rounded-lg card-action-btn transition-colors btn-rename" title="Ganti Nama">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                 </button>` : ''}
-                <button class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 btn-dl" title="Unduh">
+                <button class="p-1 rounded-lg card-action-btn transition-colors btn-dl" title="Unduh">
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 </button>
                 ${!isViewer ? `
-                <button class="p-1 rounded-lg hover:bg-rose-50 text-rose-500 btn-del" title="Hapus">
+                <button class="p-1 rounded-lg hover:bg-rose-500/20 text-rose-500 transition-colors btn-del" title="Hapus">
                   <i data-lucide="trash" class="w-3.5 h-3.5"></i>
                 </button>` : ''}
               </div>
             </div>
             <div>
-              <h4 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate mb-1" title="${item.name}">${item.name}</h4>
-              <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+              <h4 class="text-xs font-semibold truncate mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" title="${item.name}">${item.name}</h4>
+              <div class="flex items-center justify-between text-[10px] card-meta">
                 <span class="font-medium">${item.size_display || (item.is_dir ? 'Folder' : '—')}</span>
                 <span>${item.mod_time ? item.mod_time.split(' ')[0] : '-'}</span>
               </div>
@@ -1854,7 +2342,8 @@
             cb.onchange = (e) => {
               toggleItemSelection(item.path, e.target.checked);
               card.classList.toggle('border-indigo-500', e.target.checked);
-              card.classList.toggle('bg-indigo-50/50', e.target.checked);
+              card.classList.toggle('ring-2', e.target.checked);
+              card.classList.toggle('ring-indigo-500/40', e.target.checked);
             };
           }
 
@@ -1934,19 +2423,19 @@
             <td class="py-3 px-4 text-xs font-medium text-slate-600 dark:text-slate-400">${item.mod_time || '-'}</td>
             <td class="py-3 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300">${item.size_display || (item.is_dir ? 'Folder' : '—')}</td>
             <td class="py-3 px-4 text-right">
-              <div class="flex items-center justify-end gap-1 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+              <div class="row-action-group flex items-center justify-end gap-1 opacity-90 sm:opacity-40 sm:group-hover:opacity-100 transition-opacity">
                 ${!isViewer ? `
-                <button class="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 btn-move" title="Pindahkan Berkas">
+                <button class="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 btn-move transition-colors" title="Pindahkan Berkas">
                   <i data-lucide="folder-input" class="w-3.5 h-3.5 text-indigo-500"></i>
                 </button>
-                <button class="p-1 rounded-lg hover:bg-slate-200 text-slate-600 btn-rename" title="Ganti Nama">
+                <button class="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 btn-rename transition-colors" title="Ganti Nama">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                 </button>` : ''}
-                <button class="p-1 rounded-lg hover:bg-slate-200 text-slate-600 btn-dl" title="Unduh">
+                <button class="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 btn-dl transition-colors" title="Unduh">
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 </button>
                 ${!isViewer ? `
-                <button class="p-1 rounded-lg hover:bg-rose-100 text-rose-500 btn-del" title="Hapus">
+                <button class="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-500 btn-del transition-colors" title="Hapus">
                   <i data-lucide="trash" class="w-3.5 h-3.5"></i>
                 </button>` : ''}
               </div>
@@ -2892,6 +3381,7 @@
           renderDrives(inf.drives || []);
         }
         loadAuditLogs();
+        loadDashboardFileStats();
         if (currentUserRole === 'superadmin') {
           loadUsersList();
         }
@@ -3001,10 +3491,15 @@
                 </td>
                 <td class="py-2.5 px-3 text-slate-400 text-[11px]">${u.created_at ? u.created_at.split('T')[0] : '-'}</td>
                 <td class="py-2.5 px-3 text-right">
-                  ${u.username !== 'superadmin' ? `
-                  <button onclick="deleteUserAccount('${u.username}')" class="p-1 rounded hover:bg-rose-100 text-rose-600" title="Hapus User">
-                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                  </button>` : '<span class="text-[10px] text-slate-400 font-mono">Utama</span>'}
+                  <div class="flex items-center justify-end gap-1">
+                    <button onclick="openEditUserModal('${u.username}', '${encodeURIComponent(u.display_name || u.username)}', '${u.role}')" class="p-1.5 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 transition-colors" title="Edit Pengguna">
+                      <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                    ${u.username !== 'superadmin' ? `
+                    <button onclick="deleteUserAccount('${u.username}')" class="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-600 dark:text-rose-400 transition-colors" title="Hapus User">
+                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>` : ''}
+                  </div>
                 </td>
               </tr>
             `;
@@ -3068,6 +3563,149 @@
     }
 
     // ==================== EVENT LISTENERS ====================
+    
+    function toggleMobileSidebar(force) {
+      const sidebar = document.getElementById('mainSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (!sidebar) return;
+
+      const isCurrentlyOpen = !sidebar.classList.contains('-translate-x-full');
+      const shouldOpen = force !== undefined ? force : !isCurrentlyOpen;
+
+      if (shouldOpen) {
+        sidebar.classList.remove('-translate-x-full');
+        if (backdrop) backdrop.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        if (backdrop) backdrop.classList.add('hidden');
+      }
+    }
+
+    
+    // ==================== FILE STATS & VISUAL BREAKDOWN ====================
+    async function loadDashboardFileStats(force) {
+      const summaryBadge = document.getElementById('fileStatsSummaryBadge');
+      if (summaryBadge && force) summaryBadge.innerText = 'Memperbarui...';
+
+      try {
+        const headers = {};
+        if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+        const url = `/api/sys/file-stats${force ? '?refresh=true' : ''}`;
+        const res = await fetch(url, { credentials: 'include', headers });
+        const data = await res.json();
+
+        if (data.success && data.stats) {
+          const s = data.stats;
+          if (summaryBadge) {
+            summaryBadge.innerText = `${s.total_files} Berkas • ${s.total_display} (${s.total_folders} Folder)`;
+          }
+
+          const cats = s.categories || {};
+          const docs = cats.documents || { count: 0, size_display: '0 B', percent: 0 };
+          const imgs = cats.images || { count: 0, size_display: '0 B', percent: 0 };
+          const media = cats.media || { count: 0, size_display: '0 B', percent: 0 };
+          const arch = cats.archives || { count: 0, size_display: '0 B', percent: 0 };
+          const others = cats.others || { count: 0, size_display: '0 B', percent: 0 };
+
+          // Update Segmented Ratio Bar Widths
+          const barDocs = document.getElementById('barDocs');
+          const barImages = document.getElementById('barImages');
+          const barMedia = document.getElementById('barMedia');
+          const barArchives = document.getElementById('barArchives');
+          const barOthers = document.getElementById('barOthers');
+
+          if (barDocs) barDocs.style.width = `${Math.max(docs.percent > 0 ? 2 : 0, docs.percent)}%`;
+          if (barImages) barImages.style.width = `${Math.max(imgs.percent > 0 ? 2 : 0, imgs.percent)}%`;
+          if (barMedia) barMedia.style.width = `${Math.max(media.percent > 0 ? 2 : 0, media.percent)}%`;
+          if (barArchives) barArchives.style.width = `${Math.max(arch.percent > 0 ? 2 : 0, arch.percent)}%`;
+          if (barOthers) barOthers.style.width = `${Math.max(others.percent > 0 ? 2 : 0, others.percent)}%`;
+
+          // Update Legend Percentages
+          const legDocs = document.getElementById('legDocsPct');
+          const legImages = document.getElementById('legImagesPct');
+          const legMedia = document.getElementById('legMediaPct');
+          const legArchives = document.getElementById('legArchivesPct');
+          const legOthers = document.getElementById('legOthersPct');
+
+          if (legDocs) legDocs.innerText = `${docs.percent}%`;
+          if (legImages) legImages.innerText = `${imgs.percent}%`;
+          if (legMedia) legMedia.innerText = `${media.percent}%`;
+          if (legArchives) legArchives.innerText = `${arch.percent}%`;
+          if (legOthers) legOthers.innerText = `${others.percent}%`;
+
+          // Update Metric Cards
+          const statDocsCount = document.getElementById('statDocsCount');
+          const statDocsSize = document.getElementById('statDocsSize');
+          if (statDocsCount) statDocsCount.innerText = `${docs.count.toLocaleString('id-ID')} berkas`;
+          if (statDocsSize) statDocsSize.innerText = `${docs.size_display} (${docs.percent}%)`;
+
+          const statImagesCount = document.getElementById('statImagesCount');
+          const statImagesSize = document.getElementById('statImagesSize');
+          if (statImagesCount) statImagesCount.innerText = `${imgs.count.toLocaleString('id-ID')} berkas`;
+          if (statImagesSize) statImagesSize.innerText = `${imgs.size_display} (${imgs.percent}%)`;
+
+          const statMediaCount = document.getElementById('statMediaCount');
+          const statMediaSize = document.getElementById('statMediaSize');
+          if (statMediaCount) statMediaCount.innerText = `${media.count.toLocaleString('id-ID')} berkas`;
+          if (statMediaSize) statMediaSize.innerText = `${media.size_display} (${media.percent}%)`;
+
+          const statArchivesCount = document.getElementById('statArchivesCount');
+          const statArchivesSize = document.getElementById('statArchivesSize');
+          if (statArchivesCount) statArchivesCount.innerText = `${arch.count.toLocaleString('id-ID')} berkas`;
+          if (statArchivesSize) statArchivesSize.innerText = `${arch.size_display} (${arch.percent}%)`;
+        }
+      } catch (err) {
+        console.error("File stats error:", err);
+        if (summaryBadge) summaryBadge.innerText = 'Gagal memuat statistik';
+      }
+    }
+
+    // ==================== EDIT USER MODAL FUNCTIONS ====================
+    window.openEditUserModal = function(username, encodedDisplayName, role) {
+      const modal = document.getElementById('editUserModal');
+      const uInput = document.getElementById('editUsername');
+      const dInput = document.getElementById('editDisplayName');
+      const rSelect = document.getElementById('editUserRole');
+      const pInput = document.getElementById('editUserPass');
+      const roleWarn = document.getElementById('editRoleWarning');
+
+      if (uInput) uInput.value = username;
+      if (dInput) dInput.value = decodeURIComponent(encodedDisplayName || username);
+      if (rSelect) {
+        rSelect.value = role;
+        if (username === 'superadmin') {
+          rSelect.disabled = true;
+          if (roleWarn) roleWarn.classList.remove('hidden');
+        } else {
+          rSelect.disabled = false;
+          if (roleWarn) roleWarn.classList.add('hidden');
+        }
+      }
+      if (pInput) pInput.value = '';
+
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    };
+
+    window.closeEditUserModal = function() {
+      const modal = document.getElementById('editUserModal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.toggleEditPassVisibility = function() {
+      const passInput = document.getElementById('editUserPass');
+      const icon = document.getElementById('toggleEditPassIcon');
+      if (!passInput || !icon) return;
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        passInput.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
+    };
+
     function setupEvents() {
       // Move Modal Wiring
       const cancelMoveBtn = document.getElementById('cancelMoveBtn');
@@ -3107,15 +3745,7 @@
             const themeBtn = document.getElementById('themeToggle');
       if (themeBtn) themeBtn.onclick = toggleTheme;
 
-      const treeChevron = document.getElementById('folderTreeChevron');
-      const sidebarTree = document.getElementById('sidebarFolderTree');
-      if (treeChevron && sidebarTree) {
-        treeChevron.onclick = (e) => {
-          e.stopPropagation();
-          sidebarTree.classList.toggle('hidden');
-          treeChevron.classList.toggle('rotate-180');
-        };
-      }
+// folderTreeChevron removed per clean root layout design
 
       // Login Form
       const loginForm = document.getElementById('loginForm');
@@ -3465,6 +4095,40 @@
       }
 
       // Explicit window exports
+      
+      // Edit User Form Submission
+      const editUserForm = document.getElementById('editUserForm');
+      if (editUserForm) {
+        editUserForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const username = document.getElementById('editUsername').value;
+          const displayName = document.getElementById('editDisplayName').value;
+          const role = document.getElementById('editUserRole').value;
+          const password = document.getElementById('editUserPass').value;
+
+          try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (sessionToken) headers['X-Auth-Token'] = sessionToken;
+            const res = await fetch('/api/users/edit', {
+              method: 'POST',
+              headers,
+              credentials: 'include',
+              body: JSON.stringify({ username, display_name: displayName, role, password })
+            });
+            const data = await res.json();
+            if (data.success) {
+              closeEditUserModal();
+              showToast(`Pengguna "${username}" berhasil diperbarui`, 'success');
+              loadUsersList();
+            } else {
+              showToast(data.error || 'Gagal memperbarui pengguna', 'error');
+            }
+          } catch (err) {
+            showToast('Gagal menghubungi server', 'error');
+          }
+        };
+      }
+
       window.deleteSelected = deleteSelected;
       window.downloadSelected = downloadSelected;
       window.loadAdminDashboard = loadAdminDashboard;
@@ -3479,6 +4143,10 @@
       window.openDeleteModal = openDeleteModal;
       window.openAddUserModal = openAddUserModal;
       window.closeAddUserModal = closeAddUserModal;
+      window.closeEditUserModal = closeEditUserModal;
+      window.openEditUserModal = openEditUserModal;
+      window.toggleEditPassVisibility = toggleEditPassVisibility;
+      window.loadDashboardFileStats = loadDashboardFileStats;
       window.selectVolume = selectVolume;
       window.setFilter = setFilter;
       window.setViewMode = setViewMode;
@@ -3489,6 +4157,8 @@
       window.triggerDefrag = triggerDefrag;
       window.triggerDownload = triggerDownload;
       window.navigateToRoot = navigateToRoot;
+      window.togglePasswordVisibility = togglePasswordVisibility;
+      window.toggleMobileSidebar = toggleMobileSidebar;
     }
   </script>
 </body>
