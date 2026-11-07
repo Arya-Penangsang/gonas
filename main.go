@@ -992,6 +992,8 @@ func main() {
 	mux.HandleFunc("/api/fs/auto-arrange/execute", writeMiddleware(handleAutoArrangeExecute))
 
 	// 4. Static UI (Embedded)
+	_ = mime.AddExtensionType(".css", "text/css; charset=utf-8")
+	_ = mime.AddExtensionType(".js", "application/javascript; charset=utf-8")
 	webSubFS, err := fs.Sub(embeddedWebFS, "web")
 	if err != nil {
 		log.Fatalf("Gagal inisialisasi embedded web UI: %v", err)
