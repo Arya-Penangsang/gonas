@@ -1,12 +1,14 @@
 # 🚀 GoNAS — Lightweight, High-Performance, Cross-Platform Cloud NAS
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/web/gonas-banner.png" alt="GoNAS Cloud Banner" width="100%">
+  <img src="https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/web/gonas-banner.png" alt="GoNAS - Cloud Web NAS Mandiri Ringan dan Cepat Berbasis Go" width="100%">
 </p>
 
 <p align="center">
   <a href="../README.md">English</a> • <b>Bahasa Indonesia</b>
 </p>
+
+> **GoNAS** adalah engine Cloud Web NAS mandiri (*self-hosted*), berkecepatan tinggi, dan ultra-ringan (< 10 MB RAM) dengan dukungan multi-role UAC, penampil dokumen PDF/Word/Excel, pooling multi-volume, dan kesiapan *offline air-gapped* 100%. Alternatif modern & minimalis untuk Nextcloud & ownCloud.
 
 [![CI](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml/badge.svg)](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker%20Image-ghcr.io-2496ED?logo=docker)](https://github.com/Arya-Penangsang/gonas/pkgs/container/gonas)
