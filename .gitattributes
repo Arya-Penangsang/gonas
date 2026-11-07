@@ -1,0 +1,9 @@
+# GitHub Linguist Overrides
+# Mark frontend embedded assets as vendored/generated so repository language is detected as Go
+web/** linguist-vendored
+web/** linguist-generated
+*.min.css linguist-vendored
+*.min.js linguist-vendored
+web/index.html linguist-detectable=false
+web/style.min.css linguist-detectable=false
+web/lucide.min.js linguist-detectable=false

@@ -5,14 +5,14 @@
 </p>
 
 <p align="center">
-  <b>English</b> • <a href="README.id.md">Bahasa Indonesia</a>
+  <b>English</b> • <a href="docs/README.id.md">Bahasa Indonesia</a>
 </p>
 
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
 [![Memory Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
-[![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
+[![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](docs/SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **GoNAS** is a self-hosted, ultra-lightweight, and blazingly fast Cloud Web NAS engine designed for personal storage, team collaboration, office servers, homelabs, and digital archiving.
@@ -275,7 +275,7 @@ GoNAS v2.4.1 has undergone continuous security validation using **Purple Teaming
 | **Global Security Headers** | `CWE-1021` | Enforced `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy`. |
 | **Slowloris DoS Defense** | `T1499` | Server `ReadHeaderTimeout` set to 15 seconds to drop stalled TCP slow-header attacks. |
 
-Read the full technical security audit and patch notes in **[SECURITY.md](SECURITY.md)**.
+Read the full technical security audit and patch notes in **[SECURITY.md](docs/SECURITY.md)**.
 
 ---
 
@@ -283,22 +283,27 @@ Read the full technical security audit and patch notes in **[SECURITY.md](SECURI
 
 ```text
 GoNAS/
+├── docs/                   # Full Technical & Architectural Documentation
+│   ├── API.md              # Comprehensive REST API v2.4 documentation
+│   ├── ARCHITECTURE.md     # Technical architecture, 256KB streaming I/O, security specs
+│   ├── README.id.md        # Dokumentasi Bahasa Indonesia
+│   ├── SECURITY.md         # Purple Team Security Assessment Report & Patch Notes
+│   └── SOCIAL_MEDIA_POSTS.md # Social media publication draft copy
+├── web/                    # Static Web Frontend Assets (Embedded into binary)
+│   ├── index.html          # Clean & modern reactive SPA web interface
+│   ├── style.min.css       # Precompiled minified Tailwind CSS (Offline air-gapped)
+│   └── lucide.min.js       # Offline vector icon set
+├── .gitattributes          # Linguist language detection & overrides
 ├── .gitignore              # Git ignore rules (binaries, caches, runtime databases)
-├── API.md                  # Comprehensive REST API v2.4 documentation
-├── ARCHITECTURE.md         # Technical architecture, 256KB streaming I/O, security specs
 ├── Dockerfile              # Multi-stage ultra-lightweight Docker build (< 25 MB)
 ├── docker-compose.yml      # Production container orchestration config
 ├── go.mod                  # Pure Go module definition (zero dependencies)
 ├── LICENSE                 # Open-Source MIT License
 ├── README.md               # English project documentation & deployment guide
-├── README.id.md            # Dokumentasi Bahasa Indonesia
-├── SECURITY.md             # Purple Team Security Assessment Report & Patch Notes
-├── SOCIAL_MEDIA_POSTS.md   # Social media publication copy for Threads & X
 ├── disk_posix.go           # POSIX kernel disk telemetry via statfs (Linux, macOS, Docker)
 ├── disk_windows.go         # Win32 Syscall disk telemetry via GetDiskFreeSpaceExW (Windows)
 ├── main.go                 # Core Go backend engine
-└── web/                    # Embedded SPA frontend
-    └── index.html          # Tailwind CSS, Lucide icons & rich media viewers
+└── tailwind.config.js      # Tailwind CSS build configuration
 ```
 
 ---

@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> • <b>Bahasa Indonesia</b>
+  <a href="../README.md">English</a> • <b>Bahasa Indonesia</b>
 </p>
 
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
@@ -13,7 +13,7 @@
 [![Memory Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
 [![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
 **GoNAS** adalah engine Cloud Web NAS mandiri (*self-hosted*), berkecepatan tinggi, dan ultra-ringan yang dirancang untuk kebutuhan penyimpanan data pribadi, tim, server kantor, homelab, maupun institusi.
 
@@ -283,26 +283,31 @@ Laporan asesmen teknis dan catatan patch selengkapnya dapat dibaca di **[SECURIT
 
 ```text
 GoNAS/
+├── docs/                   # Dokumentasi Teknis & Arsitektur Lengkap
+│   ├── API.md              # Dokumentasi lengkap REST API v2.4
+│   ├── ARCHITECTURE.md     # Rincian desain teknis, I/O streaming, & keamanan
+│   ├── README.id.md        # Dokumentasi bahasa Indonesia
+│   ├── SECURITY.md         # Laporan Asesmen Keamanan Purple Team & Catatan Patch
+│   └── SOCIAL_MEDIA_POSTS.md # Draf teks publikasi media sosial Threads & X
+├── web/                    # Antarmuka SPA (ter-embed langsung ke dalam biner)
+│   ├── index.html          # Frontend modern responsif (Light/Dark/Auto)
+│   ├── style.min.css       # Minified Tailwind CSS offline (100% air-gapped)
+│   └── lucide.min.js       # Paket ikon SVG offline
+├── .gitattributes          # Linguist language detection & overrides
 ├── .gitignore              # Pengecualian berkas biner, cache, & data runtime
-├── API.md                  # Dokumentasi lengkap REST API v2.4
-├── ARCHITECTURE.md         # Rincian desain teknis, I/O streaming, & keamanan
 ├── Dockerfile              # Multi-stage Docker build ultra-ringan (< 25 MB)
 ├── docker-compose.yml      # Konfigurasi orkestrasi kontainer production
 ├── go.mod                  # Definisi modul Go (Zero external dependencies)
 ├── LICENSE                 # Lisensi Open-Source MIT
-├── README.md               # Dokumentasi bahasa Inggris
-├── README.id.md            # Dokumentasi bahasa Indonesia
-├── SECURITY.md             # Laporan Asesmen Keamanan Purple Team & Catatan Patch
-├── SOCIAL_MEDIA_POSTS.md   # Draf teks publikasi media sosial Threads & X
+├── README.md               # Dokumentasi bahasa Inggris & panduan deployment
 ├── disk_posix.go           # Telemetri disk kernel POSIX via statfs (Linux, macOS, Docker)
 ├── disk_windows.go         # Telemetri disk kernel Win32 via GetDiskFreeSpaceExW (Windows)
 ├── main.go                 # Engine backend Go utama
-└── web/                    # Antarmuka SPA (ter-embed langsung ke dalam biner)
-    └── index.html          # Frontend Tailwind CSS, Lucide & Rich Viewers
+└── tailwind.config.js      # Konfigurasi kompilasi Tailwind CSS
 ```
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan di bawah **[MIT License](LICENSE)**. Bebas digunakan, dimodifikasi, dan didistribusikan untuk keperluan pribadi, komunitas, homelab, perkantoran, maupun komersial.
+Proyek ini dilisensikan di bawah **[MIT License](../LICENSE)**. Bebas digunakan, dimodifikasi, dan didistribusikan untuk keperluan pribadi, komunitas, homelab, perkantoran, maupun komersial.
