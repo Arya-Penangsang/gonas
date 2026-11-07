@@ -180,6 +180,49 @@ chmod +x gonas
 
 ---
 
+### Cara 5: Raspberry Pi & Single-Board Computers (SBC Homelab)
+
+Berkat arsitektur kompilasi biner statis Go tanpa dependensi luar, GoNAS hanya mengonsumsi **~6.4 MB RAM** dan hampir **0% beban CPU idle**, menjadikannya platform NAS ideal untuk Raspberry Pi, Orange Pi, Rock Pi, maupun mini PC hemat daya.
+
+#### 1. Cross-Compile untuk Raspberry Pi (dari PC/Laptop Anda):
+```bash
+# Raspberry Pi 3 / 4 / 5 & ARM 64-bit SBC:
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gonas-arm64 .
+
+# Raspberry Pi 2 / 3 (OS 32-bit) & Pi Zero 2 W:
+CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -ldflags="-s -w" -o gonas-armv7 .
+
+# Raspberry Pi 1 & Pi Zero W (ARMv6):
+CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -ldflags="-s -w" -o gonas-armv6 .
+```
+
+#### 2. Jalankan Otomatis 24/7 sebagai Background Service (`systemd`):
+Buat berkas konfigurasi `/etc/systemd/system/gonas.service`:
+```ini
+[Unit]
+Description=GoNAS Lightweight Storage Server
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/gonas -port 8082 -root /mnt/external_drive -user admin -pass admin123
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Aktifkan dan jalankan service:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now gonas
+```
+
+---
+
 ## ⚙️ Referensi Konfigurasi
 
 GoNAS dapat dikonfigurasi melalui **Command-Line Flags** maupun **Environment Variables**:

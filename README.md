@@ -180,6 +180,49 @@ chmod +x gonas
 
 ---
 
+### Method 5: Raspberry Pi & Single-Board Computers (SBC Homelab)
+
+Thanks to its pure Go zero-dependency static compilation, GoNAS consumes only **~6.4 MB of RAM** and virtually **0% idle CPU**, making it the ultimate private cloud for Raspberry Pi, Orange Pi, Rock Pi, and low-power mini PCs.
+
+#### 1. Quick Cross-Compile for Raspberry Pi (from your PC):
+```bash
+# Raspberry Pi 3 / 4 / 5 & 64-bit ARM SBCs:
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gonas-arm64 .
+
+# Raspberry Pi 2 / 3 (32-bit OS) & Pi Zero 2 W:
+CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -ldflags="-s -w" -o gonas-armv7 .
+
+# Raspberry Pi 1 & Pi Zero W (ARMv6):
+CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -ldflags="-s -w" -o gonas-armv6 .
+```
+
+#### 2. Run as a 24/7 Silent Background Service (`systemd`):
+Create `/etc/systemd/system/gonas.service`:
+```ini
+[Unit]
+Description=GoNAS Lightweight Storage Server
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/gonas -port 8082 -root /mnt/external_drive -user admin -pass admin123
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now gonas
+```
+
+---
+
 ## ⚙️ Configuration Reference
 
 GoNAS can be configured via **CLI Flags** or **Environment Variables**:
