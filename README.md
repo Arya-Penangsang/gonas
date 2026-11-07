@@ -12,6 +12,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
 [![Memory Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
+[![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **GoNAS** is a self-hosted, ultra-lightweight, and blazingly fast Cloud Web NAS engine designed for personal storage, team collaboration, office servers, homelabs, and digital archiving.
@@ -261,6 +262,23 @@ GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o gonas_darwin .
 
 ---
 
+## 🛡️ Security & Purple Team Hardening (v2.4.1)
+
+GoNAS v2.4.1 has undergone continuous security validation using **Purple Teaming** methodologies (MITRE ATT&CK for Web Applications & OWASP Top 10):
+
+| Mitigation Vector | Technique ID | Implementation Details |
+| :--- | :---: | :--- |
+| **Strict Path Sandboxing** | `T1083` | Enforced via `filepath.Rel` to eliminate sibling directory traversal bypasses (CWE-22). |
+| **Salted Password Hashing** | `T1552.001` | Salted SHA-256 (`sha256$<salt>$<hash>`) with `crypto/subtle.ConstantTimeCompare` & `0600` permissions. |
+| **Brute-Force Rate Limiter** | `T1110.001` | Thread-safe in-memory limiter (5 failed logins -> 5-minute lockout with HTTP 429). |
+| **Stored XSS Neutralization** | `T1189` | Content-Security-Policy sandbox (`default-src 'none'; sandbox`) injected for `.html`/`.svg` previews. |
+| **Global Security Headers** | `CWE-1021` | Enforced `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy`. |
+| **Slowloris DoS Defense** | `T1499` | Server `ReadHeaderTimeout` set to 15 seconds to drop stalled TCP slow-header attacks. |
+
+Read the full technical security audit and patch notes in **[SECURITY.md](SECURITY.md)**.
+
+---
+
 ## 📂 Repository Structure
 
 ```text
@@ -274,6 +292,8 @@ GoNAS/
 ├── LICENSE                 # Open-Source MIT License
 ├── README.md               # English project documentation & deployment guide
 ├── README.id.md            # Dokumentasi Bahasa Indonesia
+├── SECURITY.md             # Purple Team Security Assessment Report & Patch Notes
+├── SOCIAL_MEDIA_POSTS.md   # Social media publication copy for Threads & X
 ├── disk_posix.go           # POSIX kernel disk telemetry via statfs (Linux, macOS, Docker)
 ├── disk_windows.go         # Win32 Syscall disk telemetry via GetDiskFreeSpaceExW (Windows)
 ├── main.go                 # Core Go backend engine

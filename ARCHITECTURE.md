@@ -88,11 +88,35 @@ _, err = io.CopyBuffer(out, part, buf)
 ```
 Berkas langsung dialirkan dari soket TCP jaringan ke storage disk tanpa membebani memori utama server.
 
-### F. Keamanan Path (Anti Directory Traversal)
-Fungsi `safePathVol(vol, subpath)` melakukan sanitasi jalur ganda:
-1. `filepath.Clean(filepath.FromSlash(subpath))` untuk meniadakan eksploitasi `../` atau `..\`.
-2. Verifikasi batas (`strings.HasPrefix(fullClean, rootClean)`), memastikan akses berkas tidak dapat menyeberang ke luar partisi root volume yang ditentukan.
+### F. Keamanan Path (Strict Relpath Anti-Directory Traversal Sandboxing)
+Fungsi `safePathVol(vol, subpath)` dan `safePath(subpath)` menerapkan isolasi jalur bertingkat:
+1. Normalisasi jalur: `filepath.Clean(filepath.FromSlash(subpath))` untuk meniadakan eksploitasi `../` atau `..\`.
+2. **Strict Containment via `filepath.Rel`**: Verifikasi relasi hierarki menggunakan `filepath.Rel(rootClean, fullClean)`. Jika hasil relasi diawali dengan `..` atau menghasilkan error (misal lompatan antar drive pada Windows), akses ditolak seketika (`HTTP 403 Forbidden`). Mekanisme ini mengeliminasi celah *sibling directory prefix bypass* (CWE-22).
 
 ### G. Collision Avoidance & Self-Move Safety
 - **Proteksi Pemindahan Berkas Rekursif**: Sistem secara otomatis menolak pemindahan direktori ke dalam dirinya sendiri atau ke dalam subfoldernya sendiri dengan HTTP 400.
 - **Penyelesaian Tabrakan Nama**: Jika berkas dipindahkan ke direktori yang sudah memiliki nama berkas yang sama, GoNAS secara otomatis menghasilkan nama unik berurutan `nama (1).ext` untuk mencegah kegagalan operasi filesystem.
+
+---
+
+## 3. Arsitektur Pertahanan & Keamanan Siber (v2.4.1 Hardened)
+
+Berdasarkan hasil asesmen *Purple Teaming* (kolaborasi mitigasi ancaman MITRE ATT&CK for Web dan NIST CSF), GoNAS v2.4.1 mengimplementasikan arsitektur *Defense-in-Depth*:
+
+1. **Cryptographic Salted Password Hashing (`sha256$<salt>$<hash>`)**:
+   Kata sandi tidak lagi disimpan dalam plaintext. Sistem membuat garam acak 16-byte menggunakan CSPRNG `crypto/rand` dan meng-hash dengan SHA-256. Komparasi sandi dilakukan dengan `crypto/subtle.ConstantTimeCompare` untuk mencegah serangan analisis waktu (*timing attacks*). Izin berkas `users.json` dibatasi ke `0600`.
+2. **In-Memory Brute-Force Rate Limiting Engine**:
+   Pelacak upaya login berbasis IP secara thread-safe (`sync.Mutex`). Kegagalan login 5 kali berturut-turut memicu penguncian sementara selama 5 menit dengan respons `HTTP 429 Too Many Requests` dan header standar `Retry-After`.
+3. **Stored XSS Neutralization via CSP Sandbox**:
+   Setiap berkas interaktif atau markup (`.html`, `.htm`, `.svg`, `.xml`) yang disajikan melalui endpoint `/api/fs/preview` disuntikkan header `Content-Security-Policy: default-src 'none'; sandbox`. Peramban secara otomatis mematikan eksekusi JavaScript dan memperlakukan konten dalam origin tertutup.
+4. **Global HTTP Security Headers**:
+   Seluruh respons server dilindungi oleh middleware keamanan terpusat:
+   - `X-Frame-Options: SAMEORIGIN` (Pencegahan Clickjacking)
+   - `X-Content-Type-Options: nosniff` (Pencegahan MIME Confusion)
+   - `Referrer-Policy: strict-origin-when-cross-origin`
+   - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+   - `X-XSS-Protection: 1; mode=block`
+5. **Slowloris DoS Mitigation**:
+   Konfigurasi HTTP Server menerapkan `ReadHeaderTimeout: 15 * time.Second` untuk memutus koneksi lambat berbahaya sebelum menghabiskan *file descriptor* atau goroutine server.
+6. **Leaked Descriptor Prevention**:
+   Operasi streaming arsip ZIP menutup berkas seketika di dalam iterasi *walk* peramban direktori tanpa penundaan `defer`.

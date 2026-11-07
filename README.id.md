@@ -12,6 +12,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
 [![Memory Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
+[![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **GoNAS** adalah engine Cloud Web NAS mandiri (*self-hosted*), berkecepatan tinggi, dan ultra-ringan yang dirancang untuk kebutuhan penyimpanan data pribadi, tim, server kantor, homelab, maupun institusi.
@@ -261,6 +262,23 @@ GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o gonas_darwin .
 
 ---
 
+## 🛡️ Pengerasan Keamanan Siber & Purple Teaming (v2.4.1)
+
+GoNAS v2.4.1 telah melalui validasi keamanan komprehensif menggunakan metodologi **Purple Teaming** terintegrasi (standar MITRE ATT&CK for Web Applications & OWASP Top 10):
+
+| Vektor Mitigasi | ID Teknik | Rincian Implementasi |
+| :--- | :---: | :--- |
+| **Sandboxing Path Strict** | `T1083` | Validasi jalur menggunakan `filepath.Rel` untuk meniadakan celah *sibling directory traversal* (CWE-22). |
+| **Salted Password Hashing** | `T1552.001` | Salted SHA-256 (`sha256$<salt>$<hash>`) dengan komparasi waktu konstan `crypto/subtle.ConstantTimeCompare` & izin berkas `0600`. |
+| **Pembatas Laju Login (Rate Limiting)** | `T1110.001` | Rate limiter in-memory berbasis IP (5 kegagalan -> penguncian 5 menit dengan respons HTTP 429). |
+| **Netralisasi Stored XSS** | `T1189` | Penyuntikan header Content-Security-Policy sandbox (`default-src 'none'; sandbox`) pada pratinjau `.html`/`.svg`. |
+| **Header Keamanan Global** | `CWE-1021` | Penegakan header `X-Frame-Options: SAMEORIGIN` (anti-Clickjacking), `X-Content-Type-Options: nosniff`, dan `Referrer-Policy`. |
+| **Pertahanan DoS Slowloris** | `T1499` | Penerapan `ReadHeaderTimeout: 15s` untuk memutus serangan koneksi TCP lambat gantung. |
+
+Laporan asesmen teknis dan catatan patch selengkapnya dapat dibaca di **[SECURITY.md](SECURITY.md)**.
+
+---
+
 ## 📂 Struktur Repositori
 
 ```text
@@ -274,6 +292,8 @@ GoNAS/
 ├── LICENSE                 # Lisensi Open-Source MIT
 ├── README.md               # Dokumentasi bahasa Inggris
 ├── README.id.md            # Dokumentasi bahasa Indonesia
+├── SECURITY.md             # Laporan Asesmen Keamanan Purple Team & Catatan Patch
+├── SOCIAL_MEDIA_POSTS.md   # Draf teks publikasi media sosial Threads & X
 ├── disk_posix.go           # Telemetri disk kernel POSIX via statfs (Linux, macOS, Docker)
 ├── disk_windows.go         # Telemetri disk kernel Win32 via GetDiskFreeSpaceExW (Windows)
 ├── main.go                 # Engine backend Go utama

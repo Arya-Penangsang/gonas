@@ -3,6 +3,8 @@ package main
 import (
 	"archive/zip"
 	"crypto/rand"
+	"crypto/sha256"
+	"crypto/subtle"
 	"embed"
 	"encoding/hex"
 	"encoding/json"
@@ -78,6 +80,125 @@ func logAudit(eventType, user, ip, detail string, success bool) {
 	auditLogs.entries = append(auditLogs.entries, entry)
 }
 
+// ==================== SECURITY HELPERS (PASSWORD HASHING & RATE LIMITING) ====================
+
+// hashPassword generates a salted SHA-256 hash formatted as sha256$<salt_hex>$<hash_hex>
+func hashPassword(password string) string {
+	saltBytes := make([]byte, 16)
+	if _, err := rand.Read(saltBytes); err != nil {
+		copy(saltBytes, []byte(fmt.Sprintf("%d", time.Now().UnixNano())))
+	}
+	saltHex := hex.EncodeToString(saltBytes)
+
+	h := sha256.New()
+	h.Write([]byte(saltHex + ":" + password))
+	hashHex := hex.EncodeToString(h.Sum(nil))
+
+	return fmt.Sprintf("sha256$%s$%s", saltHex, hashHex)
+}
+
+// verifyPassword verifies password against stored hash using constant-time comparison
+func verifyPassword(password, storedHash string) bool {
+	if strings.HasPrefix(storedHash, "sha256$") {
+		parts := strings.Split(storedHash, "$")
+		if len(parts) == 3 {
+			saltHex := parts[1]
+			expectedHashHex := parts[2]
+
+			h := sha256.New()
+			h.Write([]byte(saltHex + ":" + password))
+			computedHashHex := hex.EncodeToString(h.Sum(nil))
+
+			return subtle.ConstantTimeCompare([]byte(computedHashHex), []byte(expectedHashHex)) == 1
+		}
+	}
+	// Fallback legacy plaintext comparison with constant-time check
+	return subtle.ConstantTimeCompare([]byte(password), []byte(storedHash)) == 1
+}
+
+// LoginRateLimiter provides thread-safe IP brute-force protection
+type LoginRateLimiter struct {
+	sync.Mutex
+	attempts map[string]*RateLimitEntry
+}
+
+type RateLimitEntry struct {
+	Count       int
+	LockedUntil time.Time
+	LastAttempt time.Time
+}
+
+var loginLimiter = &LoginRateLimiter{
+	attempts: make(map[string]*RateLimitEntry),
+}
+
+func (l *LoginRateLimiter) Check(ip string) (bool, time.Duration) {
+	l.Lock()
+	defer l.Unlock()
+
+	now := time.Now()
+	entry, exists := l.attempts[ip]
+	if !exists {
+		return true, 0
+	}
+
+	if now.Before(entry.LockedUntil) {
+		return false, entry.LockedUntil.Sub(now)
+	}
+
+	// Reset if more than 5 minutes since last attempt
+	if now.Sub(entry.LastAttempt) > 5*time.Minute {
+		delete(l.attempts, ip)
+		return true, 0
+	}
+
+	return true, 0
+}
+
+func (l *LoginRateLimiter) RecordFail(ip string) (bool, time.Duration) {
+	l.Lock()
+	defer l.Unlock()
+
+	now := time.Now()
+	entry, exists := l.attempts[ip]
+	if !exists {
+		entry = &RateLimitEntry{Count: 0, LastAttempt: now}
+		l.attempts[ip] = entry
+	}
+
+	entry.Count++
+	entry.LastAttempt = now
+
+	// 5 failed attempts -> 5 minutes lockout
+	if entry.Count >= 5 {
+		lockDuration := 5 * time.Minute
+		if entry.Count > 10 {
+			lockDuration = 15 * time.Minute
+		}
+		entry.LockedUntil = now.Add(lockDuration)
+		return false, lockDuration
+	}
+	return true, 0
+}
+
+func (l *LoginRateLimiter) RecordSuccess(ip string) {
+	l.Lock()
+	defer l.Unlock()
+	delete(l.attempts, ip)
+}
+
+// Security Headers Global Middleware
+func securityHeadersMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Frame-Options", "SAMEORIGIN")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+		w.Header().Set("X-XSS-Protection", "1; mode=block")
+		next.ServeHTTP(w, r)
+	})
+}
+
 // ==================== HIERARCHICAL UAC & USER STORE ====================
 type UserRole string
 
@@ -130,28 +251,28 @@ func initUserStore() {
 	defaultUsers := []*UserAccount{
 		{
 			Username:    "superadmin",
-			Password:    "admin123",
+			Password:    hashPassword("admin123"),
 			Role:        RoleSuperAdmin,
 			DisplayName: "Super Admin BPMN",
 			CreatedAt:   time.Now(),
 		},
 		{
 			Username:    "admin",
-			Password:    "admin123",
+			Password:    hashPassword("admin123"),
 			Role:        RoleAdmin,
 			DisplayName: "Admin Preservasi",
 			CreatedAt:   time.Now(),
 		},
 		{
 			Username:    "staf",
-			Password:    "staf123",
+			Password:    hashPassword("staf123"),
 			Role:        RoleUser,
 			DisplayName: "Staf Preservasi",
 			CreatedAt:   time.Now(),
 		},
 		{
 			Username:    "tamu",
-			Password:    "tamu123",
+			Password:    hashPassword("tamu123"),
 			Role:        RoleViewer,
 			DisplayName: "Tamu / Viewer",
 			CreatedAt:   time.Now(),
@@ -174,18 +295,23 @@ func saveUserStoreLocked() {
 	}
 	data, err := json.MarshalIndent(list, "", "  ")
 	if err == nil {
-		os.WriteFile(userStore.filePath, data, 0644)
+		os.WriteFile(userStore.filePath, data, 0600)
 	}
 }
 
 func (us *UserStore) Authenticate(username, password string) *UserAccount {
-	us.RLock()
-	defer us.RUnlock()
+	us.Lock()
+	defer us.Unlock()
 	u, exists := us.users[username]
 	if !exists {
 		return nil
 	}
-	if u.Password == password {
+	if verifyPassword(password, u.Password) {
+		// Automatic transparent upgrade: If password was stored in legacy plaintext, hash it now!
+		if !strings.HasPrefix(u.Password, "sha256$") {
+			u.Password = hashPassword(password)
+			saveUserStoreLocked()
+		}
 		return u
 	}
 	return nil
@@ -216,6 +342,9 @@ func (us *UserStore) Add(u *UserAccount) error {
 		return fmt.Errorf("Username sudah digunakan")
 	}
 	u.CreatedAt = time.Now()
+	if !strings.HasPrefix(u.Password, "sha256$") {
+		u.Password = hashPassword(u.Password)
+	}
 	us.users[u.Username] = u
 	saveUserStoreLocked()
 	return nil
@@ -242,7 +371,7 @@ func (us *UserStore) UpdatePassword(username, newPass string) error {
 	if !exists {
 		return fmt.Errorf("User tidak ditemukan")
 	}
-	u.Password = newPass
+	u.Password = hashPassword(newPass)
 	saveUserStoreLocked()
 	return nil
 }
@@ -481,7 +610,7 @@ func getVolume(volID string) StorageVolume {
 
 func safePathVol(volID, subpath string) (string, StorageVolume, error) {
 	vol := getVolume(volID)
-	root := vol.RootPath
+	rootClean := filepath.Clean(vol.RootPath)
 
 	clean := filepath.Clean(filepath.FromSlash(subpath))
 	if clean == "." || clean == "/" || clean == "\\" {
@@ -490,11 +619,11 @@ func safePathVol(volID, subpath string) (string, StorageVolume, error) {
 	clean = strings.TrimPrefix(clean, "\\")
 	clean = strings.TrimPrefix(clean, "/")
 
-	full := filepath.Join(root, clean)
-	fullClean := filepath.Clean(full)
+	fullClean := filepath.Clean(filepath.Join(rootClean, clean))
 
-	rootClean := filepath.Clean(root)
-	if !strings.HasPrefix(strings.ToLower(fullClean), strings.ToLower(rootClean)) {
+	// Strict Sibling & Escape Sandboxing via filepath.Rel
+	rel, err := filepath.Rel(rootClean, fullClean)
+	if err != nil || strings.HasPrefix(rel, "..") || rel == ".." {
 		return "", vol, fmt.Errorf("akses ditolak (path traversal)")
 	}
 	return fullClean, vol, nil
@@ -505,6 +634,8 @@ func safePath(subpath string) (string, error) {
 	root := cfg.RootPath
 	configMu.RUnlock()
 
+	rootClean := filepath.Clean(root)
+
 	clean := filepath.Clean(filepath.FromSlash(subpath))
 	if clean == "." || clean == "/" || clean == "\\" {
 		clean = ""
@@ -512,11 +643,11 @@ func safePath(subpath string) (string, error) {
 	clean = strings.TrimPrefix(clean, "\\")
 	clean = strings.TrimPrefix(clean, "/")
 
-	full := filepath.Join(root, clean)
-	fullClean := filepath.Clean(full)
+	fullClean := filepath.Clean(filepath.Join(rootClean, clean))
 
-	rootClean := filepath.Clean(root)
-	if !strings.HasPrefix(strings.ToLower(fullClean), strings.ToLower(rootClean)) {
+	// Strict Sibling & Escape Sandboxing via filepath.Rel
+	rel, err := filepath.Rel(rootClean, fullClean)
+	if err != nil || strings.HasPrefix(rel, "..") || rel == ".." {
 		return "", fmt.Errorf("akses ditolak (path traversal)")
 	}
 	return fullClean, nil
@@ -775,6 +906,7 @@ func main() {
 			log.Printf("Gagal membuat %s: %v. Fallback ke direktori lokal ./storage", cfg.RootPath, err)
 			cfg.RootPath = "./storage"
 			os.MkdirAll(cfg.RootPath, 0755)
+			volumes[0].RootPath = cfg.RootPath
 		}
 	}
 
@@ -862,10 +994,11 @@ func main() {
 	})
 
 	server := &http.Server{
-		Addr:         ":" + cfg.Port,
-		Handler:      mux,
-		ReadTimeout:  2 * time.Hour,
-		WriteTimeout: 2 * time.Hour,
+		Addr:              ":" + cfg.Port,
+		Handler:           securityHeadersMiddleware(mux),
+		ReadTimeout:       2 * time.Hour,
+		WriteTimeout:      2 * time.Hour,
+		ReadHeaderTimeout: 15 * time.Second, // Slowloris DoS mitigation
 	}
 
 	log.Printf("Server siap listening di http://0.0.0.0:%s", cfg.Port)
@@ -896,9 +1029,24 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	
+	// Rate Limiting Check
+	allowed, remaining := loginLimiter.Check(ip)
+	if !allowed {
+		secs := int(remaining.Seconds())
+		logAudit("LOGIN_BLOCKED", req.Username, ip, fmt.Sprintf("Login diblokir (terlalu banyak percobaan gagal, coba lagi dalam %d detik)", secs), false)
+		w.Header().Set("Retry-After", fmt.Sprintf("%d", secs))
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"success": false,
+			"error":   fmt.Sprintf("Terlalu banyak percobaan login gagal. IP terkunci sementara selama %d detik demi keamanan.", secs),
+		})
+		return
+	}
+
 	// Check against UAC User Store
 	user := userStore.Authenticate(req.Username, req.Password)
 	if user != nil {
+		loginLimiter.RecordSuccess(ip)
 		token := sessions.Create(user)
 		http.SetCookie(w, &http.Cookie{
 			Name:     "gonas_session",
@@ -926,7 +1074,12 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 			"title":        title,
 		})
 	} else {
-		logAudit("LOGIN_FAIL", req.Username, ip, "Percobaan login gagal (kredensial salah)", false)
+		allowedAfter, lockDuration := loginLimiter.RecordFail(ip)
+		if !allowedAfter {
+			logAudit("LOGIN_LOCKED", req.Username, ip, fmt.Sprintf("IP terkunci selama %v karena 5x gagal login berturut-turut", lockDuration), false)
+		} else {
+			logAudit("LOGIN_FAIL", req.Username, ip, "Percobaan login gagal (kredensial salah)", false)
+		}
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"success": false,
@@ -1302,7 +1455,10 @@ func handleDefrag(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&req)
 	drive := "N"
 	if req.DriveLetter != "" {
-		drive = strings.TrimSuffix(strings.ToUpper(req.DriveLetter), ":")
+		cleaned := strings.TrimSuffix(strings.ToUpper(strings.TrimSpace(req.DriveLetter)), ":")
+		if len(cleaned) == 1 && cleaned[0] >= 'A' && cleaned[0] <= 'Z' {
+			drive = cleaned
+		}
 	}
 
 	ip := clientIP(r)
@@ -2048,6 +2204,10 @@ func handleView(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Stored XSS Mitigation: sandbox interactive files
+	if ext == ".html" || ext == ".htm" || ext == ".svg" || ext == ".xml" {
+		w.Header().Set("Content-Security-Policy", "default-src 'none'; sandbox")
+	}
 	w.Header().Set("Content-Type", mimeType)
 	w.Header().Set("Content-Disposition", "inline")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -2120,10 +2280,9 @@ func streamZipFolder(w http.ResponseWriter, folderPath, folderName string) {
 		if err != nil {
 			return nil
 		}
-		defer f.Close()
-
-		io.Copy(writer, f)
-		return nil
+		_, copyErr := io.Copy(writer, f)
+		f.Close() // Close immediately to avoid leaking descriptors inside walk
+		return copyErr
 	})
 }
 
