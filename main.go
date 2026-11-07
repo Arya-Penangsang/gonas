@@ -21,9 +21,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
-	"unsafe"
 )
 
 //go:embed web/*
@@ -524,64 +522,6 @@ func safePath(subpath string) (string, error) {
 	return fullClean, nil
 }
 
-// Windows Disk Telemetry
-func getDiskStats(path string) (DriveInfo, error) {
-	kernel32 := syscall.NewLazyDLL("kernel32.dll")
-	getDiskFreeSpaceEx := kernel32.NewProc("GetDiskFreeSpaceExW")
-
-	var freeBytesAvailable, totalNumberOfBytes, totalNumberOfFreeBytes uint64
-	rootPtr, err := syscall.UTF16PtrFromString(path)
-	if err != nil {
-		return DriveInfo{}, err
-	}
-
-	r1, _, err := getDiskFreeSpaceEx.Call(
-		uintptr(unsafe.Pointer(rootPtr)),
-		uintptr(unsafe.Pointer(&freeBytesAvailable)),
-		uintptr(unsafe.Pointer(&totalNumberOfBytes)),
-		uintptr(unsafe.Pointer(&totalNumberOfFreeBytes)),
-	)
-	if r1 == 0 {
-		return DriveInfo{}, err
-	}
-
-	used := totalNumberOfBytes - totalNumberOfFreeBytes
-	var percent float64
-	if totalNumberOfBytes > 0 {
-		percent = (float64(used) / float64(totalNumberOfBytes)) * 100.0
-	}
-
-	label := "Local Disk"
-	letter := strings.ToUpper(path[:2])
-	switch letter {
-	case "N:":
-		label = "STORAGE_NAS"
-	case "C:":
-		label = "Windows (OS)"
-	case "D:":
-		label = "Perkantoran"
-	case "E:":
-		label = "Data 2"
-	}
-
-	configMu.RLock()
-	isRoot := strings.EqualFold(filepath.Clean(path), filepath.Clean(cfg.RootPath))
-	configMu.RUnlock()
-
-	return DriveInfo{
-		Letter:       letter,
-		Label:        label,
-		TotalBytes:   totalNumberOfBytes,
-		FreeBytes:    totalNumberOfFreeBytes,
-		UsedBytes:    used,
-		UsedPercent:  percent,
-		TotalDisplay: formatBytes(totalNumberOfBytes),
-		UsedDisplay:  formatBytes(used),
-		FreeDisplay:  formatBytes(totalNumberOfFreeBytes),
-		IsNASRoot:    isRoot,
-	}, nil
-}
-
 func getAllDrives() []DriveInfo {
 	drives := []string{"N:\\", "C:\\", "D:\\", "E:\\"}
 	var result []DriveInfo
@@ -755,7 +695,12 @@ func writeMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 // Config file persistence
 func loadConfigFile() {
-	configPath := "C:\\NAS\\config.json"
+	configPath := "config.json"
+	if runtime.GOOS == "windows" {
+		if _, err := os.Stat("C:\\NAS"); err == nil {
+			configPath = "C:\\NAS\\config.json"
+		}
+	}
 	data, err := os.ReadFile(configPath)
 	if err == nil {
 		var saved Config
@@ -774,7 +719,12 @@ func loadConfigFile() {
 }
 
 func saveConfigFile() error {
-	configPath := "C:\\NAS\\config.json"
+	configPath := "config.json"
+	if runtime.GOOS == "windows" {
+		if _, err := os.Stat("C:\\NAS"); err == nil {
+			configPath = "C:\\NAS\\config.json"
+		}
+	}
 	configMu.RLock()
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	configMu.RUnlock()
@@ -785,14 +735,39 @@ func saveConfigFile() error {
 }
 
 func main() {
+	defaultRoot := "N:\\"
+	if runtime.GOOS != "windows" {
+		defaultRoot = "/storage"
+	}
 	flag.StringVar(&cfg.Port, "port", "8082", "Port server")
-	flag.StringVar(&cfg.RootPath, "root", "N:\\", "Root direktori storage NAS")
+	flag.StringVar(&cfg.RootPath, "root", defaultRoot, "Root direktori storage NAS")
 	flag.StringVar(&cfg.Username, "user", "admin", "Username login")
 	flag.StringVar(&cfg.Password, "pass", "admin123", "Password login")
 	flag.StringVar(&cfg.AppTitle, "title", "GoNAS - Cloud Preservasi BPMN", "Judul aplikasi Web NAS")
 	flag.Parse()
 
+	if envPort := os.Getenv("NAS_PORT"); envPort != "" {
+		cfg.Port = envPort
+	}
+	if envRoot := os.Getenv("NAS_ROOT_PATH"); envRoot != "" {
+		cfg.RootPath = envRoot
+	}
+	if envTitle := os.Getenv("NAS_APP_TITLE"); envTitle != "" {
+		cfg.AppTitle = envTitle
+	}
+
 	loadConfigFile()
+
+	if runtime.GOOS != "windows" {
+		volumes[0].RootPath = cfg.RootPath
+		volumes[0].DriveLetter = "STORAGE"
+		volumes[1].RootPath = filepath.Join(cfg.RootPath, "gudang")
+		volumes[1].DriveLetter = "GUDANG"
+		volumes[2].RootPath = filepath.Join(cfg.RootPath, "arsip")
+		volumes[2].DriveLetter = "ARSIP"
+	} else {
+		volumes[0].RootPath = cfg.RootPath
+	}
 
 	if _, err := os.Stat(cfg.RootPath); err != nil {
 		log.Printf("Peringatan: Root path %s tidak ditemukan, mencoba membuat atau fallback...", cfg.RootPath)
@@ -1332,8 +1307,13 @@ func handleDefrag(w http.ResponseWriter, r *http.Request) {
 
 	ip := clientIP(r)
 	go func() {
-		cmd := exec.Command("defrag.exe", drive+":", "/U", "/V")
-		cmd.Run()
+		if runtime.GOOS == "windows" {
+			cmd := exec.Command("defrag.exe", drive+":", "/U", "/V")
+			cmd.Run()
+		} else {
+			cmd := exec.Command("sync")
+			cmd.Run()
+		}
 	}()
 
 	logAudit("DEFRAG", cfg.Username, ip, fmt.Sprintf("Memicu proses optimasi/defrag Windows untuk drive %s:", drive), true)
