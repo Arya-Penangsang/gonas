@@ -1,7 +1,7 @@
 # 🚀 GoNAS — Lightweight, High-Performance, Cross-Platform Cloud NAS
 
 <p align="center">
-  <img src="web/gonas-banner.svg" alt="GoNAS Cloud Banner" width="100%">
+  <img src="https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/web/gonas-banner.png" alt="GoNAS Cloud Banner" width="100%">
 </p>
 
 <p align="center">
