@@ -67,6 +67,10 @@ Fitur klasifikasi cerdas untuk menyortir berkas tercecer di direktori root secar
 - **Sub-milidetik Disk Telemetry**: Membaca kapasitas disk secara native tanpa overhead CPU (Win32 Syscall `GetDiskFreeSpaceExW` di Windows, dan POSIX `statfs` di Linux/macOS/Docker).
 - **In-Memory Audit Logger**: Melacak seluruh aktivitas login, unggah, unduh, hapus, dan pemindahan berkas dengan pencatatan IP klien real-time.
 
+### 7. 🌐 Server WebDAV Terintegrasi (RFC 4918 - v2.5 Beta)
+- **Mount Langsung ke Windows Explorer & macOS Finder**: Petakan GoNAS sebagai network drive lokal (misal drive `Z:\`) tanpa aplikasi pihak ketiga.
+- **Terintegrasi UAC & Hak Akses Berperan**: Dilindungi HTTP Basic Auth dengan hashing *salted* SHA-256. Akun role `Viewer` (Tamu) otomatis dibatasi *read-only* (metode write ditolak dengan `403 Forbidden`).
+
 ---
 
 ## 🌐 Matriks Dukungan Platform
@@ -225,6 +229,62 @@ Aktifkan dan jalankan service:
 sudo systemctl daemon-reload
 sudo systemctl enable --now gonas
 ```
+
+---
+
+## 📂 Petakan Sebagai Network Drive via WebDAV (v2.5 Beta)
+
+GoNAS v2.5 dilengkapi engine **Server WebDAV RFC 4918** (`/webdav/`). Anda dapat memetakan (*mount*) penyimpanan NAS langsung menjadi drive lokal tanpa software klien tambahan:
+
+### 🪟 Windows Explorer (Map Network Drive)
+1. Buka **File Explorer** -> Klik **This PC**.
+2. Klik menu titik tiga (**...**) pada toolbar atas, lalu pilih **Map network drive...** (Petakan drive jaringan).
+3. Pilih huruf drive (misal **`Z:`**).
+4. Pada kolom **Folder**, masukkan:
+   ```text
+   http://<IP_SERVER_GONAS>:8082/webdav
+   ```
+5. Centang **Connect using different credentials**, lalu klik **Finish**.
+6. Masukkan kredensial GoNAS Anda (`superadmin`, `admin`, atau akun staf).
+7. Drive `Z:\` akan langsung muncul di File Explorer seperti harddisk lokal.
+
+> [!NOTE]
+> **Konfigurasi Windows WebClient HTTP Non-SSL (Cukup 1 Kali Saja)**:
+> Windows WebClient secara default membatasi Basic Auth pada jaringan HTTP tanpa SSL. Untuk mengizinkan koneksi via HTTP lokal, jalankan perintah berikut di PowerShell/CMD sebagai **Administrator**, lalu restart service:
+> ```cmd
+> reg add "HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters" /v BasicAuthLevel /t REG_DWORD /d 2 /f
+> net stop WebClient && net start WebClient
+> ```
+
+#### Perintah Cepat via Command Line (Windows):
+```cmd
+net use Z: http://<IP_SERVER_GONAS>:8082/webdav /user:<USERNAME> <PASSWORD> /persistent:yes
+```
+
+### 🍎 macOS Finder
+1. Buka **Finder**, lalu tekan tombol pintas **`Cmd + K`** (atau menu *Go* -> *Connect to Server*).
+2. Masukkan alamat server:
+   ```text
+   http://<IP_SERVER_GONAS>:8082/webdav
+   ```
+3. Klik **Connect**, pilih **Registered User**, lalu masukkan username & password GoNAS.
+4. Storage GoNAS akan langsung muncul di desktop dan sidebar Finder Anda.
+
+### 🐧 Linux (GNOME Nautilus & Terminal)
+* **GNOME Files (Nautilus):** Klik *Other Locations* -> pada kolom *Connect to Server*, masukkan:
+  ```text
+  dav://<IP_SERVER_GONAS>:8082/webdav
+  ```
+* **Mount via Terminal (`davfs2`):**
+  ```bash
+  sudo apt-get install -y davfs2
+  sudo mkdir -p /mnt/gonas
+  sudo mount -t davfs http://<IP_SERVER_GONAS>:8082/webdav /mnt/gonas
+  ```
+
+### 📱 Smartphone (Android & iOS)
+* **Android:** Buka aplikasi **Cx File Explorer** atau **Solid Explorer** -> Tambah Jaringan -> Pilih **WebDAV** -> Masukkan IP, Port `8082`, Path `/webdav`, serta username & password.
+* **iOS (iPhone/iPad):** Buka aplikasi **Documents by Readdle** -> Add Connection -> **WebDAV** -> Masukkan IP, Port `8082`, serta username & password.
 
 ---
 

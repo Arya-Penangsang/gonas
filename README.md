@@ -67,6 +67,10 @@ Intelligent file categorization algorithm that sorts loose root files into stand
 - **Sub-Millisecond Disk Telemetry**: Measures disk capacity natively with 0% CPU overhead (Win32 Syscall `GetDiskFreeSpaceExW` on Windows, and POSIX `statfs` on Linux, macOS, and Docker).
 - **In-Memory Audit Logger**: Tracks login activity, uploads, downloads, deletions, and moves with client IP timestamps (last 150 events).
 
+### 7. 🌐 Native WebDAV Network Drive (RFC 4918 - v2.5 Beta)
+- **Direct Explorer & Finder Mount**: Mount GoNAS as a native network drive (e.g. `Z:\`) in Windows Explorer, macOS Finder, Linux, and mobile file managers without third-party client software.
+- **UAC & Role-Aware**: Protected by HTTP Basic Authentication backed by salted SHA-256 passwords. `Viewer` accounts are automatically restricted to read-only access (write methods return `403 Forbidden`).
+
 ---
 
 ## 🌐 Platform Support Matrix
@@ -225,6 +229,62 @@ Enable and start:
 sudo systemctl daemon-reload
 sudo systemctl enable --now gonas
 ```
+
+---
+
+## 📂 Mount as Network Drive via WebDAV (v2.5 Beta)
+
+GoNAS v2.5 features an integrated **RFC 4918 WebDAV Server** (`/webdav/`). You can mount your NAS directly as a local disk drive without installing any proprietary software:
+
+### 🪟 Windows Explorer (Map Network Drive)
+1. Open **File Explorer** -> Click **This PC**.
+2. Click the three dots menu (**...**) in the top toolbar and select **Map network drive...**.
+3. Choose a drive letter (e.g. `Z:`).
+4. In the **Folder** field, enter:
+   ```text
+   http://<YOUR_SERVER_IP>:8082/webdav
+   ```
+5. Check **Connect using different credentials**, then click **Finish**.
+6. Enter your GoNAS username and password (`superadmin`, `admin`, or any created account).
+7. Drive `Z:\` will appear in Windows Explorer just like a local hard drive.
+
+> [!NOTE]
+> **Windows WebClient HTTP Configuration (One-Time Setup)**:
+> Windows WebClient blocks Basic Auth over plain HTTP by default. To allow local network HTTP mapping without SSL, run this single command in PowerShell/CMD as **Administrator**, then restart the service:
+> ```cmd
+> reg add "HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters" /v BasicAuthLevel /t REG_DWORD /d 2 /f
+> net stop WebClient && net start WebClient
+> ```
+
+#### Quick Command Line Mount (Windows):
+```cmd
+net use Z: http://<YOUR_SERVER_IP>:8082/webdav /user:<USERNAME> <PASSWORD> /persistent:yes
+```
+
+### 🍎 macOS Finder
+1. Open **Finder** and press **`Cmd + K`** (or go to menu *Go* -> *Connect to Server*).
+2. Enter the server address:
+   ```text
+   http://<YOUR_SERVER_IP>:8082/webdav
+   ```
+3. Click **Connect**, select **Registered User**, and type your GoNAS credentials.
+4. GoNAS will mount to your desktop and appear in the Finder sidebar.
+
+### 🐧 Linux (GNOME Nautilus & Terminal)
+* **GNOME Files (Nautilus):** Click *Other Locations* -> in the *Connect to Server* box, enter:
+  ```text
+  dav://<YOUR_SERVER_IP>:8082/webdav
+  ```
+* **CLI Mount via `davfs2`:**
+  ```bash
+  sudo apt-get install -y davfs2
+  sudo mkdir -p /mnt/gonas
+  sudo mount -t davfs http://<YOUR_SERVER_IP>:8082/webdav /mnt/gonas
+  ```
+
+### 📱 Mobile (Android & iOS)
+* **Android:** Open **Cx File Explorer** or **Solid Explorer** -> Add Network Location -> Choose **WebDAV** -> Enter Host IP, Port `8082`, Path `/webdav`, and credentials.
+* **iOS (iPhone/iPad):** Open **Documents by Readdle** -> Add Connection -> **WebDAV** -> Enter Host, Port `8082`, and credentials.
 
 ---
 

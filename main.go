@@ -991,6 +991,9 @@ func main() {
 	mux.HandleFunc("/api/fs/auto-arrange/scan", authMiddleware(handleAutoArrangeScan))
 	mux.HandleFunc("/api/fs/auto-arrange/execute", writeMiddleware(handleAutoArrangeExecute))
 
+	// 5. WebDAV Network Drive Engine (RFC 4918 / Windows Explorer & macOS Finder Mount)
+	setupWebDAV(mux, cfg.RootPath)
+
 	// 4. Static UI (Embedded)
 	_ = mime.AddExtensionType(".css", "text/css; charset=utf-8")
 	_ = mime.AddExtensionType(".js", "application/javascript; charset=utf-8")
@@ -1004,6 +1007,15 @@ func main() {
 		path := r.URL.Path
 		if strings.HasPrefix(path, "/api/") {
 			http.NotFound(w, r)
+			return
+		}
+
+		// WebDAV Discovery Probe for Windows Explorer WebClient
+		if r.Method == "OPTIONS" {
+			w.Header().Set("DAV", "1, 2")
+			w.Header().Set("MS-Author-Via", "DAV")
+			w.Header().Set("Allow", "OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, PROPFIND, PROPPATCH, MKCOL, COPY, MOVE, LOCK, UNLOCK")
+			w.WriteHeader(http.StatusOK)
 			return
 		}
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")

@@ -8,7 +8,9 @@ FROM golang:1.23-alpine AS builder
 WORKDIR /src
 
 # Copy dependency definition
-COPY go.mod ./
+COPY go.mod go.sum* ./
+RUN go mod download
+
 COPY . .
 
 # Compile static Linux binary
