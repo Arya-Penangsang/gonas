@@ -60,7 +60,7 @@ jobs:
               echo '🔑 Menguji autentikasi UAC multi-role...'
               LOGIN_RES=\$(curl -s -X POST http://127.0.0.1:8099/api/auth/login \
                 -H 'Content-Type: application/json' \
-                -d '{\"username\":\"superadmin\",\"password\":\"password\"}')
+                -d '{\"username\":\"superadmin\",\"password\":\"admin123\"}')
               
               TOKEN=\$(echo \$LOGIN_RES | grep -o '\"token\":\"[^\"]*' | cut -d'\"' -f4)
               
