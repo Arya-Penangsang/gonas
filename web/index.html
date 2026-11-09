@@ -727,7 +727,7 @@ html.light .gdrive-card,
             <button onclick="navigateToRoot('vol-n'); toggleMobileSidebar(false);" id="navDriveSaya" class="w-full flex items-center justify-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-200 dark:border-indigo-500/30 ring-1 ring-indigo-300 dark:ring-indigo-800 transition-all text-left group select-none cursor-pointer" title="Drive Saya (Root Penyimpanan Utama)">
               <div class="flex items-center gap-2.5 min-w-0">
                 <svg class="w-4 h-4 text-amber-500 fill-amber-400 shrink-0 group-hover:scale-105 transition-transform" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                <span class="truncate font-semibold text-xs text-left">Drive Saya (NAS)</span>
+                <span class="truncate font-semibold text-xs text-left" id="navDriveSayaLabel">Drive Saya (NAS)</span>
               </div>
             </button>
 
@@ -740,21 +740,21 @@ html.light .gdrive-card,
             <div id="volumeShortcutsSection">
               <div class="h-px bg-slate-200 dark:bg-slate-800/80 my-2"></div>
               <div class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider px-3 mb-1.5">Volume Fisik</div>
-              <button onclick="selectVolume('vol-n')" id="volBtn-n" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left">
+              <button onclick="selectVolume('vol-n'); toggleMobileSidebar(false);" id="volBtn-n" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left">
                 <div class="flex items-center gap-2.5">
                   <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
                   <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Storage Utama (N:)</span>
                 </div>
                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">500GB</span>
               </button>
-              <button onclick="selectVolume('vol-d')" id="volBtn-d" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
+              <button onclick="selectVolume('vol-d'); toggleMobileSidebar(false);" id="volBtn-d" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
                 <div class="flex items-center gap-2.5">
                   <i data-lucide="database" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
                   <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Gudang Ekstra (D:)</span>
                 </div>
                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">1.0TB</span>
               </button>
-              <button onclick="selectVolume('vol-e')" id="volBtn-e" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
+              <button onclick="selectVolume('vol-e'); toggleMobileSidebar(false);" id="volBtn-e" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
                 <div class="flex items-center gap-2.5">
                   <i data-lucide="archive" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
                   <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Arsip Dinas (E:)</span>
@@ -1861,16 +1861,22 @@ html.light .gdrive-card,
       }
     }
 
-    function selectVolume(volId) {
-      // Regular users are locked to vol-n
-      if (volId !== 'vol-n' && currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
-        showToast("Volume ini hanya dapat diakses oleh Administrator.", "error");
-        return;
+    function updateVolumeButtonsUI(volId) {
+      const isNAS = (volId === 'vol-n');
+      const navDriveSaya = document.getElementById('navDriveSaya');
+      if (navDriveSaya) {
+        navDriveSaya.className = isNAS
+          ? "w-full flex items-center justify-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-200 dark:border-indigo-500/30 ring-1 ring-indigo-300 dark:ring-indigo-800 transition-all text-left group select-none cursor-pointer"
+          : "w-full flex items-center justify-start gap-2.5 px-3.5 py-2.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left group select-none cursor-pointer font-medium";
       }
 
-      currentVolume = volId;
-      currentPath = '';
-      
+      const label = document.getElementById('navDriveSayaLabel');
+      if (label) {
+        if (volId === 'vol-d') label.innerText = "Gudang Ekstra (D:)";
+        else if (volId === 'vol-e') label.innerText = "Arsip Dinas (E:)";
+        else label.innerText = "Drive Saya (NAS)";
+      }
+
       ['volBtn-n', 'volBtn-d', 'volBtn-e'].forEach(id => {
         const b = document.getElementById(id);
         if (b) {
@@ -1882,13 +1888,26 @@ html.light .gdrive-card,
             : "w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium";
         }
       });
+    }
+
+    function selectVolume(volId) {
+      // Regular users are locked to vol-n
+      if (volId !== 'vol-n' && currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+        showToast("Volume ini hanya dapat diakses oleh Administrator.", "error");
+        return;
+      }
+
+      currentVolume = volId;
+      currentPath = '';
+      
+      updateVolumeButtonsUI(volId);
 
       treeCache = {};
       expandedTreeNodes.clear();
-      initSidebarFolderTree();
       switchTab('files');
       loadStats();
       loadFiles('');
+      toggleMobileSidebar(false);
     }
 
     function navigateToRoot(volId) {
@@ -1902,20 +1921,22 @@ html.light .gdrive-card,
       // If we are already on this volume:
       if (currentVolume === targetVol) {
         if (currentPath === '') {
-          // Already at root of Drive Saya - smooth refresh without tearing down folder tree
+          // Already at root - smooth refresh
           setActiveTreeNode('');
           loadFiles('');
+          toggleMobileSidebar(false);
           return;
         } else {
-          // Return from subfolder back to root without wiping the sidebar tree
+          // Return from subfolder back to root
           currentPath = '';
           setActiveTreeNode('');
           loadFiles('');
+          toggleMobileSidebar(false);
           return;
         }
       }
 
-      // If switching physical volumes (e.g. N: -> D: or E:)
+      // If switching physical volumes
       selectVolume(targetVol);
     }
 
@@ -1977,7 +1998,9 @@ html.light .gdrive-card,
         setActiveTreeNode(path);
         applyCurrentFilterAndRender();
         if (path === '') {
-          initSidebarFolderTree();
+          if (!treeCache[''] || treeCache[''].length === 0) {
+            initSidebarFolderTree();
+          }
         }
       } catch (err) {
         console.error("loadFiles error:", err);
@@ -2039,11 +2062,13 @@ html.light .gdrive-card,
     async function initSidebarFolderTree() {
       const tree = document.getElementById('sidebarFolderTree');
       if (!tree) return;
-      tree.innerHTML = '<div class="text-[11px] text-slate-400 py-1 pl-2 animate-pulse">Memuat folder...</div>';
+      if (!treeCache[''] || treeCache[''].length === 0) {
+        tree.innerHTML = '<div class="text-[11px] text-slate-400 py-1 pl-2 animate-pulse">Memuat folder...</div>';
+      }
 
       try {
-        const tokenParam = sessionToken ? `&token=${encodeURIComponent(sessionToken)}` : '';
-        const res = await fetch(`/api/fs/list?vol=${encodeURIComponent(currentVolume)}&path=${tokenParam}`, {
+        const url = `/api/fs/list?vol=${encodeURIComponent(currentVolume)}&path=` + (sessionToken ? `&token=${encodeURIComponent(sessionToken)}` : '');
+        const res = await fetch(url, {
           headers: sessionToken ? { 'X-Auth-Token': sessionToken } : {}
         });
         const data = await res.json();
