@@ -22,14 +22,39 @@
 
 > [!WARNING]
 > ### ⚠️ Rilis Pratinjau Beta / Unstable: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
-> Versi terbaru **GoNAS v2.5.0-beta.1** (RFC 4918 Native WebDAV Engine & Perbaikan Multi-Volume) saat ini berstatus **Unstable / Beta Preview** untuk tahap pengujian publik.
+> Versi terbaru **GoNAS v2.5.0-beta.1** (RFC 4918 Native WebDAV Engine & Perbaikan Multi-Volume Mobile) saat ini berstatus **Unstable / Beta Preview** untuk tahap pengujian publik.
 > 
-> 📦 **Pintasan Langsung ke Rilis & Unduhan Biner:**  
-> 👉 **[Buka Halaman Rilis GoNAS v2.5.0-beta.1 (Aset & Unduhan) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)**
+> 📦 **Pintasan Akses Cepat:**  
+> • 📥 **[Unduh Rilis v2.5.0-beta.1 (Biner & File Rilis) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)**  
+> • 📖 **[Panduan Instalasi Lengkap (Linux, Windows, Docker, Pi/Armbian) ↗](INSTALL.id.md)**  
+> • 🛠️ **[Panduan Penanganan Eror & Troubleshooting ↗](TROUBLESHOOTING.id.md)**
 
 **GoNAS** adalah engine Cloud Web NAS mandiri (*self-hosted*), berkecepatan tinggi, dan ultra-ringan yang dirancang untuk kebutuhan penyimpanan data pribadi, tim, server kantor, homelab, maupun institusi.
 
 Dibangun dengan **Go murni (Golang)** dan mengintegrasikan antarmuka Single-Page Application (SPA) modern berbasis **Tailwind CSS & Lucide Icons** langsung ke dalam satu biner statis (`//go:embed`), GoNAS dapat langsung dijalankan di sistem operasi apa pun tanpa dependensi eksternal (zero-dependency, tanpa Node.js, Python, ataupun database SQL eksternal).
+
+---
+
+## ⚡ Quick Start 1 Menit (Instalasi Otomatis)
+
+Jalankan perintah satu baris berikut untuk langsung memasang GoNAS:
+
+**Linux / Armbian / Raspberry Pi / macOS:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/install.sh | sudo bash
+```
+
+**Windows (Buka PowerShell sebagai Administrator):**
+```powershell
+irm https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/install.ps1 | iex
+```
+
+**Docker Compose:**
+```bash
+docker compose up -d
+```
+> Baca panduan instalasi lengkap di **[Panduan Instalasi](INSTALL.id.md)**.  
+> Jika mengalami kendala saat menghubungkan atau memasang, baca **[Panduan Troubleshooting](TROUBLESHOOTING.id.md)**.
 
 ---
 
