@@ -12,12 +12,20 @@
 
 [![CI](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml/badge.svg)](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker%20Image-ghcr.io-2496ED?logo=docker)](https://github.com/Arya-Penangsang/gonas/pkgs/container/gonas)
+[![Unstable Preview](https://img.shields.io/badge/Release-v2.5.0--beta.1%20(Unstable)-F59E0B?style=flat&logo=github)](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
 [![RAM Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
 [![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](docs/SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+> [!WARNING]
+> ### ⚠️ Unstable / Beta Preview: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
+> The latest version **v2.5.0-beta.1** introduces the RFC 4918 Native WebDAV engine and multi-volume UI improvements, and is currently in active **Public Beta / Unstable Testing**.
+> 
+> 📦 **Quick Shortcut to Downloads & Changelog:**  
+> 👉 **[Go to Release v2.5.0-beta.1 (Assets & Binaries) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)**
 
 **GoNAS** is a self-hosted, ultra-lightweight, and blazingly fast Cloud Web NAS engine designed for personal storage, team collaboration, office servers, homelabs, and digital archiving.
 
