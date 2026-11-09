@@ -22,14 +22,39 @@
 
 > [!WARNING]
 > ### ⚠️ Unstable / Beta Preview: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
-> The latest version **v2.5.0-beta.1** introduces the RFC 4918 Native WebDAV engine and multi-volume UI improvements, and is currently in active **Public Beta / Unstable Testing**.
+> The latest version **v2.5.0-beta.1** introduces the RFC 4918 Native WebDAV engine and mobile multi-volume enhancements, currently in active **Public Beta / Unstable Testing**.
 > 
-> 📦 **Quick Shortcut to Downloads & Changelog:**  
-> 👉 **[Go to Release v2.5.0-beta.1 (Assets & Binaries) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)**
+> 📦 **Quick Navigation Shortcuts:**  
+> • 📥 **[Download Release v2.5.0-beta.1 (Binaries & Assets) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)**  
+> • 📖 **[Installation Guide Across Platforms (Linux, Windows, Docker, SBC) ↗](docs/INSTALL.md)**  
+> • 🛠️ **[Troubleshooting & Error Handling Guide ↗](docs/TROUBLESHOOTING.md)**
 
 **GoNAS** is a self-hosted, ultra-lightweight, and blazingly fast Cloud Web NAS engine designed for personal storage, team collaboration, office servers, homelabs, and digital archiving.
 
 Built with **pure Go (Golang)** and embedding a modern Single-Page Application (SPA) frontend powered by **Tailwind CSS & Lucide Icons** directly into a single static binary (`//go:embed`), GoNAS runs out-of-the-box on any operating system with zero external runtime dependencies (no Node.js, Python, or external SQL database required).
+
+---
+
+## ⚡ 1-Minute Quick Start
+
+Install and launch GoNAS with a single command:
+
+**Linux / Armbian / Raspberry Pi / macOS:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/install.sh | sudo bash
+```
+
+**Windows (PowerShell as Administrator):**
+```powershell
+irm https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/install.ps1 | iex
+```
+
+**Docker Compose:**
+```bash
+docker compose up -d
+```
+> For complete step-by-step instructions across all platforms, see the **[Installation Guide](docs/INSTALL.md)**.  
+> If you encounter any connection or permission issues, refer to the **[Troubleshooting Guide](docs/TROUBLESHOOTING.md)**.
 
 ---
 
