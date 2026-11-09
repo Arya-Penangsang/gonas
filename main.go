@@ -1023,6 +1023,14 @@ func main() {
 		w.Header().Set("Expires", "0")
 
 		if path == "/" || !strings.Contains(path, ".") {
+			// Check local file on disk first (supports instant live updates without recompilation)
+			for _, checkPath := range []string{"web/index.html", "C:\\NAS\\web\\index.html", "D:\\ANTIGRAVITY\\NAS\\web\\index.html"} {
+				if diskContent, err := os.ReadFile(checkPath); err == nil && len(diskContent) > 0 {
+					w.Header().Set("Content-Type", "text/html; charset=utf-8")
+					w.Write(diskContent)
+					return
+				}
+			}
 			content, err := webSubFS.Open("index.html")
 			if err != nil {
 				http.Error(w, "index.html tidak ditemukan", http.StatusInternalServerError)
