@@ -46,16 +46,24 @@ Built with **pure Go (Golang)** and embedding a modern Single-Page Application (
 Choose your preferred way to install and launch GoNAS:
 
 ### 🤖 Option A: Instant 1-Prompt Setup via AI Coding Agent (Recommended)
-If you are using an **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, etc.), simply copy-paste this prompt into your agent's chat:
+If you or your team use an **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, etc.), simply copy-paste the corresponding prompt into your AI agent chat:
 
+#### 1. To Setup the GoNAS Server (On the Server / Host PC):
 ```text
-Please install and setup GoNAS from https://github.com/Arya-Penangsang/gonas on this machine:
+Please install and launch GoNAS Server from https://github.com/Arya-Penangsang/gonas on this machine:
 1. Download or compile the native GoNAS binary for this operating system.
 2. Setup storage directory at ./storage and run GoNAS as a persistent background service on port 8082.
-3. If on Windows, ensure the WebClient service is started, set registry BasicAuthLevel = 2, and mount WebDAV as Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
-4. Verify the server is healthy and give me the clickable Web Dashboard link.
+3. Verify the server is running and print the local and LAN IP dashboard URLs.
 ```
-> The AI Agent will autonomously inspect your environment, fetch the appropriate binary, configure background services, and map Drive `Z:` directly into your File Explorer!
+
+#### 2. To Connect Another PC / Client Laptop to GoNAS (Client WebDAV Drive `Z:`):
+```text
+Please connect this computer to our office GoNAS Server at http://<SERVER_IP>:8082 as Network Drive Z::
+1. If on Windows, start the WebClient service and set registry BasicAuthLevel = 2 (HKLM:\SYSTEM\CurrentControlSet\Services\WebClient\Parameters) to allow HTTP WebDAV.
+2. Mount the WebDAV drive persistently: net use Z: http://<SERVER_IP>:8082/webdav /user:staf staf123 /persistent:yes
+3. Verify that Drive Z: is visible in File Explorer and readable.
+```
+> The AI Agent autonomously handles registry keys, service daemons, and drive mounting in seconds!
 
 ---
 

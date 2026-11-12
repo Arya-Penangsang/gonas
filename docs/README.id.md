@@ -46,16 +46,24 @@ Dibangun dengan **Go murni (Golang)** dan mengintegrasikan antarmuka Single-Page
 Pilih cara instalasi yang paling sesuai untuk Anda:
 
 ### 🤖 Opsi A: Instalasi Instan via AI Coding Agent (Sangat Direkomendasikan)
-Jika Anda menggunakan **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, dll.), cukup *copy-paste* satu instruksi prompt ini ke dalam chat AI Anda:
+Jika Anda atau tim Anda menggunakan **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, dll.), cukup *copy-paste* prompt yang sesuai ke dalam chat AI Anda:
 
+#### 1. Untuk Memasang Server GoNAS (Di PC Server / Mesin NAS):
 ```text
-Tolong pasang dan jalankan GoNAS dari https://github.com/Arya-Penangsang/gonas di komputer ini:
+Tolong pasang dan jalankan GoNAS Server dari https://github.com/Arya-Penangsang/gonas di komputer ini:
 1. Unduh atau compile biner native GoNAS sesuai sistem operasi mesin ini.
 2. Siapkan direktori penyimpanan di ./storage dan jalankan GoNAS sebagai background service di port 8082.
-3. Jika di Windows, pastikan service WebClient aktif, setel registry BasicAuthLevel = 2, dan hubungkan WebDAV sebagai Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
-4. Verifikasi bahwa server berjalan normal dan berikan saya link Web Dashboard yang bisa langsung diklik.
+3. Verifikasi bahwa server berjalan normal dan berikan URL Web Dashboard (IP lokal & LAN).
 ```
-> AI Agent Anda akan secara otomatis membaca lingkungan sistem, memasang biner yang sesuai, mengatur background daemon, hingga memetakan Drive `Z:` langsung di Windows File Explorer Anda!
+
+#### 2. Untuk Menghubungkan PC / Laptop Klien Lain ke GoNAS (Mount Drive `Z:`):
+```text
+Tolong hubungkan komputer ini ke server GoNAS kantor di http://<IP_SERVER>:8082 sebagai Network Drive Z::
+1. Jika di Windows, aktifkan service WebClient dan setel registry BasicAuthLevel = 2 (HKLM:\SYSTEM\CurrentControlSet\Services\WebClient\Parameters) agar HTTP WebDAV diizinkan.
+2. Hubungkan Network Drive Z: secara permanen: net use Z: http://<IP_SERVER>:8082/webdav /user:staf staf123 /persistent:yes
+3. Pastikan Drive Z: sudah muncul di File Explorer dan dapat dibaca.
+```
+> AI Agent di PC klien akan otomatis mengatur registry Windows, menyalakan service WebClient, dan memetakan Drive `Z:` tanpa membuat pengguna bingung!
 
 ---
 

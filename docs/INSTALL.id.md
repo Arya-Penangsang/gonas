@@ -7,14 +7,24 @@ Panduan komprehensif cara memasang dan menjalankan **GoNAS** (Go Network Attache
 ## ⚡ Quick Start 1 Menit
 
 ### 🤖 Opsi 1: Pemasangan Otomatis Menggunakan AI Coding Agent (Paling Mudah)
-Jika Anda bekerja bersama asisten AI (seperti **Google Antigravity**, **Claude Code**, **Cursor**, **Windsurf**, atau **GitHub Copilot**), Anda tidak perlu mengetik perintah terminal secara manual. Cukup salin perintah berikut dan kirimkan ke chat AI Agent Anda:
+Jika Anda bekerja bersama asisten AI (seperti **Google Antigravity**, **Claude Code**, **Cursor**, **Windsurf**, atau **GitHub Copilot**), Anda tidak perlu mengetik perintah terminal secara manual:
 
+#### A. Di Mesin Server (Host GoNAS):
+Salin prompt ini ke AI Agent di PC Server:
 ```text
-Tolong pasang dan jalankan GoNAS dari https://github.com/Arya-Penangsang/gonas di komputer ini:
+Tolong pasang dan jalankan GoNAS Server dari https://github.com/Arya-Penangsang/gonas di komputer ini:
 1. Unduh atau compile biner native GoNAS sesuai sistem operasi mesin ini.
 2. Siapkan direktori penyimpanan di ./storage dan jalankan GoNAS sebagai background service di port 8082.
-3. Jika di Windows, pastikan service WebClient aktif, setel registry BasicAuthLevel = 2, dan hubungkan WebDAV sebagai Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
-4. Verifikasi bahwa server berjalan normal dan berikan saya link Web Dashboard yang bisa langsung diklik.
+3. Verifikasi bahwa server berjalan normal dan berikan URL Web Dashboard (IP lokal & LAN).
+```
+
+#### B. Di PC / Laptop Klien Lain (Untuk Menghubungkan Drive Z:):
+Salin prompt ini ke AI Agent di PC staf kantor atau laptop lain:
+```text
+Tolong hubungkan komputer ini ke server GoNAS kantor di http://<IP_SERVER>:8082 sebagai Network Drive Z::
+1. Jika di Windows, aktifkan service WebClient dan setel registry BasicAuthLevel = 2 (HKLM:\SYSTEM\CurrentControlSet\Services\WebClient\Parameters) agar HTTP WebDAV diizinkan.
+2. Hubungkan Network Drive Z: secara permanen: net use Z: http://<IP_SERVER>:8082/webdav /user:staf staf123 /persistent:yes
+3. Pastikan Drive Z: sudah muncul di File Explorer dan dapat dibaca.
 ```
 
 ---

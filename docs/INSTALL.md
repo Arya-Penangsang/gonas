@@ -7,14 +7,22 @@ Comprehensive installation guide for **GoNAS** (Go Network Attached Storage & We
 ## ⚡ 1-Minute Quick Start
 
 ### 🤖 Option 1: Autonomous Installation via AI Coding Agent (Easiest)
-If you are developing or running alongside an **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, or GitHub Copilot), you don't even need to open a terminal manually. Just paste this instruction prompt into your AI agent chat:
+If you are developing or running alongside an **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, or GitHub Copilot), you can set up both the server and client drives with single prompts:
 
+#### A. On the Server Machine (GoNAS Host):
 ```text
-Please install and setup GoNAS from https://github.com/Arya-Penangsang/gonas on this machine:
+Please install and launch GoNAS Server from https://github.com/Arya-Penangsang/gonas on this machine:
 1. Download or compile the native GoNAS binary for this operating system.
 2. Setup storage directory at ./storage and run GoNAS as a persistent background service on port 8082.
-3. If on Windows, ensure the WebClient service is started, set registry BasicAuthLevel = 2, and mount WebDAV as Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
-4. Verify the server is healthy and give me the clickable Web Dashboard link.
+3. Verify the server is running and print the local and LAN IP dashboard URLs.
+```
+
+#### B. On Another PC / Client Laptop (Map Network Drive Z:):
+```text
+Please connect this computer to our office GoNAS Server at http://<SERVER_IP>:8082 as Network Drive Z::
+1. If on Windows, start the WebClient service and set registry BasicAuthLevel = 2 (HKLM:\SYSTEM\CurrentControlSet\Services\WebClient\Parameters) to allow HTTP WebDAV.
+2. Mount the WebDAV drive persistently: net use Z: http://<SERVER_IP>:8082/webdav /user:staf staf123 /persistent:yes
+3. Verify that Drive Z: is visible in File Explorer and readable.
 ```
 
 ---
