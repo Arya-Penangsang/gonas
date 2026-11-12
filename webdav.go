@@ -25,16 +25,31 @@ func setupWebDAV(mux *http.ServeMux, rootDir string) {
 
 	handlerFunc := func(w http.ResponseWriter, r *http.Request) {
 		// Provide WebDAV discovery capabilities for Windows Explorer & macOS Finder
-		if r.Method == "OPTIONS" {
-			w.Header().Set("DAV", "1, 2")
-			w.Header().Set("MS-Author-Via", "DAV")
-			w.Header().Set("Allow", "OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, PROPFIND, PROPPATCH, MKCOL, COPY, MOVE, LOCK, UNLOCK")
+		w.Header().Set("DAV", "1, 2")
+		w.Header().Set("MS-Author-Via", "DAV")
+		w.Header().Set("Allow", "OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, PROPFIND, PROPPATCH, MKCOL, COPY, MOVE, LOCK, UNLOCK")
+
+		// Transparently normalize /webdav to /webdav/ without HTTP redirect (Windows WebClient fails on redirects!)
+		if r.URL.Path == "/webdav" {
+			r.URL.Path = "/webdav/"
 		}
 
+		// Windows Explorer & WebDAV clients probe with OPTIONS - MUST return 200 OK without auth!
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		ua := r.Header.Get("User-Agent")
+		isWebDAVClient := strings.Contains(ua, "Microsoft-WebDAV") ||
+			strings.Contains(ua, "WebDAV") ||
+			strings.Contains(ua, "DavClnt") ||
+			strings.Contains(ua, "gvfs") ||
+			strings.Contains(ua, "Darwin")
+
 		// Friendly browser intercept:
-		// If a user navigates to /webdav or /webdav/ directly with a web browser (Accept: text/html),
-		// display an informative guide page with a direct link to the Web UI instead of a Basic Auth prompt.
-		if r.Method == "GET" && (r.URL.Path == "/webdav" || r.URL.Path == "/webdav/") && strings.Contains(r.Header.Get("Accept"), "text/html") {
+		// Only when opened in a standard web browser (e.g. Chrome/Firefox/Edge), not a WebDAV client!
+		if r.Method == "GET" && r.URL.Path == "/webdav/" && strings.Contains(r.Header.Get("Accept"), "text/html") && !isWebDAVClient {
 			renderWebDAVBrowserInfo(w, r)
 			return
 		}
@@ -69,12 +84,6 @@ func setupWebDAV(mux *http.ServeMux, rootDir string) {
 		switch r.Method {
 		case "PUT", "DELETE", "MKCOL", "MOVE":
 			logAudit("WEBDAV_"+r.Method, username, clientIP(r), fmt.Sprintf("WebDAV %s: %s", r.Method, r.URL.Path), true)
-		}
-
-		// Standardize path: redirect /webdav to /webdav/
-		if r.URL.Path == "/webdav" {
-			http.Redirect(w, r, "/webdav/", http.StatusPermanentRedirect)
-			return
 		}
 
 		davHandler.ServeHTTP(w, r)
