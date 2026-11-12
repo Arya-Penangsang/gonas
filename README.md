@@ -43,7 +43,23 @@ Built with **pure Go (Golang)** and embedding a modern Single-Page Application (
 
 ## ⚡ 1-Minute Quick Start
 
-Install and launch GoNAS with a single command:
+Choose your preferred way to install and launch GoNAS:
+
+### 🤖 Option A: Instant 1-Prompt Setup via AI Coding Agent (Recommended)
+If you are using an **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, etc.), simply copy-paste this prompt into your agent's chat:
+
+```text
+Please install and setup GoNAS from https://github.com/Arya-Penangsang/gonas on this machine:
+1. Download or compile the native GoNAS binary for this operating system.
+2. Setup storage directory at ./storage and run GoNAS as a persistent background service on port 8082.
+3. If on Windows, ensure the WebClient service is started, set registry BasicAuthLevel = 2, and mount WebDAV as Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
+4. Verify the server is healthy and give me the clickable Web Dashboard link.
+```
+> The AI Agent will autonomously inspect your environment, fetch the appropriate binary, configure background services, and map Drive `Z:` directly into your File Explorer!
+
+---
+
+### 💻 Option B: One-Liner Command (Terminal / PowerShell)
 
 **Linux / Armbian / Raspberry Pi / macOS:**
 ```bash

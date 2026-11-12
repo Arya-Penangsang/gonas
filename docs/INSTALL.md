@@ -6,7 +6,22 @@ Comprehensive installation guide for **GoNAS** (Go Network Attached Storage & We
 
 ## ⚡ 1-Minute Quick Start
 
-Choose your platform below for the fastest automated installation:
+### 🤖 Option 1: Autonomous Installation via AI Coding Agent (Easiest)
+If you are developing or running alongside an **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, or GitHub Copilot), you don't even need to open a terminal manually. Just paste this instruction prompt into your AI agent chat:
+
+```text
+Please install and setup GoNAS from https://github.com/Arya-Penangsang/gonas on this machine:
+1. Download or compile the native GoNAS binary for this operating system.
+2. Setup storage directory at ./storage and run GoNAS as a persistent background service on port 8082.
+3. If on Windows, ensure the WebClient service is started, set registry BasicAuthLevel = 2, and mount WebDAV as Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
+4. Verify the server is healthy and give me the clickable Web Dashboard link.
+```
+
+---
+
+### 💻 Option 2: One-Liner Automated Script (CLI / Terminal)
+
+Choose your platform below for automated installation:
 
 ### Linux / Armbian / Raspberry Pi / macOS
 ```bash

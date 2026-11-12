@@ -41,9 +41,25 @@ Dibangun dengan **Go murni (Golang)** dan mengintegrasikan antarmuka Single-Page
 
 ---
 
-## ⚡ Quick Start 1 Menit (Instalasi Otomatis)
+## ⚡ Quick Start 1 Menit
 
-Jalankan perintah satu baris berikut untuk langsung memasang GoNAS:
+Pilih cara instalasi yang paling sesuai untuk Anda:
+
+### 🤖 Opsi A: Instalasi Instan via AI Coding Agent (Sangat Direkomendasikan)
+Jika Anda menggunakan **AI Coding Agent** (Google Antigravity, Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, dll.), cukup *copy-paste* satu instruksi prompt ini ke dalam chat AI Anda:
+
+```text
+Tolong pasang dan jalankan GoNAS dari https://github.com/Arya-Penangsang/gonas di komputer ini:
+1. Unduh atau compile biner native GoNAS sesuai sistem operasi mesin ini.
+2. Siapkan direktori penyimpanan di ./storage dan jalankan GoNAS sebagai background service di port 8082.
+3. Jika di Windows, pastikan service WebClient aktif, setel registry BasicAuthLevel = 2, dan hubungkan WebDAV sebagai Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
+4. Verifikasi bahwa server berjalan normal dan berikan saya link Web Dashboard yang bisa langsung diklik.
+```
+> AI Agent Anda akan secara otomatis membaca lingkungan sistem, memasang biner yang sesuai, mengatur background daemon, hingga memetakan Drive `Z:` langsung di Windows File Explorer Anda!
+
+---
+
+### 💻 Opsi B: Perintah Baris Tunggal (Terminal / PowerShell)
 
 **Linux / Armbian / Raspberry Pi / macOS:**
 ```bash

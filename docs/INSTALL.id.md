@@ -4,9 +4,24 @@ Panduan komprehensif cara memasang dan menjalankan **GoNAS** (Go Network Attache
 
 ---
 
-## ⚡ Quick Start 1 Menit (Instalasi Otomatis)
+## ⚡ Quick Start 1 Menit
 
-Pilih sistem operasi Anda untuk menjalankan installer otomatis tercepat:
+### 🤖 Opsi 1: Pemasangan Otomatis Menggunakan AI Coding Agent (Paling Mudah)
+Jika Anda bekerja bersama asisten AI (seperti **Google Antigravity**, **Claude Code**, **Cursor**, **Windsurf**, atau **GitHub Copilot**), Anda tidak perlu mengetik perintah terminal secara manual. Cukup salin perintah berikut dan kirimkan ke chat AI Agent Anda:
+
+```text
+Tolong pasang dan jalankan GoNAS dari https://github.com/Arya-Penangsang/gonas di komputer ini:
+1. Unduh atau compile biner native GoNAS sesuai sistem operasi mesin ini.
+2. Siapkan direktori penyimpanan di ./storage dan jalankan GoNAS sebagai background service di port 8082.
+3. Jika di Windows, pastikan service WebClient aktif, setel registry BasicAuthLevel = 2, dan hubungkan WebDAV sebagai Network Drive Z: (URL: http://localhost:8082/webdav, user: admin, pass: admin123).
+4. Verifikasi bahwa server berjalan normal dan berikan saya link Web Dashboard yang bisa langsung diklik.
+```
+
+---
+
+### 💻 Opsi 2: Skrip Otomatis Satu Baris (Terminal / CLI)
+
+Pilih sistem operasi Anda untuk menjalankan installer otomatis:
 
 ### Linux / Armbian / Raspberry Pi / macOS
 Buka terminal dan jalankan perintah satu baris berikut:
