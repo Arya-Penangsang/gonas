@@ -1,69 +1,61 @@
 @echo off
-title GoNAS WebDAV Windows Auto-Mounter
+title GoNAS WebDAV Windows Setup
 color 0b
 
-:: 1. Self-elevation to Administrator
 net session >nul 2>&1
-if %errorLevel% neq 0 (
+if %errorlevel% neq 0 (
     echo ===================================================================
-    echo   Meminta Izin Administrator (UAC) untuk mengaktifkan WebClient...
+    echo   [PERHATIAN] FILE INI WAJIB DIJALANKAN SEBAGAI ADMINISTRATOR!
     echo ===================================================================
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process cmd -ArgumentList '/c \"\"%~f0\"\"' -Verb RunAs"
+    echo.
+    echo   Karena Windows memerlukan izin Admin untuk menyalakan WebClient,
+    echo   silakan lakukan langkah berikut:
+    echo.
+    echo     1. TUTUP jendela hitam ini.
+    echo     2. KLIK KANAN pada file ini di Desktop:
+    echo        "Hubungkan WebDAV ke Drive Z (Admin).cmd"
+    echo     3. Pilih menu "Run as administrator" (Jalankan sebagai administrator).
+    echo     4. Klik "Yes" pada jendela konfirmasi Windows (UAC).
+    echo.
+    echo ===================================================================
+    pause
     exit /b
 )
 
 echo ===================================================================
-echo   GoNAS WebDAV - Windows Service ^& Drive Mounter
+echo   GoNAS WebDAV - Menyalakan Layanan Windows & Memetakan Drive Z:
 echo ===================================================================
 echo.
 
-:: 2. Enable & Start WebClient Service
-echo [1/4] Mengaktifkan layanan Windows WebClient (WebDAV Engine)...
-sc config WebClient start= auto >nul 2>&1
-net start WebClient >nul 2>&1
+echo [1/4] Mengatur Registry Windows agar mengizinkan WebDAV HTTP...
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters" /v BasicAuthLevel /t REG_DWORD /d 2 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters" /v FileSizeLimitInBytes /t REG_DWORD /d 4294967295 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLinkedConnections /t REG_DWORD /d 1 /f
 
-:: 3. Configure Windows Registry for HTTP Basic Auth & File Size Limit (4GB)
-echo [2/4] Mengatur Registry WebClient (BasicAuthLevel=2 ^& FileLimit 4GB)...
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters" /v BasicAuthLevel /t REG_DWORD /d 2 /f >nul
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters" /v FileSizeLimitInBytes /t REG_DWORD /d 4294967295 /f >nul
-
-:: Restart WebClient service to apply registry changes
-echo [3/4] Menerapkan konfigurasi WebClient...
+echo.
+echo [2/4] Mengaktifkan dan memulai layanan Windows WebClient...
+sc config WebClient start= auto
 net stop WebClient >nul 2>&1
-net start WebClient >nul 2>&1
+net start WebClient
 
-:: 4. Map Network Drive to Z:
-echo [4/4] Memetakan WebDAV ke Drive Jaringan Z:...
+echo.
+echo [3/4] Menghubungkan GoNAS WebDAV ke Drive Z:...
 net use Z: /delete /y >nul 2>&1
-net use Z: "http://127.0.0.1:8082/webdav" /user:admin admin123 /persistent:yes >nul 2>&1
+timeout /t 2 >nul
+net use Z: "http://172.16.63.151:8082/webdav" /user:admin admin123 /persistent:yes
 
-if %errorLevel% equ 0 (
-    goto :success
-)
-
-:: Fallback format (DavWWWRoot)
-net use Z: "\\127.0.0.1@8082\webdav" /user:admin admin123 /persistent:yes >nul 2>&1
-if %errorLevel% equ 0 (
-    goto :success
+if %errorlevel% neq 0 (
+    echo.
+    echo Mencoba format DavWWWRoot...
+    net use Z: "\\172.16.63.151@8082\webdav" /user:admin admin123 /persistent:yes
 )
 
 echo.
-echo [PERINGATAN] Gagal memetakan langsung via baris perintah.
-echo Silakan buka File Explorer -> This PC -> titik tiga (...) -> Map network drive:
-echo   Folder : http://127.0.0.1:8082/webdav/
-echo   User   : admin
-echo   Pass   : admin123
-echo Layanan WebClient dan Registry Windows sudah AKTIF dan SIAP digunakan.
-goto :end
-
-:success
-echo.
-echo ===================================================================
-echo   SUKSES! Drive Z: (GoNAS Cloud Storage) Berhasil Terhubung!
-echo   Membuka Drive Z: di Windows File Explorer...
-echo ===================================================================
+echo [4/4] Membuka Drive Z: di Windows File Explorer...
 start explorer Z:
 
-:end
 echo.
-timeout /t 5
+echo ===================================================================
+echo   BERHASIL! Drive Z: (GoNAS Cloud WebDAV) sudah aktif dan terbuka!
+echo ===================================================================
+pause
