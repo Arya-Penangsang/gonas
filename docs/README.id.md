@@ -24,8 +24,7 @@
 > ### 💿 Mencari Versi Standalone OS (GoNAS OS Turnkey Appliance)?
 > Ubah PC kantor bekas, Mini PC China (Intel N100/J4125), STB IndiHome (ZTE B860H/HG680P), atau Raspberry Pi menjadi server NAS mandiri siap pakai tanpa perlu instal OS manual!
 > 
-> 👉 **Kunjungi Repositori Resmi OS:** [**GoNAS OS (Turnkey Appliance OS)**](https://github.com/Arya-Penangsang/gonas-os)  
-> 📡 **Server Mirror Kantor (PC Preservasi):** `http://172.16.63.151:8088/`
+> 👉 **Kunjungi Repositori Resmi OS:** [**GoNAS OS (Turnkey Appliance OS)**](https://github.com/Arya-Penangsang/gonas-os)
 
 > [!WARNING]
 > ### ⚠️ Rilis Pratinjau Beta / Unstable: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
