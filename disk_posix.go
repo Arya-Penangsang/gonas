@@ -3,6 +3,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -54,4 +56,65 @@ func getDiskStats(path string) (DriveInfo, error) {
 		FreeDisplay:  formatBytes(totalNumberOfFreeBytes),
 		IsNASRoot:    isRoot,
 	}, nil
+}
+
+func detectAvailableVolumes() []StorageVolume {
+	var detected []StorageVolume
+	configMu.RLock()
+	rootPath := cfg.RootPath
+	configMu.RUnlock()
+
+	cleanRoot := filepath.Clean(rootPath)
+	detected = append(detected, StorageVolume{
+		ID:          "vol-n",
+		Name:        "Storage Utama (GoNAS)",
+		DriveLetter: "STORAGE",
+		RootPath:    cleanRoot,
+		Description: fmt.Sprintf("Folder Utama GoNAS Cloud (%s)", cleanRoot),
+	})
+
+	// On Linux, inspect /proc/mounts to automatically find mounted partitions/disks
+	if data, err := os.ReadFile("/proc/mounts"); err == nil {
+		lines := strings.Split(string(data), "\n")
+		seen := make(map[string]bool)
+		seen[cleanRoot] = true
+		for _, line := range lines {
+			parts := strings.Fields(line)
+			if len(parts) >= 3 {
+				device := parts[0]
+				mountPoint := parts[1]
+				fsType := parts[2]
+
+				// Only consider real disk devices (/dev/sd*, /dev/nvme*, /dev/vd*, /dev/mmcblk*)
+				if strings.HasPrefix(device, "/dev/sd") || strings.HasPrefix(device, "/dev/nvme") || strings.HasPrefix(device, "/dev/vd") || strings.HasPrefix(device, "/dev/mmcblk") {
+					if !seen[mountPoint] && !strings.HasPrefix(mountPoint, "/boot") && !strings.HasPrefix(mountPoint, "/snap") {
+						seen[mountPoint] = true
+						var stat syscall.Statfs_t
+						if err := syscall.Statfs(mountPoint, &stat); err == nil {
+							total := uint64(stat.Blocks) * uint64(stat.Bsize)
+							if total > 0 {
+								name := fmt.Sprintf("Disk %s (%s)", filepath.Base(mountPoint), fsType)
+								if mountPoint == "/" {
+									name = fmt.Sprintf("Root OS / (%s)", fsType)
+								}
+								volID := fmt.Sprintf("vol-%s", strings.ReplaceAll(strings.Trim(mountPoint, "/"), "/", "-"))
+								if volID == "vol-" {
+									volID = "vol-root"
+								}
+								detected = append(detected, StorageVolume{
+									ID:          volID,
+									Name:        name,
+									DriveLetter: filepath.Base(mountPoint),
+									RootPath:    mountPoint,
+									Description: fmt.Sprintf("Mount %s pada %s (%s)", device, mountPoint, formatBytes(total)),
+								})
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return detected
 }

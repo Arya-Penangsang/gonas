@@ -559,7 +559,7 @@ html.light .gdrive-card,
           <i data-lucide="hard-drive" class="w-8 h-8 text-white"></i>
         </div>
         <h1 class="text-2xl font-bold tracking-tight text-white">GoNAS</h1>
-        <p class="text-xs text-slate-400 mt-1">Sistem Cloud Preservasi BPMN</p>
+        <p class="text-xs text-slate-400 mt-1">Private Cloud NAS & File Manager</p>
         <span class="mt-2 text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">UAC Multi-Role Edition</span>
       </div>
 
@@ -630,7 +630,7 @@ html.light .gdrive-card,
               <h1 class="font-bold text-sm sm:text-base tracking-tight text-white">GoNAS</h1>
               <span class="text-[9px] uppercase font-bold tracking-widest px-1.5 sm:px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">v2.4</span>
             </div>
-            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate max-w-[140px] sm:max-w-[160px]">Cloud Preservasi BPMN</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate max-w-[140px] sm:max-w-[160px]">Private Cloud NAS</p>
           </div>
         </div>
       </div>
@@ -639,7 +639,7 @@ html.light .gdrive-card,
       <div class="flex-1 max-w-2xl relative">
         <div class="relative flex items-center">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4"></i>
-          <input type="text" id="searchInput" placeholder="Telusuri di GoNAS Preservasi BPMN..."
+          <input type="text" id="searchInput" placeholder="Telusuri berkas di GoNAS..."
                  class="w-full pl-11 pr-10 py-2.5 bg-slate-900/90 border border-slate-800 focus:border-indigo-500 rounded-full text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-inner">
           <button class="absolute right-3.5 p-1 rounded-lg text-slate-500 hover:text-slate-300" title="Filter Pencarian">
             <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
@@ -736,31 +736,16 @@ html.light .gdrive-card,
               <div class="text-[11px] text-slate-500 py-1 pl-2">Memuat folder...</div>
             </div>
 
-            <!-- Volume Shortcuts (Hidden or Locked for regular users) -->
+            <!-- Volume Shortcuts (Dynamically Loaded) -->
             <div id="volumeShortcutsSection">
               <div class="h-px bg-slate-200 dark:bg-slate-800/80 my-2"></div>
-              <div class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider px-3 mb-1.5">Volume Fisik</div>
-              <button onclick="selectVolume('vol-n'); toggleMobileSidebar(false);" id="volBtn-n" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left">
-                <div class="flex items-center gap-2.5">
-                  <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
-                  <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Storage Utama (N:)</span>
-                </div>
-                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">500GB</span>
-              </button>
-              <button onclick="selectVolume('vol-d'); toggleMobileSidebar(false);" id="volBtn-d" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
-                <div class="flex items-center gap-2.5">
-                  <i data-lucide="database" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
-                  <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Gudang Ekstra (D:)</span>
-                </div>
-                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">1.0TB</span>
-              </button>
-              <button onclick="selectVolume('vol-e'); toggleMobileSidebar(false);" id="volBtn-e" class="vol-btn-admin w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium">
-                <div class="flex items-center gap-2.5">
-                  <i data-lucide="archive" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"></i>
-                  <span class="font-semibold text-xs text-slate-800 dark:text-slate-200">Arsip Dinas (E:)</span>
-                </div>
-                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">307GB</span>
-              </button>
+              <div class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider px-3 mb-1.5 flex items-center justify-between">
+                <span>Drive & Volume Fisik</span>
+                <span id="volCountBadge" class="text-[9px] px-1.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono">Memuat...</span>
+              </div>
+              <div id="volumeListContainer" class="flex flex-col gap-1">
+                <div class="text-[11px] text-slate-500 py-1 pl-3">Mendeteksi drive...</div>
+              </div>
             </div>
           </nav>
         </div>
@@ -952,7 +937,7 @@ html.light .gdrive-card,
                   <i data-lucide="server" class="w-4 h-4"></i>
                 </div>
               </div>
-              <div class="text-xl font-bold text-white mb-1" id="dashHostname">PRESERVASI-BPMN</div>
+              <div class="text-xl font-bold text-white mb-1" id="dashHostname">GONAS-SERVER</div>
               <div class="flex items-center gap-2 text-xs text-emerald-400 font-medium">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span id="dashUptime">Aktif --</span>
@@ -1249,7 +1234,7 @@ html.light .gdrive-card,
       <form id="addUserForm" class="space-y-3">
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 mb-1">Username</label>
-          <input type="text" id="newUsername" required placeholder="misal: budi_bpmn"
+          <input type="text" id="newUsername" required placeholder="misal: budi_staf"
                  class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
         </div>
         <div>
@@ -1855,10 +1840,71 @@ html.light .gdrive-card,
         const data = await res.json();
         if (data.success && data.volumes) {
           availableVolumes = data.volumes;
+          renderVolumesUI();
         }
       } catch(e) {
         console.error("Gagal memuat volume:", e);
       }
+    }
+
+    function renderVolumesUI() {
+      const container = document.getElementById('volumeListContainer');
+      const badge = document.getElementById('volCountBadge');
+      if (badge) badge.innerText = `${availableVolumes.length} Drive`;
+      if (!container) return;
+
+      container.innerHTML = '';
+      availableVolumes.forEach(v => {
+        const isSelected = (v.id === currentVolume);
+        const isNASRoot = (v.id === 'vol-n' || v.drive_letter === 'STORAGE');
+        
+        let iconName = 'hard-drive';
+        let iconColor = 'text-indigo-600 dark:text-indigo-400';
+        if (isNASRoot) {
+          iconName = 'folder-sync';
+          iconColor = 'text-indigo-600 dark:text-indigo-400';
+        } else if (v.drive_letter === 'C:') {
+          iconName = 'laptop';
+          iconColor = 'text-blue-600 dark:text-blue-400';
+        } else if (v.drive_letter === 'D:') {
+          iconName = 'database';
+          iconColor = 'text-emerald-600 dark:text-emerald-400';
+        } else if (v.drive_letter === 'F:') {
+          iconName = 'hard-drive-download';
+          iconColor = 'text-amber-600 dark:text-amber-400';
+        } else if (v.drive_letter === 'G:') {
+          iconName = 'cloud';
+          iconColor = 'text-cyan-600 dark:text-cyan-400';
+        }
+
+        const btn = document.createElement('button');
+        btn.id = `volBtn-${v.id}`;
+        btn.onclick = () => { selectVolume(v.id); toggleMobileSidebar(false); };
+        
+        // Non-NAS physical volumes get class vol-btn-admin so regular users are restricted
+        const adminClass = isNASRoot ? '' : 'vol-btn-admin';
+        const activeClass = isSelected
+          ? "w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left"
+          : "w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium";
+
+        btn.className = `${adminClass} ${activeClass}`.trim();
+        btn.title = `${v.name} (${v.root_path}) - Kapasitas: ${v.total_display}`;
+        btn.innerHTML = `
+          <div class="flex items-center gap-2.5 truncate mr-2">
+            <i data-lucide="${iconName}" class="w-3.5 h-3.5 shrink-0 ${iconColor}"></i>
+            <span class="font-semibold text-xs text-slate-800 dark:text-slate-200 truncate">${v.name}</span>
+          </div>
+          <span class="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium shrink-0">${v.total_display || ''}</span>
+        `;
+        container.appendChild(btn);
+      });
+
+      // Apply role restrictions
+      if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+        document.querySelectorAll('.vol-btn-admin').forEach(el => el.classList.add('hidden'));
+      }
+
+      if (window.lucide) lucide.createIcons();
     }
 
     function updateVolumeButtonsUI(volId) {
@@ -1871,21 +1917,22 @@ html.light .gdrive-card,
       }
 
       const label = document.getElementById('navDriveSayaLabel');
+      const found = availableVolumes.find(v => v.id === volId);
       if (label) {
-        if (volId === 'vol-d') label.innerText = "Gudang Ekstra (D:)";
-        else if (volId === 'vol-e') label.innerText = "Arsip Dinas (E:)";
-        else label.innerText = "Drive Saya (NAS)";
+        if (found) {
+          label.innerText = found.name;
+        } else {
+          label.innerText = "Drive Saya (NAS)";
+        }
       }
 
-      ['volBtn-n', 'volBtn-d', 'volBtn-e'].forEach(id => {
-        const b = document.getElementById(id);
+      availableVolumes.forEach(v => {
+        const b = document.getElementById(`volBtn-${v.id}`);
         if (b) {
-          const match = (id === 'volBtn-n' && volId === 'vol-n') || 
-                        (id === 'volBtn-d' && volId === 'vol-d') || 
-                        (id === 'volBtn-e' && volId === 'vol-e');
-          b.className = match
+          const match = (v.id === volId);
+          b.className = (b.classList.contains('vol-btn-admin') ? 'vol-btn-admin ' : '') + (match
             ? "w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 font-semibold border border-indigo-200 dark:border-indigo-500/30 transition-all text-left"
-            : "w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium";
+            : "w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-left font-medium");
         }
       });
     }
@@ -1958,20 +2005,14 @@ html.light .gdrive-card,
           const totalEl = document.getElementById('sidebarDiskTotal');
           const freeEl = document.getElementById('sidebarDiskFree');
 
-          if (currentVolume === 'vol-n') {
-            if (usageEl) usageEl.innerText = "2,2 GB";
-            if (totalEl) totalEl.innerText = "1,4 TB";
-            if (freeEl) freeEl.innerText = "1,4 TB Bebas (N: 500GB + D: 1.0TB)";
-          } else {
-            if (usageEl) usageEl.innerText = s.used_display;
-            if (totalEl) totalEl.innerText = s.total_display;
-            if (freeEl) freeEl.innerText = `${s.free_display} Bebas (${s.label || s.letter})`;
-          }
+          if (usageEl) usageEl.innerText = s.used_display;
+          if (totalEl) totalEl.innerText = s.total_display;
+          if (freeEl) freeEl.innerText = `${s.free_display} Bebas (${s.label || s.letter})`;
 
           const dashNASFree = document.getElementById('dashNASFree');
-          if (dashNASFree) dashNASFree.innerText = "1.4 TB Bebas";
+          if (dashNASFree) dashNASFree.innerText = `${s.free_display} Bebas`;
           const dashNASTotal = document.getElementById('dashNASTotal');
-          if (dashNASTotal) dashNASTotal.innerText = "Total: 1.4 TB Pool (N: 500GB + D: 1.0TB)";
+          if (dashNASTotal) dashNASTotal.innerText = `Kapasitas: ${s.total_display} (${s.label || s.letter})`;
         }
       } catch (e) {
         console.error("loadStats error:", e);
@@ -2015,8 +2056,6 @@ html.light .gdrive-card,
       const getVolumeRootLabel = () => {
         const found = availableVolumes.find(v => v.id === currentVolume);
         if (found) return found.name;
-        if (currentVolume === 'vol-d') return 'Gudang Ekstra (1.0 TB)';
-        if (currentVolume === 'vol-e') return 'Arsip Kedinasan';
         return 'Drive Saya';
       };
 
@@ -3411,7 +3450,7 @@ html.light .gdrive-card,
         if (dataInfo.success && dataInfo.info) {
           const inf = dataInfo.info;
           const hostEl = document.getElementById('dashHostname');
-          if (hostEl) hostEl.innerText = inf.hostname || 'PRESERVASI-BPMN';
+          if (hostEl) hostEl.innerText = inf.hostname || 'GONAS-SERVER';
           const upEl = document.getElementById('dashUptime');
           if (upEl) upEl.innerText = `Aktif ${inf.uptime_display}`;
           const osEl = document.getElementById('dashOS');

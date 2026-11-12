@@ -604,39 +604,31 @@ type StorageVolume struct {
 	Description string `json:"description"`
 }
 
-var volumes = []StorageVolume{
-	{
-		ID:          "vol-n",
-		Name:        "Storage Utama",
-		DriveLetter: "N:",
-		RootPath:    "N:\\",
-		Description: "Penyimpanan Utama Berbagi Berkas Preservasi (500 GB)",
-	},
-	{
-		ID:          "vol-d",
-		Name:        "Gudang Ekstra 1TB",
-		DriveLetter: "D:",
-		RootPath:    "D:\\STORAGE_NAS_GUDANG",
-		Description: "Penyimpanan Ekstra Gudang Media, Video & Raw Scan (1.0 TB)",
-	},
-	{
-		ID:          "vol-e",
-		Name:        "Arsip Kedinasan",
-		DriveLetter: "E:",
-		RootPath:    "E:\\Arsip_Dinas_Perkantoran",
-		Description: "Penyimpanan Arsip Surat & Dokumen Dinas Kantor",
-	},
+func getAvailableVolumes() []StorageVolume {
+	return detectAvailableVolumes()
 }
 
 func getVolume(volID string) StorageVolume {
+	vols := getAvailableVolumes()
 	if volID != "" {
-		for _, v := range volumes {
+		for _, v := range vols {
 			if strings.EqualFold(v.ID, volID) || strings.EqualFold(v.DriveLetter, volID) || strings.EqualFold(strings.TrimSuffix(v.DriveLetter, ":"), volID) {
 				return v
 			}
 		}
 	}
-	return volumes[0]
+	if len(vols) > 0 {
+		return vols[0]
+	}
+	configMu.RLock()
+	rootPath := cfg.RootPath
+	configMu.RUnlock()
+	return StorageVolume{
+		ID:          "vol-n",
+		Name:        "Storage Utama",
+		DriveLetter: "STORAGE",
+		RootPath:    rootPath,
+	}
 }
 
 func safePathVol(volID, subpath string) (string, StorageVolume, error) {
@@ -685,11 +677,16 @@ func safePath(subpath string) (string, error) {
 }
 
 func getAllDrives() []DriveInfo {
-	drives := []string{"N:\\", "C:\\", "D:\\", "E:\\"}
 	var result []DriveInfo
-	for _, d := range drives {
-		if stats, err := getDiskStats(d); err == nil && stats.TotalBytes > 0 {
-			result = append(result, stats)
+	vols := getAvailableVolumes()
+	seen := make(map[string]bool)
+	for _, v := range vols {
+		target := v.RootPath
+		if v.DriveLetter != "STORAGE" && !seen[v.DriveLetter] {
+			seen[v.DriveLetter] = true
+			if stats, err := getDiskStats(target); err == nil && stats.TotalBytes > 0 {
+				result = append(result, stats)
+			}
 		}
 	}
 	return result
@@ -897,15 +894,12 @@ func saveConfigFile() error {
 }
 
 func main() {
-	defaultRoot := "N:\\"
-	if runtime.GOOS != "windows" {
-		defaultRoot = "/storage"
-	}
+	defaultRoot := "./storage"
 	flag.StringVar(&cfg.Port, "port", "8082", "Port server")
 	flag.StringVar(&cfg.RootPath, "root", defaultRoot, "Root direktori storage NAS")
 	flag.StringVar(&cfg.Username, "user", "admin", "Username login")
 	flag.StringVar(&cfg.Password, "pass", "admin123", "Password login")
-	flag.StringVar(&cfg.AppTitle, "title", "GoNAS - Cloud Preservasi BPMN", "Judul aplikasi Web NAS")
+	flag.StringVar(&cfg.AppTitle, "title", "GoNAS - Cloud Server & File Manager", "Judul aplikasi Web NAS")
 	flag.Parse()
 
 	if envPort := os.Getenv("NAS_PORT"); envPort != "" {
@@ -920,24 +914,12 @@ func main() {
 
 	loadConfigFile()
 
-	if runtime.GOOS != "windows" {
-		volumes[0].RootPath = cfg.RootPath
-		volumes[0].DriveLetter = "STORAGE"
-		volumes[1].RootPath = filepath.Join(cfg.RootPath, "gudang")
-		volumes[1].DriveLetter = "GUDANG"
-		volumes[2].RootPath = filepath.Join(cfg.RootPath, "arsip")
-		volumes[2].DriveLetter = "ARSIP"
-	} else {
-		volumes[0].RootPath = cfg.RootPath
-	}
-
 	if _, err := os.Stat(cfg.RootPath); err != nil {
 		log.Printf("Peringatan: Root path %s tidak ditemukan, mencoba membuat atau fallback...", cfg.RootPath)
 		if err := os.MkdirAll(cfg.RootPath, 0755); err != nil {
 			log.Printf("Gagal membuat %s: %v. Fallback ke direktori lokal ./storage", cfg.RootPath, err)
 			cfg.RootPath = "./storage"
 			os.MkdirAll(cfg.RootPath, 0755)
-			volumes[0].RootPath = cfg.RootPath
 		}
 	}
 
@@ -1488,10 +1470,11 @@ func handleVolumes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var result []VolResponse
-	for _, v := range volumes {
-		stat, err := getDiskStats(v.DriveLetter + "\\")
-		if err != nil {
-			stat, _ = getDiskStats(v.RootPath)
+	vols := getAvailableVolumes()
+	for _, v := range vols {
+		stat, err := getDiskStats(v.RootPath)
+		if err != nil && v.DriveLetter != "STORAGE" {
+			stat, _ = getDiskStats(v.DriveLetter + "\\")
 		}
 		result = append(result, VolResponse{
 			ID:           v.ID,
@@ -1520,9 +1503,9 @@ func handleStats(w http.ResponseWriter, r *http.Request) {
 	volID := r.URL.Query().Get("vol")
 	vol := getVolume(volID)
 
-	stats, err := getDiskStats(vol.DriveLetter + "\\")
-	if err != nil {
-		stats, err = getDiskStats(vol.RootPath)
+	stats, err := getDiskStats(vol.RootPath)
+	if err != nil && vol.DriveLetter != "STORAGE" {
+		stats, err = getDiskStats(vol.DriveLetter + "\\")
 	}
 	stats.Label = vol.Name
 
