@@ -58,6 +58,18 @@ func getDiskStats(path string) (DriveInfo, error) {
 	}, nil
 }
 
+// isPhysicalBlockDevice checks if device string is a real physical or block disk on Linux
+func isPhysicalBlockDevice(device string) bool {
+	return strings.HasPrefix(device, "/dev/sd") || // SATA HDD/SSD, USB External & Flashdisks
+		strings.HasPrefix(device, "/dev/nvme") || // NVMe M.2 SSDs
+		strings.HasPrefix(device, "/dev/vd") || // VirtIO Cloud Disks (KVM, Proxmox, VPS)
+		strings.HasPrefix(device, "/dev/xvd") || // Xen Disks (AWS EC2)
+		strings.HasPrefix(device, "/dev/mmcblk") || // SD Cards / eMMC (Raspberry Pi, SBC)
+		strings.HasPrefix(device, "/dev/mapper/") || // LVM & LUKS Encrypted Disks (Ubuntu/Debian)
+		strings.HasPrefix(device, "/dev/md") || // Linux Software RAID arrays
+		strings.HasPrefix(device, "/dev/dm-") // Device Mapper nodes
+}
+
 func detectAvailableVolumes() []StorageVolume {
 	var detected []StorageVolume
 	configMu.RLock()
@@ -73,11 +85,12 @@ func detectAvailableVolumes() []StorageVolume {
 		Description: fmt.Sprintf("Folder Utama GoNAS Cloud (%s)", cleanRoot),
 	})
 
-	// On Linux, inspect /proc/mounts to automatically find mounted partitions/disks
+	seen := make(map[string]bool)
+	seen[cleanRoot] = true
+
+	// 1. Linux Mount Auto-Discovery (/proc/mounts)
 	if data, err := os.ReadFile("/proc/mounts"); err == nil {
 		lines := strings.Split(string(data), "\n")
-		seen := make(map[string]bool)
-		seen[cleanRoot] = true
 		for _, line := range lines {
 			parts := strings.Fields(line)
 			if len(parts) >= 3 {
@@ -85,9 +98,16 @@ func detectAvailableVolumes() []StorageVolume {
 				mountPoint := parts[1]
 				fsType := parts[2]
 
-				// Only consider real disk devices (/dev/sd*, /dev/nvme*, /dev/vd*, /dev/mmcblk*)
-				if strings.HasPrefix(device, "/dev/sd") || strings.HasPrefix(device, "/dev/nvme") || strings.HasPrefix(device, "/dev/vd") || strings.HasPrefix(device, "/dev/mmcblk") {
-					if !seen[mountPoint] && !strings.HasPrefix(mountPoint, "/boot") && !strings.HasPrefix(mountPoint, "/snap") {
+				if isPhysicalBlockDevice(device) {
+					// Exclude system virtual boot & container internal mount paths
+					if strings.HasPrefix(mountPoint, "/boot") ||
+						strings.HasPrefix(mountPoint, "/snap") ||
+						strings.HasPrefix(mountPoint, "/var/lib/docker") ||
+						strings.HasPrefix(mountPoint, "/var/lib/containerd") {
+						continue
+					}
+
+					if !seen[mountPoint] {
 						seen[mountPoint] = true
 						var stat syscall.Statfs_t
 						if err := syscall.Statfs(mountPoint, &stat); err == nil {
@@ -96,6 +116,8 @@ func detectAvailableVolumes() []StorageVolume {
 								name := fmt.Sprintf("Disk %s (%s)", filepath.Base(mountPoint), fsType)
 								if mountPoint == "/" {
 									name = fmt.Sprintf("Root OS / (%s)", fsType)
+								} else if strings.HasPrefix(mountPoint, "/media/") || strings.HasPrefix(mountPoint, "/run/media/") {
+									name = fmt.Sprintf("USB %s (%s)", filepath.Base(mountPoint), fsType)
 								}
 								volID := fmt.Sprintf("vol-%s", strings.ReplaceAll(strings.Trim(mountPoint, "/"), "/", "-"))
 								if volID == "vol-" {
@@ -106,10 +128,34 @@ func detectAvailableVolumes() []StorageVolume {
 									Name:        name,
 									DriveLetter: filepath.Base(mountPoint),
 									RootPath:    mountPoint,
-									Description: fmt.Sprintf("Mount %s pada %s (%s)", device, mountPoint, formatBytes(total)),
+									Description: fmt.Sprintf("Partisi %s mounted pada %s (%s)", device, mountPoint, formatBytes(total)),
 								})
 							}
 						}
+					}
+				}
+			}
+		}
+	}
+
+	// 2. macOS (Darwin) External Volume Auto-Discovery (/Volumes)
+	if entries, err := os.ReadDir("/Volumes"); err == nil {
+		for _, e := range entries {
+			mountPoint := filepath.Join("/Volumes", e.Name())
+			if !seen[mountPoint] && e.Name() != "Macintosh HD" {
+				seen[mountPoint] = true
+				var stat syscall.Statfs_t
+				if err := syscall.Statfs(mountPoint, &stat); err == nil {
+					total := uint64(stat.Blocks) * uint64(stat.Bsize)
+					if total > 0 {
+						volID := fmt.Sprintf("vol-%s", strings.ToLower(strings.ReplaceAll(e.Name(), " ", "-")))
+						detected = append(detected, StorageVolume{
+							ID:          volID,
+							Name:        fmt.Sprintf("Disk %s", e.Name()),
+							DriveLetter: e.Name(),
+							RootPath:    mountPoint,
+							Description: fmt.Sprintf("External Drive %s (%s)", e.Name(), formatBytes(total)),
+						})
 					}
 				}
 			}
