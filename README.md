@@ -20,6 +20,13 @@
 [![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](docs/SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+> [!TIP]
+> ### 💿 Looking for Standalone OS (Turnkey Appliance)?
+> Turn your old PC, Chinese Mini PC (Intel N100/J4125), IndiHome STB (ZTE B860H/HG680P), or Raspberry Pi into a dedicated plug-and-play NAS without installing an operating system manually!
+> 
+> 👉 **Visit the official OS repository:** [**GoNAS OS (Turnkey Appliance OS)**](https://github.com/Arya-Penangsang/gonas-os)  
+> 📡 **Local Network Mirror (PC Preservasi):** `http://172.16.63.151:8088/`
+
 > [!WARNING]
 > ### ⚠️ Unstable / Beta Preview: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
 > The latest version **v2.5.0-beta.1** introduces the RFC 4918 Native WebDAV engine and mobile multi-volume enhancements, currently in active **Public Beta / Unstable Testing**.

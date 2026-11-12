@@ -699,6 +699,10 @@ func getLocalIPs() []string {
 		return ips
 	}
 	for _, i := range ifaces {
+		// Skip down and loopback interfaces
+		if i.Flags&net.FlagUp == 0 || i.Flags&net.FlagLoopback != 0 {
+			continue
+		}
 		addrs, err := i.Addrs()
 		if err != nil {
 			continue
@@ -713,7 +717,8 @@ func getLocalIPs() []string {
 			}
 			if ip != nil && !ip.IsLoopback() && ip.To4() != nil {
 				ipStr := ip.String()
-				if strings.HasPrefix(ipStr, "100.") || strings.HasPrefix(ipStr, "172.16.") || strings.HasPrefix(ipStr, "192.168.") {
+				// Accept all private IPv4 subnets (RFC 1918) & Tailscale/CGNAT (RFC 6598)
+				if ip.IsPrivate() || strings.HasPrefix(ipStr, "100.") || strings.HasPrefix(ipStr, "192.168.") || strings.HasPrefix(ipStr, "10.") {
 					ips = append(ips, ipStr)
 				}
 			}

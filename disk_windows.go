@@ -166,7 +166,7 @@ func detectAvailableVolumes() []StorageVolume {
 				driveName = fmt.Sprintf("%s (%s)", driveName, letter)
 			}
 
-			volID := fmt.Sprintf("vol-%s", strings.ToLower(string('a'+i)))
+			volID := fmt.Sprintf("vol-%c", rune('a'+i))
 
 			detected = append(detected, StorageVolume{
 				ID:          volID,

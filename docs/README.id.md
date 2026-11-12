@@ -20,6 +20,13 @@
 [![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
+> [!TIP]
+> ### 💿 Mencari Versi Standalone OS (GoNAS OS Turnkey Appliance)?
+> Ubah PC kantor bekas, Mini PC China (Intel N100/J4125), STB IndiHome (ZTE B860H/HG680P), atau Raspberry Pi menjadi server NAS mandiri siap pakai tanpa perlu instal OS manual!
+> 
+> 👉 **Kunjungi Repositori Resmi OS:** [**GoNAS OS (Turnkey Appliance OS)**](https://github.com/Arya-Penangsang/gonas-os)  
+> 📡 **Server Mirror Kantor (PC Preservasi):** `http://172.16.63.151:8088/`
+
 > [!WARNING]
 > ### ⚠️ Rilis Pratinjau Beta / Unstable: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
 > Versi terbaru **GoNAS v2.5.0-beta.1** (RFC 4918 Native WebDAV Engine & Perbaikan Multi-Volume Mobile) saat ini berstatus **Unstable / Beta Preview** untuk tahap pengujian publik.
