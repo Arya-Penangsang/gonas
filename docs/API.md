@@ -23,7 +23,7 @@ Memverifikasi kredensial pengguna dan menerbitkan token sesi serta informasi per
     "user": "superadmin",
     "role": "superadmin",
     "display_name": "Super Administrator",
-    "title": "GoNAS - Cloud Preservasi BPMN"
+    "title": "GoNAS - Cloud Server & File Manager"
   }
   ```
 

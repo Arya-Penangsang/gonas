@@ -257,21 +257,21 @@ func initUserStore() {
 			Username:    "superadmin",
 			Password:    hashPassword("admin123"),
 			Role:        RoleSuperAdmin,
-			DisplayName: "Super Admin BPMN",
+			DisplayName: "Super Administrator",
 			CreatedAt:   time.Now(),
 		},
 		{
 			Username:    "admin",
 			Password:    hashPassword("admin123"),
 			Role:        RoleAdmin,
-			DisplayName: "Admin Preservasi",
+			DisplayName: "Administrator",
 			CreatedAt:   time.Now(),
 		},
 		{
 			Username:    "staf",
 			Password:    hashPassword("staf123"),
 			Role:        RoleUser,
-			DisplayName: "Staf Preservasi",
+			DisplayName: "Staf Pengguna",
 			CreatedAt:   time.Now(),
 		},
 		{
@@ -590,7 +590,7 @@ func getAutoArrangeTarget(ext string) string {
 	case ".exe", ".msi", ".iso", ".dmg", ".apk":
 		return "Master_Software"
 	case ".zip", ".rar", ".7z", ".tar", ".gz", ".sql", ".bak":
-		return "Arsip_Preservasi"
+		return "Arsip_Dokumen"
 	default:
 		return "Dokumen_Bersama"
 	}

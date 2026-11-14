@@ -6,12 +6,12 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>GoNAS - Cloud Preservasi BPMN</title>
+  <title>GoNAS - Cloud Storage & File Manager</title>
   
   <!-- Primary SEO Meta Tags -->
   <meta name="title" content="GoNAS - Ultra-Lightweight Self-Hosted Cloud NAS & Web File Manager">
   <meta name="description" content="Sistem Cloud Web NAS mandiri, berkecepatan tinggi, dan ultra-ringan (< 10 MB RAM) dengan dukungan multi-role UAC, penampil dokumen PDF/Word/Excel, dan 100% offline air-gapped.">
-  <meta name="keywords" content="cloud nas, private cloud, self-hosted storage, web file manager, golang nas, nextcloud alternative, bpm preservasi, air-gapped cloud, homelab storage">
+  <meta name="keywords" content="cloud nas, private cloud, self-hosted storage, web file manager, golang nas, nextcloud alternative, air-gapped cloud, homelab storage">
   <meta name="author" content="Arya Penangsang & Nafik">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#4f46e5">
@@ -1239,7 +1239,7 @@ html.light .gdrive-card,
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Tampilan</label>
-          <input type="text" id="newDisplayName" placeholder="Budi Santoso (Preservasi)"
+          <input type="text" id="newDisplayName" placeholder="Budi Santoso (Staf)"
                  class="w-full px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white">
         </div>
         <div>
@@ -3626,7 +3626,7 @@ html.light .gdrive-card,
     async function triggerDefrag() {
       showConfirmDialog({
         title: 'Optimasi & Defrag Storage N:',
-        message: 'Jalankan proses optimasi disk dan defragmentasi background untuk volume Storage Utama (N:)?',
+        message: 'Jalankan proses optimasi disk dan defragmentasi background untuk volume penyimpanan ini?',
         confirmText: 'Mulai Defrag',
         confirmClass: 'bg-indigo-600 hover:bg-indigo-500',
         onConfirm: async () => {

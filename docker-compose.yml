@@ -11,7 +11,7 @@ services:
       - "8082:8082"
     environment:
       - NAS_PORT=8082
-      - NAS_APP_TITLE=GoNAS - Cloud Preservasi BPMN
+      - NAS_APP_TITLE=GoNAS - Cloud Server & File Manager
       - NAS_ROOT_PATH=/storage
     volumes:
       - ./storage:/storage
