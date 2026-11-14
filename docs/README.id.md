@@ -12,28 +12,49 @@
 
 [![CI](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml/badge.svg)](https://github.com/Arya-Penangsang/gonas/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker%20Image-ghcr.io-2496ED?logo=docker)](https://github.com/Arya-Penangsang/gonas/pkgs/container/gonas)
-[![Unstable Preview](https://img.shields.io/badge/Rilis-v2.5.0--beta.1%20(Unstable)-F59E0B?style=flat&logo=github)](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
+[![Latest Release](https://img.shields.io/badge/Rilis%20Terbaru-v2.5.1%20(Stabil%20Produksi)-10B981?style=for-the-badge&logo=github)](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.1)
+[![Deprecated](https://img.shields.io/badge/v2.4.x-KADALUARSA%20%2F%20DEPRECATED-red?style=for-the-badge)](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.1)
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20Windows%20|%20macOS%20|%20Docker-0078D6?style=flat)](https://github.com/Arya-Penangsang/gonas)
 [![RAM Footprint](https://img.shields.io/badge/RAM%20Usage-~6.4%20MB-10B981?style=flat)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Single%20Static%20Binary-6366F1?style=flat)]()
-[![Security](https://img.shields.io/badge/Security-Hardened%20(v2.4.1)-10B981?style=flat&logo=shield)](SECURITY.md)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
+[![Security](https://img.shields.io/badge/Security-Hardened%20(v2.5.1)-10B981?style=flat&logo=shield)](../SECURITY.md)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../../LICENSE)
+
+> [!CAUTION]
+> # 🚨 PENGUMUMAN PENTING / CRITICAL UPGRADE NOTICE
+> ### 🛑 VERSI 2.4 SUDAH TIDAK RELEVAN & RESMI DI-DEPRECATE (DEPRECATED & OBSOLETE)
+> 
+> **SEMUA PENGGUNA WAJIB MEMPERBARUI KE VERSI TERBARU v2.5.1 STABIL PRODUKSI.**
+> 
+> Seluruh rilis **GoNAS v2.4.x dan versi terdahulu dinyatakan TIDAK RELEVAN LAGI untuk instalasi baru maupun server produksi**, karena memiliki kendala arsitektur lama:
+> - ❌ **Volume Hardcoded Lama:** Versi 2.4 masih menggunakan cetakan drive lama (`Storage Utama (N:)`, `Gudang Ekstra (D:)`, `Arsip Dinas (E:)`) yang menyebabkan error partisi tidak ditemukan di server Linux (seperti Inlis, Debian, Ubuntu), Docker, maupun PC baru.
+> - ❌ **Branding Lokal Spesifik:** Versi 2.4 masih memuat label internal lama (*Preservasi BPMN*) yang tidak cocok untuk instalasi publik atau instansi umum.
+> - ❌ **Keterbatasan Deteksi Subnet Jaringan:** Filter IP lama berpotensi salah membaca alamat antarmuka loopback/virtual.
+> 
+> ---
+> 
+> ### 🌟 APA YANG BARU & WAJIB DI VERSI TERBARU (v2.5.1 STABIL):
+> 1. ✅ **Dynamic Physical Drive Discovery (Zero-Hardcode):** Otomatis mendeteksi seluruh partisi penyimpanan nyata dari `/proc/mounts` pada Linux (SATA HDD, NVMe SSD, USB Flashdisk) dan Win32 Logical Drives API pada Windows.
+> 2. ✅ **Clean Enterprise UI & Custom Title:** Antarmuka web bersih dan netral (*GoNAS - Cloud Storage & File Manager*) serta judul aplikasi dapat diubah bebas lewat parameter `-title`.
+> 3. ✅ **RFC 4918 Native WebDAV Engine:** Dukungan penuh untuk *Direct Network Drive Mapping* (Drive `Z:`) di Windows File Explorer, macOS Finder, Linux `davfs2`, dan smartphone tanpa aplikasi pihak ketiga.
+> 4. ✅ **Autonomous AI Coding Agent Setup:** Dukungan perintah prompt satu langkah untuk instalasi otonom menggunakan Google Antigravity, Claude Code, Cursor, Windsurf, dan GitHub Copilot.
+> 5. ✅ **Multi-Platform Pre-Compiled Binaries:** Biner resmi siap pakai untuk Linux AMD64 (Server Inlis / PC), Linux ARM64 (STB IndiHome & Raspberry Pi), Linux ARMv7, Windows, dan macOS.
+> 
+> 📦 **Pintasan Rilis Terbaru:**  
+> • 📥 **[Unduh Biner Resmi v2.5.1 (GitHub Releases) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.1)**  
+> • 📖 **[Panduan Instalasi & Upgrade Lengkap ↗](INSTALL.id.md)**  
+> 
+> **Perintah Upgrade Instan 1 Baris (Linux / Inlis / STB):**
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/Arya-Penangsang/gonas/main/install.sh | sudo bash
+> ```
 
 > [!TIP]
 > ### 💿 Mencari Versi Standalone OS (GoNAS OS Turnkey Appliance)?
 > Ubah PC kantor bekas, Mini PC China (Intel N100/J4125), STB IndiHome (ZTE B860H/HG680P), atau Raspberry Pi menjadi server NAS mandiri siap pakai tanpa perlu instal OS manual!
 > 
 > 👉 **Kunjungi Repositori Resmi OS:** [**GoNAS OS (Turnkey Appliance OS)**](https://github.com/Arya-Penangsang/gonas-os)
-
-> [!WARNING]
-> ### ⚠️ Rilis Pratinjau Beta / Unstable: [v2.5.0-beta.1](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)
-> Versi terbaru **GoNAS v2.5.0-beta.1** (RFC 4918 Native WebDAV Engine & Perbaikan Multi-Volume Mobile) saat ini berstatus **Unstable / Beta Preview** untuk tahap pengujian publik.
-> 
-> 📦 **Pintasan Akses Cepat:**  
-> • 📥 **[Unduh Rilis v2.5.0-beta.1 (Biner & File Rilis) ↗](https://github.com/Arya-Penangsang/gonas/releases/tag/v2.5.0-beta.1)**  
-> • 📖 **[Panduan Instalasi Lengkap (Linux, Windows, Docker, Pi/Armbian) ↗](INSTALL.id.md)**  
-> • 🛠️ **[Panduan Penanganan Eror & Troubleshooting ↗](TROUBLESHOOTING.id.md)**
 
 **GoNAS** adalah engine Cloud Web NAS mandiri (*self-hosted*), berkecepatan tinggi, dan ultra-ringan yang dirancang untuk kebutuhan penyimpanan data pribadi, tim, server kantor, homelab, maupun institusi.
 
@@ -88,7 +109,7 @@ docker compose up -d
 
 ---
 
-## ✨ Fitur Utama (v2.4 Universal Edition)
+## ✨ Fitur Utama (v2.5.1 Enterprise Edition)
 
 ### 1. 📁 Modern File Manager & Rich Document Viewers
 - **Dual View Modes**: Beralih seketika antara **List Table View** (tampilan baris berkontras tinggi dengan metadata lengkap, ukuran folder, dan pemilik) dan **Grid View** (kartu berkas responsif).
